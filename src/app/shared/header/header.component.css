@@ -1,0 +1,27 @@
+.navbar {
+  justify-content: unset;
+}
+
+.navbar-nav-head {
+  background: #3b54a0;
+}
+
+.navbar-nav-head-text,
+.navbar-nav-head-name,
+.navbar-nav-head-logo {
+  color: #fff;
+}
+
+.top-navbar {
+  padding: 0px;
+}
+
+.top-navbar .navbar-nav-head {
+  padding: 0.5rem 1rem;
+  width: 240px;
+}
+
+.navbar-nav .nav-item .nav-link {
+  font-size: 17px;
+  padding: 0.8rem 1rem;
+}

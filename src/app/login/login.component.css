@@ -1,0 +1,21 @@
+.fondo-login {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  background-image: url("/assets/images/fondo-Escritorio.jpg");
+}
+
+.login-box {
+  width: 400px;
+  margin: 0 auto;
+  border-radius: 0;
+}
+
+.fondo-login .login-box {
+  position: absolute;
+  right: 0px;
+  height: 100%;
+}

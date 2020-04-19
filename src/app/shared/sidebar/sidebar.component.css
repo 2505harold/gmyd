@@ -1,0 +1,54 @@
+.sidebar {
+  position: fixed;
+  width: 240px;
+  height: 100%;
+  top: 0px;
+  padding-top: 57px;
+  box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  background: #2e4ead;
+}
+
+.scroll-sidebar ul {
+  text-decoration: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.scroll-sidebar ul li {
+  list-style: none;
+}
+
+.scroll-sidebar ul li a {
+  display: block;
+  padding: 20px;
+  position: relative;
+  color: #92a6e2;
+  text-decoration: none;
+}
+
+.scroll-sidebar ul li a:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #92a6e2;
+  display: none;
+}
+
+.scroll-sidebar ul li a span.icon {
+  margin-right: 10px;
+}
+
+.scroll-sidebar ul li a:hover,
+.scroll-sidebar ul li a.active {
+  background-color: #4360b5;
+  color: #fff;
+}
+
+.scroll-sidebar ul li a:hover:before,
+.scroll-sidebar ul li a.active:before {
+  display: block;
+}
