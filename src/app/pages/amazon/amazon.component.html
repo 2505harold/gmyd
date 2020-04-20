@@ -1,1 +1,94 @@
-<p>amazon works!</p>
+<div class="d-flex justify-content-between">
+  <h4>Prefijos</h4>
+
+  <section>
+    <div class="btn-group">
+      <button
+        type="button"
+        class="btn btn-primary dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Actualizar
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="#">Prefijos</a>
+        <a class="dropdown-item" href="#">Regiones</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<br />
+
+<div class="card my-1">
+  <div class="card-body">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"
+          ><i class="icon-search"></i
+        ></span>
+      </div>
+      <input
+        #input
+        (keyup)="buscar(input.value)"
+        type="text"
+        class="form-control"
+        aria-describedby="basic-addon1"
+        placeholder="Buscar..."
+      />
+    </div>
+  </div>
+</div>
+
+<div class="card my-1">
+  <div class="card-body">
+    <div
+      *ngIf="carga"
+      class="alert alert-warning d-flex align-items-center justify-content-center"
+      role="alert"
+    >
+      <div class="spinner-grow text-dark" role="status"></div>
+      <span>Cargando Datos...</span>
+    </div>
+    <div *ngIf="!carga" class="table-responsive">
+      <table class="table table-striped table-hover sortable">
+        <thead>
+          <tr>
+            <th scope="col">Region</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Servicio</th>
+            <th scope="col">Prefijo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prefijo of prefijos; let i = index">
+            <td>{{ prefijo.network_border_group }}</td>
+            <td>{{ prefijo.region }}</td>
+            <td>{{ prefijo.service }}</td>
+            <td>{{ prefijo.ip_prefix }}</td>
+            <td class="d-flex justify-content-center align-items-center">
+              <button
+                (click)="testPing(prefijo)"
+                type="button"
+                class="btn btn-secondary btn-sm mx-1"
+              >
+                Ping
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mb-3">
+        <button class="btn btn-outline-secondary">
+          <i class="icon-angle-double-left"></i> Atras
+        </button>
+        <button class="btn btn-outline-secondary mx-1">
+          Siguiente <i class="icon-angle-double-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
