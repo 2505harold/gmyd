@@ -10,9 +10,10 @@ import { PAGES_ROUTES } from "./pages.routes";
 //componentes
 import { AmazonComponent } from "./amazon/amazon.component";
 import { PagesComponent } from "./pages.component";
+import { NperfComponent } from './nperf/nperf.component';
 
 @NgModule({
-  declarations: [AmazonComponent, PagesComponent],
+  declarations: [AmazonComponent, PagesComponent, NperfComponent],
   imports: [CommonModule, SharedModule, PAGES_ROUTES, FormsModule],
 })
 export class PagesModule {}

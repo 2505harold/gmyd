@@ -35,12 +35,17 @@ export class AmazonComponent implements OnInit {
   }
 
   testPing(prefijo: any) {
-    console.log(prefijo);
-    const ip = prefijo.ip_prefix.substring(0, prefijo.ip_prefix.indexOf("/"));
-    const mask = prefijo.ip_prefix.substring(
-      prefijo.ip_prefix.indexOf("/") + 1
-    );
-    this._amazonService.testping("52.92.72.1").subscribe((resp) => {
+    var ip = "",
+      mask = "";
+    if (prefijo.ip_prefix) {
+      ip = prefijo.ip_prefix.substring(0, prefijo.ip_prefix.indexOf("/"));
+      mask = prefijo.ip_prefix.substring(prefijo.ip_prefix.indexOf("/") + 1);
+    } else {
+      ip = prefijo;
+    }
+
+    console.log(ip);
+    this._amazonService.testping(ip).subscribe((resp) => {
       console.log(resp.avg);
       if (resp.avg != "unknown") {
         Swal.fire({
@@ -56,5 +61,13 @@ export class AmazonComponent implements OnInit {
         });
       }
     });
+  }
+
+  prefixAmazon() {
+    this._amazonService.cargarPrefixAmazon().subscribe();
+  }
+
+  regionAmazon() {
+    this._amazonService.cargarRegionesAmazon().subscribe();
   }
 }

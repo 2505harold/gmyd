@@ -117,7 +117,7 @@ app.get("/", (req, res) => {
 app.get("/ping/:ip", (req, res) => {
   const ip = req.params.ip;
   ping.promise
-    .probe(ip)
+    .probe(ip.trim())
     .then(function (resp) {
       res.json(resp);
     })

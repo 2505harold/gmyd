@@ -28,4 +28,36 @@ export class AmazonService {
       })
     );
   }
+
+  cargarPrefixAmazon() {
+    const url = URL_SERVICIOS + "/amazon/ips";
+    return this.http.post(url, {}).pipe(
+      map((resp: any) => {
+        Swal.fire({
+          icon: "success",
+          title: "Prefijo actualizados",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        return true;
+      })
+    );
+  }
+
+  cargarRegionesAmazon() {
+    const url = URL_SERVICIOS + "/amazon/regiones";
+    return this.http.post(url, {}).pipe(
+      map((resp: any) => {
+        Swal.fire({
+          icon: "success",
+          title: "Regiones actualizadas",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        return true;
+      })
+    );
+  }
 }

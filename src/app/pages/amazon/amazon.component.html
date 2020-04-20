@@ -13,8 +13,8 @@
         Actualizar
       </button>
       <div class="dropdown-menu dropdown-menu-right">
-        <a class="dropdown-item" href="#">Prefijos</a>
-        <a class="dropdown-item" href="#">Regiones</a>
+        <a (click)="prefixAmazon()" class="dropdown-item">Prefijos</a>
+        <a (click)="regionAmazon()" class="dropdown-item">Regiones</a>
       </div>
     </div>
   </section>
@@ -38,6 +38,15 @@
         aria-describedby="basic-addon1"
         placeholder="Buscar..."
       />
+      <div class="input-group-append">
+        <button
+          (click)="testPing(input.value)"
+          class="btn btn-secondary"
+          type="button"
+        >
+          Ping
+        </button>
+      </div>
     </div>
   </div>
 </div>
