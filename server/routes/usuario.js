@@ -7,8 +7,18 @@ const app = express();
 // Crear nuevo usuario
 // ====================================
 app.post("/", (req, res) => {
-  req.body.password = bcrypt.hashSync(req.body.password);
-  const usuario = new Usuario(req.body);
+  var body = req.body;
+  body.password = bcrypt.hashSync(body.password);
+  const usuario = new Usuario({
+    correo: body.correo,
+    password: body.password,
+    nombre: body.nombre,
+    apelido: body.apellido,
+    departamento: body.departamento,
+    provincia: body.provincia,
+    distrito: body.distrito,
+  });
+
   usuario.save((err, usuarioGuardado) => {
     if (err) {
       return res.status(400).json({
