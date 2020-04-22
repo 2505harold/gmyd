@@ -14,6 +14,7 @@ const pagesRoute: Routes = [
       { path: "amazon", component: AmazonComponent },
       { path: "nperf", component: NperfComponent },
       { path: "nperf/:id", component: NperfEditarComponent },
+      { path: "", redirectTo: "nperf", pathMatch: "full" },
     ],
   },
 ];

@@ -60,7 +60,6 @@ body {
   position: absolute;
   width: 240px;
   z-index: 100;
-  transition: all 0.3s ease;
 }
 
 .movil aside.sidebar.show .scroll-sidebar > ul > li > a span.item,
