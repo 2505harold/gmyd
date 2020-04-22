@@ -52,3 +52,15 @@
 .scroll-sidebar ul li a.active:before {
   display: block;
 }
+
+.movil aside.sidebar.show {
+  position: absolute;
+  width: 240px;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.movil aside.sidebar.show .scroll-sidebar > ul > li > a span.item,
+.movil .sidebar.show .scroll-sidebar > ul > li > a span.icon {
+  display: inline-block;
+}

@@ -1,0 +1,103 @@
+<section class="fondo-login">
+  <div class="card login-box">
+    <div class="card-body" style="overflow-y: scroll;">
+      <form #form="ngForm" ngNativeValidate (ngSubmit)="registrarse(form)">
+        <h1 class="text-center">GMyD</h1>
+        <h3
+          class="card-subtitle text-center mb-3 font-weight-light text-warning"
+        >
+          Gestion Monitoreo y Diseño
+        </h3>
+
+        <div class="form-group mt-3">
+          <label>Usuario</label>
+          <input
+            [(ngModel)]="usuario.correo"
+            type="email"
+            class="form-control"
+            name="correo"
+            placeholder="Correo"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            [(ngModel)]="usuario.password"
+            type="password"
+            class="form-control"
+            name="password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Confirmar password</label>
+          <input type="password" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label>Su primer nombre</label>
+          <input
+            [(ngModel)]="usuario.nombre"
+            type="text"
+            class="form-control"
+            name="nombre"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Su apellido paterno</label>
+          <input
+            [(ngModel)]="usuario.apellido"
+            type="text"
+            class="form-control"
+            name="apellido"
+            required
+          />
+        </div>
+        <div class="form-group mt-3">
+          <label>Departamento</label>
+          <input
+            [(ngModel)]="usuario.departamento"
+            type="text"
+            class="form-control"
+            name="departamento"
+            required
+          />
+        </div>
+        <div class="form-group mt-3">
+          <label>Provincia</label>
+          <input
+            [(ngModel)]="usuario.provincia"
+            type="text"
+            class="form-control"
+            name="provincia"
+            required
+          />
+        </div>
+        <div class="form-group mt-3">
+          <label>Distrito</label>
+          <input
+            [(ngModel)]="usuario.distrito"
+            type="text"
+            class="form-control"
+            name="distrito"
+            required
+          />
+        </div>
+        <a
+          routerLink="/login"
+          style="font-size: larger;"
+          class="text-right btn btn-link"
+          >Ir al login</a
+        >
+        <button
+          type="submit"
+          class="btn btn-primary btn-block badge-pill mt-3"
+          style="font-size: larger;"
+        >
+          Registrarme
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,196 @@
+<div class="container animated fadeIn">
+  <h4>Mantenimiento de Datos nPerf</h4>
+
+  <form #form="ngForm" ngNativeValidate (ngSubmit)="guardar(form)">
+    <div class="row">
+      <div class="col-lg-6 col-sm-12 my-1">
+        <div class="card">
+          <div class="card-header form-inline">
+            <img
+              class="img-award w-25"
+              src="../../../assets/images/award-2.png"
+              alt=""
+            />
+            <section class="ml-2">
+              <h5 class="card-title">Puntuacion</h5>
+              <h5 class="card-subtitle">Puntuacion</h5>
+            </section>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Claro</label>
+              <input
+                name="claro"
+                [(ngModel)]="metricas.claro"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Bitel</label>
+              <input
+                name="bitel"
+                [(ngModel)]="metricas.bitel"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Movistar</label>
+              <input
+                name="movistar"
+                [(ngModel)]="metricas.movistar"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Entel</label>
+              <input
+                name="entel"
+                [(ngModel)]="metricas.entel"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12 my-1">
+        <div class="card">
+          <div class="card-header form-inline">
+            <img
+              class="img-award w-25"
+              src="../../../assets/images/meter.png"
+              alt=""
+            />
+            <section class="ml-2">
+              <h5 class="card-title">Mediciones locales</h5>
+              <h5 class="card-subtitle">Indicadores de zona</h5>
+            </section>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Velocidad de descarga máx. (Mbps)</label>
+              <input
+                name="downlink_max"
+                [(ngModel)]="metricas.downlink_max"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Velocidad de descarga prom. (Mbps)</label>
+              <input
+                name="downlink_avg"
+                [(ngModel)]="metricas.downlink_avg"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Velocidad de Subida máx. (Mbps)</label>
+              <input
+                name="uplink_max"
+                [(ngModel)]="metricas.uplink_max"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Velocidad de Subida prom. (Mbps)</label>
+              <input
+                name="uplink_avg"
+                [(ngModel)]="metricas.uplink_avg"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Latencia mín (ms)</label>
+              <input
+                name="latency_min"
+                [(ngModel)]="metricas.latency_min"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Latencia prom. (ms)</label>
+              <input
+                name="latency_avg"
+                [(ngModel)]="metricas.latency_avg"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Latencia jitter (ms)</label>
+              <input
+                name="latency_jitter"
+                [(ngModel)]="metricas.latency_jitter"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Rendimiento de navegación (%)</label>
+              <input
+                name="navegacion"
+                [(ngModel)]="metricas.navegacion"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Rendimiento de streaming (%)</label>
+              <input
+                name="streaming"
+                [(ngModel)]="metricas.streaming"
+                type="input"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Fecha</label>
+              <input
+                name="fecha_ingreso"
+                [(ngModel)]="metricas.fecha_ingreso"
+                type="datetime-local"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="text-center">
+      <a
+        routerLink="/nperf"
+        type="submit"
+        style="width: 150px;"
+        class="btn btn-secondary mx-1"
+      >
+        Regresar
+      </a>
+      <button type="submit" style="width: 150px;" class="btn btn-danger mx-1">
+        Guardar
+      </button>
+    </div>
+  </form>
+</div>

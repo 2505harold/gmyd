@@ -1,7 +1,7 @@
 <section class="fondo-login">
   <div class="card login-box">
     <div class="card-body">
-      <form #form="ngForm" (ngSubmit)="ingresar()">
+      <form #form="ngForm" ngNativeValidate (ngSubmit)="ingresar(form)">
         <h1 class="text-center">GMyD</h1>
         <h3
           class="card-subtitle text-center mb-3 font-weight-light text-warning"
@@ -11,22 +11,46 @@
 
         <div class="form-group mt-3">
           <label>Usuario</label>
-          <input type="input" class="form-control" />
+          <input
+            [ngModel]="correo"
+            type="email"
+            class="form-control"
+            name="correo"
+            placeholder="correo electronico"
+            required
+          />
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" class="form-control" />
-        </div>
-        <div class="custom-control custom-switch">
           <input
-            type="checkbox"
-            class="custom-control-input"
-            id="customSwitch1"
+            ngModel
+            type="password"
+            class="form-control"
+            name="password"
+            required
           />
-          <label class="custom-control-label" for="customSwitch1"
-            >Recuerdame</label
-          >
         </div>
+        <div class="form-inline">
+          <div class="custom-control custom-switch">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="customSwitch1"
+            />
+            <label class="custom-control-label" for="customSwitch1"
+              >Recuerdame</label
+            >
+          </div>
+          <a
+            routerLink="/register"
+            type="button"
+            class="btn btn-link ml-auto"
+            style="font-size: larger;"
+          >
+            Crear cuenta
+          </a>
+        </div>
+
         <button
           type="submit"
           class="btn btn-primary btn-block badge-pill mt-3"

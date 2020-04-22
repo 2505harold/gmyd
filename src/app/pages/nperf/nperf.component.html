@@ -1,1 +1,84 @@
-<p>nperf works!</p>
+<div class="d-flex justify-content-between">
+  <h4>DashBoard</h4>
+</div>
+<br />
+<div class="card shadow-sm animated fadeIn">
+  <div class="card-body">
+    <div class="chart-container">
+      <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [legend]="legend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [timeline]="timeline"
+        [results]="datos"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-line-chart>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-2 animated fadeIn">
+  <div class="card-body">
+    <div class="form-inline">
+      <h5>Tabla puntuacion Nacional</h5>
+      <button
+        [routerLink]="['/nperf', 'nuevo']"
+        class="btn btn-outline-primary ml-auto"
+      >
+        Agregar
+      </button>
+    </div>
+    <br />
+    <div class="table-responsive">
+      <table
+        class="table table-striped table-hover sortable sortable-theme-bootstrap"
+        data-sortable
+      >
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Claro</th>
+            <th scope="col">Bitel</th>
+            <th scope="col">Movistar</th>
+            <th scope="col">Entel</th>
+            <th scope="col"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let puntos of puntajes">
+            <td>{{ puntos.fecha_ingreso | date: "medium" }}</td>
+            <td>{{ puntos.usuario.nombre | titlecase }}</td>
+            <td>{{ puntos.claro }}</td>
+            <td>{{ puntos.entel }}</td>
+            <td>{{ puntos.bitel }}</td>
+            <td>{{ puntos.movistar }}</td>
+            <td class="d-flex justify-content-center align-items-center">
+              <button type="button" class="btn btn-outline-dark btn-sm mx-1">
+                Editar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mb-3">
+        <button class="btn btn-outline-secondary">
+          <i class="icon-angle-double-left"></i> Atras
+        </button>
+        <button class="btn btn-outline-secondary mx-1">
+          Siguiente <i class="icon-angle-double-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
