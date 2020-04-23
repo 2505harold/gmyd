@@ -8,11 +8,21 @@ import Swal from "sweetalert2";
 export class AmazonService {
   constructor(public http: HttpClient) {}
 
-  obtenerPrefixAmazon(buscar?: string) {
-    var query = "";
-    if (buscar) query = "?buscar=" + buscar;
+  obtenerPrefixAmazon(desde?: number) {
+    var url = URL_SERVICIOS + "/amazon";
+    if (desde) {
+      url += "?desde=" + desde;
+    }
 
-    const url = URL_SERVICIOS + "/amazon" + query;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp;
+      })
+    );
+  }
+
+  buscarPrefixAmazon(buscar: string, desde?: number) {
+    const url = URL_SERVICIOS + "/amazon" + "?buscar=" + buscar;
     return this.http.get(url).pipe(
       map((resp: any) => {
         return resp;

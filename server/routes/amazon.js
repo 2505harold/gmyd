@@ -72,20 +72,14 @@ app.post("/regiones", async (req, res) => {
 // ====================================
 app.get("/", (req, res) => {
   const buscar = req.query.buscar || "";
+  const desde = req.query.desde || 0;
   const regex = new RegExp(buscar, "i");
-
   IpsAmazon.find({
     $or: [{ ip_prefix: regex }, { service: regex }, { region: regex }],
-  }).exec(async (err, ipsamazon) => {
-    if (err) {
-      return res.status(500).json({
-        ok: false,
-        mensaje: "Ocurrio un error con obtener la lista",
-        error: err,
-      });
-    }
-
-    RegionesAmazon.find({}).exec((err, regionesamazon) => {
+  })
+    .skip(Number(desde))
+    .limit(10)
+    .exec(async (err, ipsamazon) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -94,21 +88,37 @@ app.get("/", (req, res) => {
         });
       }
 
-      ipsamazon.forEach(async (item, index) => {
-        var region = regionesamazon.filter((a) => {
-          return a.code === item.region;
-        });
-        if (region.length > 0) {
-          item.network_border_group = region[0].name;
-        }
-      });
+      IpsAmazon.countDocuments(
+        { $or: [{ ip_prefix: regex }, { service: regex }, { region: regex }] },
+        (err, cantidad) => {
+          RegionesAmazon.find({}).exec((err, regionesamazon) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Ocurrio un error con obtener la lista",
+                error: err,
+              });
+            }
+            var count = 0;
+            ipsamazon.forEach(async (item, index) => {
+              count++;
+              var region = regionesamazon.filter((a) => {
+                return a.code === item.region;
+              });
+              if (region.length > 0) {
+                item.network_border_group = region[0].name;
+              }
+            });
 
-      return res.status(200).json({
-        ok: true,
-        ipsamazon,
-      });
+            return res.status(200).json({
+              ok: true,
+              total: cantidad,
+              ipsamazon,
+            });
+          });
+        }
+      );
     });
-  });
 });
 
 // ====================================

@@ -13,7 +13,7 @@ app.post("/", (req, res) => {
     correo: body.correo,
     password: body.password,
     nombre: body.nombre,
-    apelido: body.apellido,
+    apellido: body.apellido,
     departamento: body.departamento,
     provincia: body.provincia,
     distrito: body.distrito,
@@ -51,7 +51,7 @@ app.post("/login", (req, res) => {
     if (!usuarioDB) {
       return res.status(400).json({
         ok: false,
-        mensaje: "credenciales incorrectas - correo incorrecto",
+        mensaje: "El usuario no existe",
         errors: err,
       });
     }
@@ -59,7 +59,7 @@ app.post("/login", (req, res) => {
     if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
       return res.status(400).json({
         ok: false,
-        mensaje: "credenciales incorrectas - password incorrecto",
+        mensaje: "Password incorrecto",
         errors: err,
       });
     }

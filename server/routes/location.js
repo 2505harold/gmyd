@@ -6,7 +6,7 @@ const path = require("path");
 
 const app = express();
 
-console.log(path.join(__dirname, "../iplocation/IP2LOCATION-LITE-DB1.BIN"));
+//console.log(path.join(__dirname, "../iplocation/IP2LOCATION-LITE-DB1.BIN"));
 
 // ====================================
 // Obtener mi locacion por mi ip publica

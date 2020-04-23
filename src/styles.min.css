@@ -13,14 +13,14 @@
 .icon-amazon:before{content:"\e900"}
 .icon-menu:before{content:"\e901"}
 body{background:#fff;font-family:Montserrat,sans-serif;margin:0;overflow-x:hidden;color:#67757c;font-weight:300}
-.chart-container{display:grid;height:400px}
+.chart-container{display:grid}
 .w-25{width:25%!important}
 .card .card-subtitle{font-weight:300;margin-bottom:15px;color:#99abb4}
 .card .card-title{position:relative}
 .mini-sidebar .sidebar .scroll-sidebar>ul>li>a span.item{display:none}
 .mini-sidebar aside.sidebar{width:65px}
 .mini-sidebar .main{margin-left:65px}
-.movil aside.sidebar.show{position:absolute;width:240px;z-index:100}
+.movil aside.sidebar.show{left:0;z-index:100}
 .movil .sidebar.show .scroll-sidebar>ul>li>a span.icon,.movil aside.sidebar.show .scroll-sidebar>ul>li>a span.item{display:inline-block}
 .preload{position:fixed;top:0;width:100%;height:100vh;background:#77b3d4;display:flex;justify-content:center;align-items:center;transition:all .5s ease}
 .cloud1,.cloud2,.cloud3{height:100px;position:absolute;right:0;z-index:-1}
@@ -49,12 +49,11 @@ to{right:130%}
 }
 @media (max-width:412px){
 .main{margin-left:0;transition:.2s ease-in}
-.sidebar{width:0}
+.sidebar{left:-100%;width:70px;transition:.2s ease-out}
 .login-box{width:100%}
 .sidebar .scroll-sidebar>ul>li>a span.icon,.sidebar .scroll-sidebar>ul>li>a span.item{display:none}
 }
 @media (max-width:412px){
 body .ngx-charts{width:100%}
 body .tooltip-area{width:100%}
-.chart-container{height:300px;display:block}
 }

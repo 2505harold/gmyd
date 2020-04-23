@@ -11,6 +11,7 @@ import { ObjectUnsubscribedError } from "rxjs";
 export class NperfComponent implements OnInit {
   public puntajes: Array<object> = [];
   public labels: any;
+  public loadTablaPuntos: boolean = true;
 
   datos = [];
   view: any[];
@@ -21,8 +22,8 @@ export class NperfComponent implements OnInit {
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
-  showYAxisLabel: boolean = true;
-  showXAxisLabel: boolean = true;
+  showYAxisLabel: boolean = false;
+  showXAxisLabel: boolean = false;
   xAxisLabel: string = "Fecha";
   yAxisLabel: string = "Puntos";
   timeline: boolean = false;
@@ -47,12 +48,12 @@ export class NperfComponent implements OnInit {
 
   ngOnInit() {
     this.loadDatosChart();
+    this.loadDatosTables();
   }
 
   loadDatosChart() {
     const operadores = ["claro", "entel", "movistar", "bitel"];
     this._nperfService.obtenerMetricas().subscribe((resp: any) => {
-      this.puntajes = resp.metricas;
       var datos = [];
       operadores.forEach((operador) => {
         var series = [];
@@ -66,6 +67,13 @@ export class NperfComponent implements OnInit {
       });
 
       this.datos = datos;
+    });
+  }
+
+  loadDatosTables() {
+    this._nperfService.obtenerMetricas().subscribe((resp: any) => {
+      this.puntajes = resp.metricas;
+      this.loadTablaPuntos = false;
     });
   }
 }

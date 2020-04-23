@@ -23,6 +23,7 @@
         <div class="form-group">
           <label>Password</label>
           <input
+            #pass1
             [(ngModel)]="usuario.password"
             type="password"
             class="form-control"
@@ -32,7 +33,16 @@
         </div>
         <div class="form-group">
           <label>Confirmar password</label>
-          <input type="password" class="form-control" required />
+          <input
+            #pass2
+            (blur)="confirmarPassword(pass1.value, pass2.value)"
+            type="password"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group text-danger" *ngIf="!passwordIguales">
+          <p>las contraseñas tienen que ser iguales</p>
         </div>
         <div class="form-group">
           <label>Su primer nombre</label>
@@ -92,7 +102,9 @@
         >
         <button
           type="submit"
-          class="btn btn-primary btn-block badge-pill mt-3"
+          [ngClass]="!clickRegister ? 'btn-primary' : 'btn-secondary disabled'"
+          [disabled]="clickRegister"
+          class="btn btn-block badge-pill mt-3"
           style="font-size: larger;"
         >
           Registrarme

@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between">
-  <h4>Prefijos</h4>
+  <h4>Amazon</h4>
 
   <section>
     <div class="btn-group">
@@ -55,7 +55,7 @@
   <div class="card-body">
     <div
       *ngIf="carga"
-      class="alert alert-warning d-flex align-items-center justify-content-center"
+      class="alert alert-info d-flex align-items-center justify-content-center"
       role="alert"
     >
       <div class="spinner-grow text-dark" role="status"></div>
@@ -91,12 +91,12 @@
         </tbody>
       </table>
       <div class="mb-3">
-        <button class="btn btn-outline-secondary">
+        <a (click)="continuar(-10)" class="btn btn-outline-secondary">
           <i class="icon-angle-double-left"></i> Atras
-        </button>
-        <button class="btn btn-outline-secondary mx-1">
+        </a>
+        <a (click)="continuar(10)" class="btn btn-outline-secondary mx-1">
           Siguiente <i class="icon-angle-double-right"></i>
-        </button>
+        </a>
       </div>
     </div>
   </div>

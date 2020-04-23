@@ -26,6 +26,7 @@ app.post("/", (req, res) => {
 // Obtener metricas : -1 Mayor a Menor
 // ====================================
 app.get("/", (req, res) => {
+  var desde = req.query.desde || 0;
   Nperf.find({})
     .sort({ fecha_ingreso: "asc" })
     .populate("usuario", "nombre")
