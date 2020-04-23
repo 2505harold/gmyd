@@ -13,7 +13,6 @@ $(document).ready(function () {
   var set = function () {
     var width = window.innerWidth > 0 ? window.innerWidth : this.screen.width;
     var topOffset = 0;
-    console.log(width);
     if (width <= 575.98) {
       $(".modos").addClass("movil").removeClass("mini-sidebar");
     } else {

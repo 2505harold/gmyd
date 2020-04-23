@@ -15,6 +15,11 @@ body {
 /*---------------------------*/
 .chart-container {
   display: grid;
+  height: 400px;
+}
+
+.chart-body {
+  height: 530px;
 }
 
 /*---------------------------*/
@@ -308,7 +313,7 @@ span.groupbox {
 /*-- =====================================================
  RESPONSIVE CHART
  ========================================================*/
-@media (max-width: 412px) {
+/* @media (max-width: 412px) {
   body .ngx-charts {
     width: 100%;
   }
@@ -316,4 +321,4 @@ span.groupbox {
   body .tooltip-area {
     width: 100%;
   }
-}
+} */
