@@ -40,4 +40,15 @@ export class NperfService {
       })
     );
   }
+
+  obtenerSorterMetricas(campo: string, order: string, desde?: number) {
+    var url = URL_SERVICIOS + "/nperf/sorter/" + campo + "/" + order;
+    if (desde) url += "?desde=" + desde;
+
+    return this.http.get(url).pipe(
+      map((resp) => {
+        return resp;
+      })
+    );
+  }
 }

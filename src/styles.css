@@ -10,9 +10,42 @@ body {
   font-weight: 300;
 }
 
-/*---------------------------*/
-/*  CONTENEDOR DE CHART NGX */
-/*---------------------------*/
+/*-- =====================================================
+ SECTION DONDE SE MOSTRARA LOS DATOS
+ ========================================================*/
+.main {
+  background: #f4f6f9;
+  padding-bottom: 60px;
+  position: relative;
+  padding-top: 70px;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+/*-- =====================================================
+ESTILOS TABLA
+========================================================*/
+.tableFixHead {
+  overflow-y: auto;
+  height: 400px;
+}
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+.tableFixHead,
+.tableFixHead td {
+  box-shadow: inset 1px -1px rgba(0, 0, 0, 0.125);
+}
+.tableFixHead th {
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.125), 0 1px rgba(0, 0, 0, 0.125);
+}
+
+/*-- =====================================================
+CONTENEDOR DE CHART NGX 
+========================================================*/
 .chart-container {
   display: grid;
   height: 400px;
@@ -250,18 +283,6 @@ span.groupbox {
   to {
     right: 130%;
   }
-}
-
-/*-- =====================================================
- SECTION DONDE SE MOSTRARA LOS DATOS
- ========================================================*/
-.main {
-  background: #f4f6f9;
-  padding-bottom: 60px;
-  position: relative;
-  padding-top: 70px;
-  min-height: 100vh;
-  transition: all 0.3s ease;
 }
 
 /*-- =====================================================

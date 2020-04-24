@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AmazonService } from "src/app/services/service.index";
 import { IpsAmazon } from "src/app/models/ips.amazon.model";
+import ping from "ping";
+import Ping from "ping.js";
 import Swal from "sweetalert2";
 
 @Component({
@@ -13,6 +15,7 @@ export class AmazonComponent implements OnInit {
   carga: boolean = true;
   desde: number = 0;
   totalRegistro: number = 0;
+  relativoRegistro: number = 0;
 
   constructor(public _amazonService: AmazonService) {}
 
@@ -26,6 +29,7 @@ export class AmazonComponent implements OnInit {
     this._amazonService.obtenerPrefixAmazon(this.desde).subscribe((resp) => {
       this.prefijos = resp.ipsamazon;
       this.totalRegistro = resp.total;
+      this.relativoRegistro = resp.relativo;
       this.carga = false;
     });
   }
@@ -35,6 +39,8 @@ export class AmazonComponent implements OnInit {
     this.carga = true;
     this._amazonService.buscarPrefixAmazon(termino).subscribe((resp) => {
       this.prefijos = resp.ipsamazon;
+      this.totalRegistro = resp.total;
+      this.relativoRegistro = resp.relativo;
       this.carga = false;
     });
   }
@@ -50,23 +56,46 @@ export class AmazonComponent implements OnInit {
       ip = prefijo;
     }
 
-    console.log(ip);
-    this._amazonService.testping(ip).subscribe((resp) => {
-      console.log(resp.avg);
-      if (resp.avg != "unknown") {
-        Swal.fire({
-          icon: "success",
-          title: resp.avg,
-          text: "Hay conectividad",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: resp.avg,
-          text: "No Hay respuesta",
-        });
-      }
+    // var p = new Ping();
+
+    // p.ping(ip, function (err, data) {
+    //   // Also display error if err is returned.
+    //   if (err) {
+    //     console.log("error loading resource");
+    //     data = data + " " + err;
+    //   }
+    //   console.log(data);
+    // });
+
+    this._amazonService.pingAngular(ip).subscribe((resp) => {
+      console.log(resp);
     });
+    // var ip = prefijo.ip_prefix.substring(0, prefijo.ip_prefix.indexOf("/"));
+    // ping.promise
+    //   .probe(ip.trim())
+    //   .then(function (res) {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    // this._amazonService.testping(ip).subscribe((resp) => {
+    //   console.log(resp.avg);
+    //   if (resp.avg != "unknown") {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: resp.avg,
+    //       text: "Hay conectividad",
+    //     });
+    //   } else {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: resp.avg,
+    //       text: "No Hay respuesta",
+    //     });
+    //   }
+    // });
   }
 
   //actualizar prefijos de amazon

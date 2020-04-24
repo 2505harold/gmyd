@@ -3,6 +3,8 @@ import { NperfService } from "src/app/services/service.index";
 import { isNgTemplate } from "@angular/compiler";
 import { ObjectUnsubscribedError } from "rxjs";
 
+declare function init_plugins();
+
 @Component({
   selector: "app-nperf",
   templateUrl: "./nperf.component.html",
@@ -12,6 +14,8 @@ export class NperfComponent implements OnInit {
   public puntajes: Array<object> = [];
   public labels: any;
   public loadTablaPuntos: boolean = true;
+  public totalRegistro: number = 0;
+  public desde: number = 0;
 
   datos = [];
   view: any[];
@@ -47,6 +51,7 @@ export class NperfComponent implements OnInit {
   }
 
   ngOnInit() {
+    init_plugins();
     this.loadDatosChart();
     this.loadDatosTables();
   }
@@ -70,10 +75,27 @@ export class NperfComponent implements OnInit {
     });
   }
 
-  loadDatosTables() {
-    this._nperfService.obtenerMetricas().subscribe((resp: any) => {
-      this.puntajes = resp.metricas;
-      this.loadTablaPuntos = false;
-    });
+  loadDatosTables(desde?: number) {
+    this._nperfService
+      .obtenerSorterMetricas("fecha_ingreso", "desc", desde)
+      .subscribe((resp: any) => {
+        this.puntajes = resp.metricas;
+        this.totalRegistro = resp.total;
+        this.loadTablaPuntos = false;
+      });
+  }
+
+  //click en siguinete o anterior
+  continuar(valor: number) {
+    const desde = this.desde + valor;
+    if (desde >= this.totalRegistro) {
+      return;
+    }
+    if (desde < 0) {
+      return;
+    }
+
+    this.desde += valor;
+    this.loadDatosTables(desde);
   }
 }
