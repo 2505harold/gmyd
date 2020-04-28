@@ -1,9 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AmazonService } from "src/app/services/service.index";
-import { IpsAmazon } from "src/app/models/ips.amazon.model";
-import ping from "ping";
-import Ping from "ping.js";
-import Swal from "sweetalert2";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-amazon",
@@ -11,16 +8,28 @@ import Swal from "sweetalert2";
   styles: [],
 })
 export class AmazonComponent implements OnInit {
-  prefijos: IpsAmazon[] = [];
+  form: FormGroup;
+  prefijos: any;
   carga: boolean = true;
   desde: number = 0;
   totalRegistro: number = 0;
   relativoRegistro: number = 0;
+  tiempo: number;
+  imageSrc: string = "";
+  timeStart: number;
 
   constructor(public _amazonService: AmazonService) {}
 
   ngOnInit() {
     this.cargarPrefijosAmazon();
+    this.form = new FormGroup({
+      ip: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(
+          "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+        ),
+      ]),
+    });
   }
 
   //llenar tabla de prefijos amazon
@@ -35,14 +44,19 @@ export class AmazonComponent implements OnInit {
   }
 
   //buscar
-  buscar(termino: string) {
-    this.carga = true;
-    this._amazonService.buscarPrefixAmazon(termino).subscribe((resp) => {
-      this.prefijos = resp.ipsamazon;
-      this.totalRegistro = resp.total;
-      this.relativoRegistro = resp.relativo;
-      this.carga = false;
-    });
+  buscar() {
+    if (!this.form.invalid) {
+      this.carga = true;
+      this._amazonService
+        .buscarPrefixAmazon(this.form.value.ip)
+        .subscribe((resp) => {
+          this.prefijos = resp.ipsamazon;
+          this.totalRegistro = resp.total;
+          this.relativoRegistro = resp.relativo;
+          this.desde = 0;
+          this.carga = false;
+        });
+    }
   }
 
   //prueba de ping
@@ -56,44 +70,25 @@ export class AmazonComponent implements OnInit {
       ip = prefijo;
     }
 
-    // var p = new Ping();
+    let start = performance.now();
 
-    // p.ping(ip, function (err, data) {
+    this._amazonService
+      .pingAngular("ec2-3-80-0-0.compute-1.amazonaws.com")
+      .subscribe((resp: any) => {
+        //let end = performance.timing.responseEnd;
+        let end = performance.now();
+
+        this.tiempo = end - start;
+      });
+
+    //this.timeStart = performance.now();
+
+    //var p = new Ping();
+
+    // p.ping("https://3.80.0.0", function (err, data) {
     //   // Also display error if err is returned.
     //   if (err) {
-    //     console.log("error loading resource");
-    //     data = data + " " + err;
-    //   }
-    //   console.log(data);
-    // });
-
-    this._amazonService.pingAngular(ip).subscribe((resp) => {
-      console.log(resp);
-    });
-    // var ip = prefijo.ip_prefix.substring(0, prefijo.ip_prefix.indexOf("/"));
-    // ping.promise
-    //   .probe(ip.trim())
-    //   .then(function (res) {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    // this._amazonService.testping(ip).subscribe((resp) => {
-    //   console.log(resp.avg);
-    //   if (resp.avg != "unknown") {
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: resp.avg,
-    //       text: "Hay conectividad",
-    //     });
-    //   } else {
-    //     Swal.fire({
-    //       icon: "error",
-    //       title: resp.avg,
-    //       text: "No Hay respuesta",
-    //     });
+    //     return performance.now();
     //   }
     // });
   }

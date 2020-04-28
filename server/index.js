@@ -8,6 +8,7 @@ const ipsAmazonRoutes = require("./routes/amazon");
 const nperfRoutes = require("./routes/nperf");
 const locationRoutes = require("./routes/location");
 const usuarioRoutes = require("./routes/usuario");
+const loginRoutes = require("./routes/login");
 
 //CORS
 app.use(function (req, res, next) {
@@ -29,6 +30,7 @@ app.use("/amazon", ipsAmazonRoutes);
 app.use("/nperf", nperfRoutes);
 app.use("/locacion", locationRoutes);
 app.use("/usuario", usuarioRoutes);
+app.use("/login", loginRoutes);
 
 //conexion a la base de datos
 mongoose.connect(

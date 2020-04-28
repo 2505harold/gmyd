@@ -12,10 +12,10 @@ export class UsuarioService {
   }
 
   login(correo: string, password: string) {
-    const url = URL_SERVICIOS + "/usuario/login";
+    const url = URL_SERVICIOS + "/login";
     return this.http.post(url, { correo, password }).pipe(
       map((resp: any) => {
-        this.cargarStorage(resp.usuario);
+        this.cargarStorage(resp.usuario, resp.token);
         return true;
       })
     );
@@ -38,9 +38,10 @@ export class UsuarioService {
     }
   }
 
-  cargarStorage(usuario) {
+  cargarStorage(usuario, token) {
     localStorage.setItem("id", usuario._id);
     localStorage.setItem("nombre", usuario.nombre);
+    localStorage.setItem("token", token);
     this.id = usuario._id;
   }
 

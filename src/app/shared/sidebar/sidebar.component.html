@@ -1,28 +1,28 @@
 <aside class="sidebar">
   <div class="scroll-sidebar">
-    <ul>
-      <li>
+    <ul class="menu">
+      <li class="item-menu">
         <a href="#">
           <span class="icon"></span>
           <span class="item">Opcion1</span>
         </a>
       </li>
-      <li>
-        <a routerLinkActive="active" routerLink="/amazon">
+      <li class="item-menu">
+        <a routerLinkActive="active" [routerLink]="['/amazon']">
           <span class="icon-amazon icon"></span>
           <span class="item">Amazon</span>
         </a>
       </li>
-      <li>
-        <a routerLinkActive="active" routerLink="/nperf">
+      <li class="item-menu">
+        <a routerLinkActive="active" [routerLink]="['/nperf']">
           <span class="icon icon-meter2"></span>
           <span class="item">nPerf</span>
         </a>
       </li>
-      <li>
-        <a href="#">
-          <span class="icon"></span>
-          <span class="item">Opcion1</span>
+      <li class="item-menu">
+        <a routerLinkActive="active" [routerLink]="['/amazon/mantenimiento']">
+          <span class="icon-lab icon"></span>
+          <span class="item">Mantenimiento</span>
         </a>
       </li>
     </ul>

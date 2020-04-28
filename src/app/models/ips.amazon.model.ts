@@ -5,6 +5,8 @@ export class IpsAmazon {
     public region: string,
     public service: string,
     public network_border_group: string,
+    public name: string,
+    public full_name: string,
     public delay: number
   ) {}
 }

@@ -9,6 +9,10 @@
   background: #2e4ead;
 }
 
+ul.submenu {
+  background: #233b82;
+}
+
 .scroll-sidebar ul {
   text-decoration: none;
   margin: 0px;
@@ -27,7 +31,7 @@
   text-decoration: none;
 }
 
-.scroll-sidebar ul li a:before {
+.scroll-sidebar ul > li > a:before {
   content: "";
   position: absolute;
   top: 0;
@@ -38,17 +42,32 @@
   display: none;
 }
 
-.scroll-sidebar ul li a span.icon {
+.scroll-sidebar ul > li > ul > li > a:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.scroll-sidebar ul.menu li.item-menu a span.icon {
   margin-right: 10px;
 }
 
-.scroll-sidebar ul li a:hover,
-.scroll-sidebar ul li a.active {
+.scroll-sidebar ul > li > a:hover,
+.scroll-sidebar ul > li > a.active {
   background-color: #4360b5;
   color: #fff;
 }
 
-.scroll-sidebar ul li a:hover:before,
-.scroll-sidebar ul li a.active:before {
+.scroll-sidebar ul > li > ul > li a:hover,
+.scroll-sidebar ul > li > ul > li a.active {
+  background-color: #233b82;
+  color: #fff;
+}
+
+.scroll-sidebar ul.menu li.item-menu a:hover:before,
+.scroll-sidebar ul.menu li.item-menu a.active:before {
   display: block;
 }

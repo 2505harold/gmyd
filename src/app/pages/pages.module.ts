@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 //modulos
 import { SharedModule } from "../shared/shared.module";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
@@ -14,6 +14,7 @@ import { AmazonComponent } from "./amazon/amazon.component";
 import { PagesComponent } from "./pages.component";
 import { NperfComponent } from "./nperf/nperf.component";
 import { NperfEditarComponent } from "./nperf/nperf-editar.component";
+import { MantenimientoComponent } from "./mantenimiento/mantenimiento.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { NperfEditarComponent } from "./nperf/nperf-editar.component";
     PagesComponent,
     NperfComponent,
     NperfEditarComponent,
+    MantenimientoComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import { NperfEditarComponent } from "./nperf/nperf-editar.component";
     FormsModule,
     NgxChartsModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
   ],
 })
 export class PagesModule {}

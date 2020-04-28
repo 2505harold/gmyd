@@ -34,41 +34,4 @@ app.post("/", (req, res) => {
   });
 });
 
-// ====================================
-// login
-// ====================================
-app.post("/login", (req, res) => {
-  const body = req.body;
-  Usuario.findOne({ correo: body.correo }, (err, usuarioDB) => {
-    if (err) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "Error al buscar usuario",
-        errors: err,
-      });
-    }
-
-    if (!usuarioDB) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "El usuario no existe",
-        errors: err,
-      });
-    }
-
-    if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "Password incorrecto",
-        errors: err,
-      });
-    }
-
-    return res.status(200).json({
-      ok: true,
-      usuario: usuarioDB,
-    });
-  });
-});
-
 module.exports = app;

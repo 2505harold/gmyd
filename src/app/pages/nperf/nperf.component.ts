@@ -3,15 +3,13 @@ import { NperfService } from "src/app/services/service.index";
 import { isNgTemplate } from "@angular/compiler";
 import { ObjectUnsubscribedError } from "rxjs";
 
-declare function init_plugins();
-
 @Component({
   selector: "app-nperf",
   templateUrl: "./nperf.component.html",
   styles: [],
 })
 export class NperfComponent implements OnInit {
-  public puntajes: Array<object> = [];
+  public puntajes: any = [];
   public labels: any;
   public loadTablaPuntos: boolean = true;
   public totalRegistro: number = 0;
@@ -51,7 +49,6 @@ export class NperfComponent implements OnInit {
   }
 
   ngOnInit() {
-    init_plugins();
     this.loadDatosChart();
     this.loadDatosTables();
   }
@@ -76,6 +73,7 @@ export class NperfComponent implements OnInit {
   }
 
   loadDatosTables(desde?: number) {
+    this.loadTablaPuntos = true;
     this._nperfService
       .obtenerSorterMetricas("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {
