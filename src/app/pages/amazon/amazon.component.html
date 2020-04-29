@@ -22,6 +22,56 @@
 
 <br />
 
+<div class="row my-1">
+  <div class="col-sm-6">
+    <!-- <div class="card">
+      <div class="card-body">
+        <div class="chart">
+          <ngx-charts-line-chart
+            [view]="view"
+            [scheme]="colorScheme"
+            [legend]="legend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxis]="xAxis"
+            [yAxis]="yAxis"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [timeline]="timeline"
+            [results]="datos"
+            [legendPosition]="'below'"
+          >
+          </ngx-charts-line-chart>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li
+        *ngFor="let item of pcs"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <img src="{{ item.img }}" alt="" style="width: 25px;" />
+        {{ item.region }}
+        <span
+          *ngIf="!item.delay"
+          class="badge badge-primary badge-pill"
+          style="width: 70px;"
+          ><div class="spinner-border spinner-border-sm" role="status"></div>
+          ms</span
+        >
+        <span
+          *ngIf="item.delay"
+          class="badge badge-primary badge-pill"
+          style="width: 70px;"
+          >{{ item.delay | number: "1.0-0" }} ms</span
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+
 <div class="card my-1">
   <div class="card-body">
     <form [formGroup]="form" (ngSubmit)="buscar()">

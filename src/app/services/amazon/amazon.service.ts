@@ -30,37 +30,14 @@ export class AmazonService {
     );
   }
 
-  // pingAngular(ip: string) {
-  //   let timeStart: number = performance.now();
-  //   return this.http
-  //     .get("https://" + ip, {
-  //       observe: "response",
-  //     })
-  //     .pipe(first())
-  //     .subscribe(
-  //       (resp) => {
-  //         if (resp.status === 200) {
-  //           let timeEnd: number = performance.now();
-  //           let ping: number = timeEnd - timeStart;
-  //           return ping;
-  //         } else {
-  //           console.log(false);
-  //         }
-  //       },
-  //       (err) => console.log(err)
-  //     );
-  // }
-
   pingAngular(ip: string) {
     let timeStart: number = performance.now();
     return this.http
-      .get("http://3.22.194.90/", {
+      .get("http://" + ip, {
         observe: "response",
       })
       .pipe(
         map((resp) => {
-          //let timeEnd: number = performance.now();
-          //let ping: number = timeEnd - timeStart;
           return resp.body;
         })
       );

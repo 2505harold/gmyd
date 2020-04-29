@@ -55,6 +55,11 @@ CONTENEDOR DE CHART NGX
   height: 530px;
 }
 
+.chart {
+  display: grid;
+  height: 300px;
+}
+
 /*---------------------------*/
 /*  TAMAÑOS */
 /*---------------------------*/
