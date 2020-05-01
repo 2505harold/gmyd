@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AmazonService } from "src/app/services/service.index";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { interval } from "rxjs/internal/observable/interval";
-import { isNgTemplate } from "@angular/compiler";
 
 @Component({
   selector: "app-amazon",

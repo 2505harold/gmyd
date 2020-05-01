@@ -23,29 +23,7 @@
 <br />
 
 <div class="row my-1">
-  <div class="col-sm-6">
-    <!-- <div class="card">
-      <div class="card-body">
-        <div class="chart">
-          <ngx-charts-line-chart
-            [view]="view"
-            [scheme]="colorScheme"
-            [legend]="legend"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxis]="xAxis"
-            [yAxis]="yAxis"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
-            [timeline]="timeline"
-            [results]="datos"
-            [legendPosition]="'below'"
-          >
-          </ngx-charts-line-chart>
-        </div>
-      </div>
-    </div> -->
-  </div>
+  <div class="col-sm-6"></div>
   <div class="col-sm-6">
     <ul class="list-group">
       <li
@@ -116,7 +94,6 @@
               <th scope="col">Codigo</th>
               <th scope="col">Servicio</th>
               <th scope="col">Prefijo</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -125,15 +102,6 @@
               <td>{{ prefijo.region }}</td>
               <td>{{ prefijo.service }}</td>
               <td>{{ prefijo.ip_prefix }}</td>
-              <td class="d-flex justify-content-center align-items-center">
-                <button
-                  (click)="testPing(prefijo)"
-                  type="button"
-                  class="btn btn-secondary btn-sm mx-1"
-                >
-                  Ping
-                </button>
-              </td>
             </tr>
           </tbody>
         </table>
