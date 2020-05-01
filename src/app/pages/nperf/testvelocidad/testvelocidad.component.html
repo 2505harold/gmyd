@@ -1,0 +1,103 @@
+<div class="animated fadeIn">
+  <h4>Mantenimiento de Datos nPerf</h4>
+
+  <form #form="ngForm" ngNativeValidate (ngSubmit)="guardar(form)">
+    <div class="col-lg-6 my-1 mx-auto">
+      <div class="card shadow-sm">
+        <div
+          class="card-header d-flex justify-content-center align-items-center"
+        >
+          <img
+            class="img-award w-25"
+            src="../../../assets/images/meter.png"
+            alt=""
+          />
+          <section class="ml-2">
+            <h5 class="card-title">Velocidad</h5>
+            <h5 class="card-subtitle">
+              Ingrese la velocidad de descarga en Kbps
+            </h5>
+          </section>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Claro (Kbps)</label>
+            <input
+              name="claro"
+              [(ngModel)]="metricas.claro"
+              type="number"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Bitel (Kbps)</label>
+            <input
+              name="bitel"
+              [(ngModel)]="metricas.bitel"
+              type="number"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Movistar (Kbps)</label>
+            <input
+              name="movistar"
+              [(ngModel)]="metricas.movistar"
+              type="number"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Entel (Kbps)</label>
+            <input
+              name="entel"
+              [(ngModel)]="metricas.entel"
+              type="number"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Numero de pruebas</label>
+            <input
+              name="pruebas"
+              [(ngModel)]="metricas.pruebas"
+              type="number"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Tipo</label>
+            <select
+              name="tipo"
+              [(ngModel)]="metricas.tipo"
+              class="form-control"
+              required
+            >
+              <option selected value="0">Seleccione</option>
+              <option value="Movil">Movil</option>
+              <option value="Fijo">Fijo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a
+          routerLink="/nperf"
+          type="submit"
+          style="width: 150px;"
+          class="btn btn-secondary m-1"
+        >
+          Regresar
+        </a>
+        <button type="submit" style="width: 150px;" class="btn btn-danger m-1">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

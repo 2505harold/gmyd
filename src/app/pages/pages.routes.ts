@@ -5,6 +5,7 @@ import { NperfComponent } from "./nperf/nperf.component";
 import { NperfEditarComponent } from "./nperf/nperf-editar.component";
 import { LoginGuard } from "../services/service.index";
 import { MantenimientoComponent } from "./mantenimiento/mantenimiento.component";
+import { TestvelocidadComponent } from "./nperf/testvelocidad/testvelocidad.component";
 
 const pagesRoute: Routes = [
   {
@@ -16,6 +17,7 @@ const pagesRoute: Routes = [
       { path: "mantenimiento", component: MantenimientoComponent },
       { path: "nperf", component: NperfComponent },
       { path: "nperf/:id", component: NperfEditarComponent },
+      { path: "nperf/velocidad/:id", component: TestvelocidadComponent },
       { path: "", redirectTo: "nperf", pathMatch: "full" },
     ],
   },

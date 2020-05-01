@@ -26,46 +26,47 @@ export class AmazonComponent implements OnDestroy {
       img: "../../../assets/images/estados-unidos-de-america.svg",
       region: "oregon",
       ip: "34.223.228.236",
+      public_dns_ipv4: "ec2-34-223-228-236.us-west-2.compute.amazonaws.com",
       delay: null,
     },
     {
       img: "../../../assets/images/estados-unidos-de-america.svg",
       region: "north virginia",
       ip: "52.90.140.184",
+      public_dns_ipv4: "ec2-52-90-140-184.compute-1.amazonaws.com",
       delay: null,
     },
     {
       img: "../../../assets/images/estados-unidos-de-america.svg",
       region: "ohio",
       ip: "3.22.194.90",
+      public_dns_ipv4: "ec2-3-22-194-90.us-east-2.compute.amazonaws.com",
+      delay: null,
+    },
+    {
+      img: "../../../assets/images/estados-unidos-de-america.svg",
+      region: "north california",
+      ip: "13.57.226.225",
+      public_dns_ipv4: "ec2-13-57-226-225.us-west-1.compute.amazonaws.com",
+      delay: null,
+    },
+    {
+      img: "../../../assets/images/francia.svg",
+      region: "paris",
+      public_dns_ipv4: "ec2-35-180-64-184.eu-west-3.compute.amazonaws.com",
+      ip: "35.180.64.184",
       delay: null,
     },
     {
       img: "../../../assets/images/brasil.svg",
       region: "brasil",
       ip: "54.233.154.2",
+      public_dns_ipv4: "ec2-54-233-154-2.sa-east-1.compute.amazonaws.com",
       delay: null,
     },
   ];
 
   datos = [];
-  view: any[];
-
-  // options
-  legend: boolean = true;
-  showLabels: boolean = true;
-  animations: boolean = true;
-  xAxis: boolean = true;
-  yAxis: boolean = true;
-  showYAxisLabel: boolean = false;
-  showXAxisLabel: boolean = false;
-  xAxisLabel: string = "Fecha";
-  yAxisLabel: string = "Puntos";
-  timeline: boolean = false;
-
-  colorScheme = {
-    domain: ["#dc3545", "#007bff", "#28a745", "#ffc107", "#a8385d", "#aae3f5"],
-  };
 
   constructor(public _amazonService: AmazonService) {
     this.metricasDelay();
@@ -97,29 +98,20 @@ export class AmazonComponent implements OnDestroy {
 
   metricasDelay() {
     this.intervalo = setInterval(() => {
-      this.pcs.forEach((pc) => {
+      this.pcs.forEach((pc, index) => {
         let start = performance.now();
-        this._amazonService.pingAngular(pc.ip).subscribe((resp: any) => {
-          let end = performance.now();
-          let time = end - start - 7;
-          pc.delay = time;
-        });
+        this._amazonService
+          .pingAngular(pc.public_dns_ipv4)
+          .subscribe((resp: any) => {
+            let end = performance.now();
+            let time = end - start - 7;
+            pc.delay = time;
+          });
       });
       this.data.push({ fecha: new Date(), delays: this.pcs });
     }, 5000);
     this.loadDatosChart();
-    console.log("paso");
   }
-
-  // let estructura = [
-  //   {
-  //     name: "ohio",
-  //     series: [
-  //       { name: "fecha1", value: "2" },
-  //       { name: "fecha2", value: "2" },
-  //     ],
-  //   },
-  // ];
 
   loadDatosChart() {
     var datos = [];
@@ -135,8 +127,6 @@ export class AmazonComponent implements OnDestroy {
     });
 
     this.datos = datos;
-    console.log(datos);
-    console.log(this.data);
   }
 
   //buscar
@@ -153,32 +143,6 @@ export class AmazonComponent implements OnDestroy {
           this.carga = false;
         });
     }
-  }
-
-  //prueba de ping
-  testPing(prefijo: any) {
-    let ip: string;
-    switch (prefijo.region) {
-      case "us-west-2":
-        ip = "34.223.228.236"; //oregon
-        break;
-      case "us-east-1":
-        ip = "52.90.140.184"; //north virginia
-        break;
-      case "us-east-2":
-        ip = "3.22.194.90"; //ohio
-        break;
-      case "sa-east-1":
-        ip = "54.233.154.2"; //sap paolo
-        break;
-    }
-
-    let start = performance.now();
-
-    // this._amazonService.pingAngular(ip).subscribe((resp: any) => {
-    //   let end = performance.now();
-    //   this.tiempo = end - start - 7;
-    // });
   }
 
   //actualizar prefijos de amazon

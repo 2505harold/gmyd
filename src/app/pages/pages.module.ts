@@ -15,6 +15,8 @@ import { PagesComponent } from "./pages.component";
 import { NperfComponent } from "./nperf/nperf.component";
 import { NperfEditarComponent } from "./nperf/nperf-editar.component";
 import { MantenimientoComponent } from "./mantenimiento/mantenimiento.component";
+import { GraficoLineasNgxchartsComponent } from "../components/grafico-lineas-ngxcharts/grafico-lineas-ngxcharts.component";
+import { TestvelocidadComponent } from './nperf/testvelocidad/testvelocidad.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { MantenimientoComponent } from "./mantenimiento/mantenimiento.component"
     NperfComponent,
     NperfEditarComponent,
     MantenimientoComponent,
+    GraficoLineasNgxchartsComponent,
+    TestvelocidadComponent,
   ],
   imports: [
     CommonModule,

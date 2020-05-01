@@ -1,7 +1,5 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { NperfService } from "src/app/services/service.index";
-import { isNgTemplate } from "@angular/compiler";
-import { ObjectUnsubscribedError } from "rxjs";
 
 @Component({
   selector: "app-nperf",
@@ -9,55 +7,80 @@ import { ObjectUnsubscribedError } from "rxjs";
   styles: [],
 })
 export class NperfComponent implements OnInit {
-  public puntajes: any = [];
-  public labels: any;
-  public loadTablaPuntos: boolean = true;
-  public totalRegistro: number = 0;
-  public desde: number = 0;
+  puntajes: any = [];
+  puntaje: any = [];
+  progressVelocidades: any = [];
+  velocidades: any = [];
+  labels: any;
+  loadTablaPuntos: boolean = true;
+  totalRegistro: number = 0;
+  desde: number = 0;
+  loadTablaVelocidades: boolean = true;
+  totalRegistro2: number = 0;
+  desde2: number = 0;
+  operadores = ["claro", "entel", "movistar", "bitel"];
 
   datos = [];
-  view: any[];
-
-  // options
-  legend: boolean = true;
-  showLabels: boolean = true;
-  animations: boolean = true;
-  xAxis: boolean = true;
-  yAxis: boolean = true;
-  showYAxisLabel: boolean = false;
-  showXAxisLabel: boolean = false;
-  xAxisLabel: string = "Fecha";
-  yAxisLabel: string = "Puntos";
-  timeline: boolean = false;
-
-  colorScheme = {
-    domain: ["#dc3545", "#007bff", "#28a745", "#ffc107", "#a8385d", "#aae3f5"],
-  };
+  datosVelocidades = [];
 
   constructor(private _nperfService: NperfService) {}
-
-  onSelect(data): void {
-    console.log("Item clicked", JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data): void {
-    console.log("Activate", JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data): void {
-    console.log("Deactivate", JSON.parse(JSON.stringify(data)));
-  }
 
   ngOnInit() {
     this.loadDatosChart();
     this.loadDatosTables();
+    this.loadDatosTablesVelocidades();
+    this.loadUltimosPuntajes();
+    this.loadDatosChartVelocidades();
+    this.loadUltimasVelocidades();
+  }
+
+  loadUltimosPuntajes() {
+    this._nperfService
+      .obtenerSorterMetricas("fecha_ingreso", "desc", 0, 1)
+      .subscribe((resp: any) => {
+        let mayor = 0;
+        this.operadores.forEach((operador) => {
+          if (mayor < Number(resp.metricas[0][operador])) {
+            mayor = Number(resp.metricas[0][operador]);
+          }
+        });
+
+        this.operadores.forEach((operador) => {
+          this.puntaje.push({
+            operador,
+            puntos: resp.metricas[0][operador],
+            porcentaje: (resp.metricas[0][operador] / mayor) * 100,
+          });
+        });
+      });
+  }
+
+  loadUltimasVelocidades() {
+    this._nperfService
+      .obtenerSorterMetricasVelocidades("fecha_ingreso", "desc", 0, 1)
+      .subscribe((resp: any) => {
+        console.log(resp);
+        let mayor = 0;
+        this.operadores.forEach((operador) => {
+          if (mayor < Number(resp.metricas[0][operador])) {
+            mayor = Number(resp.metricas[0][operador]);
+          }
+        });
+
+        this.operadores.forEach((operador) => {
+          this.progressVelocidades.push({
+            operador,
+            puntos: resp.metricas[0][operador],
+            porcentaje: (resp.metricas[0][operador] / mayor) * 100,
+          });
+        });
+      });
   }
 
   loadDatosChart() {
-    const operadores = ["claro", "entel", "movistar", "bitel"];
     this._nperfService.obtenerMetricas().subscribe((resp: any) => {
       var datos = [];
-      operadores.forEach((operador) => {
+      this.operadores.forEach((operador) => {
         var series = [];
         resp.metricas.forEach((objeto) => {
           series.push({
@@ -72,6 +95,12 @@ export class NperfComponent implements OnInit {
     });
   }
 
+  loadDatosChartVelocidades() {
+    this._nperfService.obtenerMetricasVelocidad().subscribe((resp) => {
+      this.datosVelocidades = resp;
+    });
+  }
+
   loadDatosTables(desde?: number) {
     this.loadTablaPuntos = true;
     this._nperfService
@@ -83,7 +112,18 @@ export class NperfComponent implements OnInit {
       });
   }
 
-  //click en siguinete o anterior
+  loadDatosTablesVelocidades(desde?: number) {
+    this.loadTablaPuntos = true;
+    this._nperfService
+      .obtenerSorterMetricasVelocidades("fecha_ingreso", "desc", desde)
+      .subscribe((resp: any) => {
+        this.velocidades = resp.metricas;
+        this.totalRegistro2 = resp.total;
+        this.loadTablaVelocidades = false;
+      });
+  }
+
+  //click en siguiente o anterior en la tabla
   continuar(valor: number) {
     const desde = this.desde + valor;
     if (desde >= this.totalRegistro) {
@@ -95,5 +135,19 @@ export class NperfComponent implements OnInit {
 
     this.desde += valor;
     this.loadDatosTables(desde);
+  }
+
+  //click en siguiente o anterior en la tabla
+  continuarT2(valor: number) {
+    const desde2 = this.desde2 + valor;
+    if (desde2 >= this.totalRegistro2) {
+      return;
+    }
+    if (desde2 < 0) {
+      return;
+    }
+
+    this.desde2 += valor;
+    this.loadDatosTablesVelocidades(desde2);
   }
 }
