@@ -7,7 +7,21 @@ $(function () {
       $(".sidebar").toggleClass("show");
     } else {
       $(".modos").toggleClass("mini-sidebar");
+      $(".item-menu .submenu").removeClass("show");
+      $(".item-menu > a").attr("aria-expanded", "false");
     }
+  });
+
+  $(".item-menu > a").on("click", function () {
+    $(".item-menu > a").removeClass("active");
+    //$(".item-menu > a").removeClass("active");
+    //Ocultamos todos los submenus desplegados
+    $(".item-menu .submenu").removeClass("show");
+    $(".item-menu > a").attr("aria-expanded", "false");
+    var $this = $(this);
+    var checkelement = $(this).next();
+    console.log(checkelement);
+    $(this).addClass("active");
   });
 
   // ==============================================================

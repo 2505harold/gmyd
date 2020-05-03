@@ -11,17 +11,15 @@ import { NgForm } from "@angular/forms";
 export class TestvelocidadComponent implements OnInit {
   metricas: NperfVelocidad = new NperfVelocidad();
 
-  constructor(private _nperfService: NperfService) {
-    this.metricas.tipo = 0;
-  }
+  constructor(private _nperfService: NperfService) {}
 
   ngOnInit() {}
 
   guardar(form: NgForm) {
+    this.metricas.tipo = "Movil";
     this.metricas.fecha_ingreso = new Date();
     this.metricas.usuario = localStorage.getItem("id");
     this._nperfService.guardarMetricasVelocidad(this.metricas).subscribe();
     form.reset();
-    this.metricas.tipo = 0;
   }
 }

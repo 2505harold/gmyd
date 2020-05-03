@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       .login(form.value.correo, form.value.password)
       .subscribe(
         (resp: any) => {
-          this.router.navigate(["/nperf"]);
+          this.router.navigate(["/nperf/movil"]);
         },
         (error) => {
           console.log(error);

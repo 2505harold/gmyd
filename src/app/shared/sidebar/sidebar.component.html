@@ -8,22 +8,53 @@
         </a>
       </li>
       <li class="item-menu">
-        <a routerLinkActive="active" [routerLink]="['/amazon']">
+        <a
+          routerLinkActive="active"
+          class="has-arrow"
+          [routerLink]="['/amazon']"
+        >
           <span class="icon-amazon icon"></span>
           <span class="item">Amazon</span>
         </a>
       </li>
       <li class="item-menu">
-        <a routerLinkActive="active" [routerLink]="['/nperf']">
+        <a
+          data-toggle="collapse"
+          data-target="#nperf"
+          aria-expanded="false"
+          class="has-arrow"
+        >
           <span class="icon icon-meter2"></span>
           <span class="item">nPerf</span>
         </a>
+        <ul class="collapse submenu" id="nperf">
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/nperf/movil']"
+              >Movil</a
+            >
+          </li>
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/nperf/fijo']">Fijo</a>
+          </li>
+        </ul>
       </li>
       <li class="item-menu">
-        <a routerLinkActive="active" [routerLink]="['/amazon/mantenimiento']">
+        <a
+          data-toggle="collapse"
+          data-target="#mantenimiento"
+          aria-expanded="false"
+          class="has-arrow"
+        >
           <span class="icon-lab icon"></span>
           <span class="item">Mantenimiento</span>
         </a>
+        <ul class="collapse submenu" id="mantenimiento">
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/mantenimiento']"
+              >Movil</a
+            >
+          </li>
+        </ul>
       </li>
     </ul>
   </div>

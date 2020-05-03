@@ -16,7 +16,10 @@ import { NperfComponent } from "./nperf/nperf.component";
 import { NperfEditarComponent } from "./nperf/nperf-editar.component";
 import { MantenimientoComponent } from "./mantenimiento/mantenimiento.component";
 import { GraficoLineasNgxchartsComponent } from "../components/grafico-lineas-ngxcharts/grafico-lineas-ngxcharts.component";
-import { TestvelocidadComponent } from './nperf/testvelocidad/testvelocidad.component';
+import { TestvelocidadComponent } from "./nperf/testvelocidad/testvelocidad.component";
+import { FijoComponent } from "./nperf/fijo/fijo.component";
+import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
+import { DropdownButtonComponent } from "../components/dropdown-button/dropdown-button.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { TestvelocidadComponent } from './nperf/testvelocidad/testvelocidad.comp
     NperfEditarComponent,
     MantenimientoComponent,
     GraficoLineasNgxchartsComponent,
+    DropdownButtonComponent,
     TestvelocidadComponent,
+    FijoComponent,
+    EditarFijoComponent,
   ],
   imports: [
     CommonModule,

@@ -3,11 +3,14 @@ import { HttpClient } from "@angular/common/http";
 import { URL_SERVICIOS } from "src/app/config/global";
 import { map } from "rxjs/operators";
 import { Usuario } from "src/app/models/usuario.model";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class UsuarioService {
   id: string = "";
-  constructor(public http: HttpClient) {
+  usuario: any = [];
+  token: string;
+  constructor(public http: HttpClient, private router: Router) {
     this.leerStorage();
   }
 
@@ -15,10 +18,21 @@ export class UsuarioService {
     const url = URL_SERVICIOS + "/login";
     return this.http.post(url, { correo, password }).pipe(
       map((resp: any) => {
-        this.cargarStorage(resp.usuario, resp.token);
+        this.guardarStorage(resp.usuario, resp.token);
         return true;
       })
     );
+  }
+
+  logout() {
+    this.id = "";
+    this.usuario = [];
+    this.token = "";
+    localStorage.removeItem("id");
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("nombre");
+    localStorage.removeItem("token");
+    this.router.navigate(["/login"]);
   }
 
   guardarUsuario(usuario: Usuario) {
@@ -31,21 +45,38 @@ export class UsuarioService {
   }
 
   leerStorage() {
-    if (localStorage.getItem("id")) {
+    if (localStorage.getItem("usuario")) {
       this.id = localStorage.getItem("id");
+      this.usuario = JSON.parse(localStorage.getItem("usuario"));
+      this.token = localStorage.getItem("token");
     } else {
       this.id = "";
+      this.usuario = [];
+      this.token = "";
     }
   }
 
-  cargarStorage(usuario, token) {
+  guardarStorage(usuario, token) {
     localStorage.setItem("id", usuario._id);
     localStorage.setItem("nombre", usuario.nombre);
     localStorage.setItem("token", token);
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    this.usuario = usuario;
     this.id = usuario._id;
+    this.token = token;
   }
 
   estaLogeado() {
-    return this.id.length > 5 ? true : false;
+    return this.usuario.nombre ? true : false;
+  }
+
+  obtenerDepartamentos() {
+    let url = URL_SERVICIOS + "/usuario/departamentos";
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        console.log(resp);
+        return resp.departamentos;
+      })
+    );
   }
 }

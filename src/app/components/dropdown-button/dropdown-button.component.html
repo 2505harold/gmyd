@@ -1,0 +1,14 @@
+<div class="btn-group m-1">
+  <button
+    class="btn btn-outline-secondary btn-sm dropdown-toggle"
+    type="button"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <span class="valor">{{ valor }}</span>
+  </button>
+  <div class="dropdown-menu">
+    <a *ngFor="let item of datos" class="dropdown-item">{{ item }}</a>
+  </div>
+</div>

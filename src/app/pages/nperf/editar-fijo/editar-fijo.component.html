@@ -1,0 +1,183 @@
+<div class="animated fadeIn">
+  <h4>Mantenimiento de Datos nPerf Fijo</h4>
+
+  <form #form="ngForm" ngNativeValidate (ngSubmit)="guardar(form)">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-header form-inline">
+            <img
+              class="img-award"
+              style="width: 70px;"
+              src="../../../assets/images/peru-sin-border.svg"
+              alt=""
+            />
+            <section class="ml-2">
+              <h5 class="card-title">Nacional</h5>
+              <h5 class="card-subtitle">
+                Media nacional
+              </h5>
+            </section>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Movistar (Mbps)</label>
+              <input
+                name="movistarNacional"
+                [(ngModel)]="fijoNacional.movistar"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Claro (Mbps)</label>
+              <input
+                name="claroNacional"
+                [(ngModel)]="fijoNacional.claro"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Claro Movil (Mbps)</label>
+              <input
+                name="claroMovilNacional"
+                [(ngModel)]="fijoNacional.claro_movil"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Americatel Peru S.A. (Mbps)</label>
+              <input
+                name="americatelNacional"
+                [(ngModel)]="fijoNacional.americatel_peru"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Movistar Movil (Mbps)</label>
+              <input
+                name="movistarMovilNacional"
+                [(ngModel)]="fijoNacional.movistar_movil"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Numero de pruebas</label>
+              <input
+                name="pruebasNacionales"
+                [(ngModel)]="fijoNacional.pruebas"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-header form-inline">
+            <img
+              class="img-award"
+              style="width: 70px;"
+              src="../../../assets/images/marcador-de-posicion-del-mapa.svg"
+              alt=""
+            />
+            <section class="ml-2">
+              <h5 class="card-title">Local</h5>
+              <h5 class="card-subtitle">
+                Media local
+              </h5>
+            </section>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Movistar (Mbps)</label>
+              <input
+                name="movistarLocal"
+                [(ngModel)]="fijoLocal.movistar"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Claro (Mbps)</label>
+              <input
+                name="claroLocal"
+                [(ngModel)]="fijoLocal.claro"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Americatel Peru S.A. (Mbps)</label>
+              <input
+                name="americatelLocal"
+                [(ngModel)]="fijoLocal.americatel_peru"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Winet Telecom SAC</label>
+              <input
+                name="winetLocal"
+                [(ngModel)]="fijoLocal.winet_telecom"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Claro Movil (Mbps)</label>
+              <input
+                name="claroMovilLocal"
+                [(ngModel)]="fijoLocal.claro_movil"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Numero de pruebas</label>
+              <input
+                name="pruebasLocales"
+                [(ngModel)]="fijoLocal.pruebas"
+                type="number"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a
+        routerLink="/nperf/fijo"
+        type="submit"
+        style="width: 150px;"
+        class="btn btn-secondary m-1"
+      >
+        Regresar
+      </a>
+      <button type="submit" style="width: 150px;" class="btn btn-danger m-1">
+        Guardar
+      </button>
+    </div>
+  </form>
+</div>

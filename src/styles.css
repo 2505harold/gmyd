@@ -94,6 +94,10 @@ CONTENEDOR DE CHART NGX
   margin-left: 65px;
 }
 
+.mini-sidebar .has-arrow::after {
+  display: none;
+}
+
 /*---------------------------*/
 /*  SIDEBAR EN MODO MOVIL */
 /*---------------------------*/

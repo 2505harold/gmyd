@@ -59,7 +59,6 @@ export class NperfComponent implements OnInit {
     this._nperfService
       .obtenerSorterMetricasVelocidades("fecha_ingreso", "desc", 0, 1)
       .subscribe((resp: any) => {
-        console.log(resp);
         let mayor = 0;
         this.operadores.forEach((operador) => {
           if (mayor < Number(resp.metricas[0][operador])) {
@@ -96,7 +95,7 @@ export class NperfComponent implements OnInit {
   }
 
   loadDatosChartVelocidades() {
-    this._nperfService.obtenerMetricasVelocidad().subscribe((resp) => {
+    this._nperfService.obtenerMetricasVelocidadMovil().subscribe((resp) => {
       this.datosVelocidades = resp;
     });
   }
