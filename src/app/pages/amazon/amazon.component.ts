@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AmazonService } from "src/app/services/service.index";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
+//declare function init_plugins();
+
 @Component({
   selector: "app-amazon",
   templateUrl: "./amazon.component.html",
@@ -67,6 +69,7 @@ export class AmazonComponent implements OnDestroy {
   datos = [];
 
   constructor(public _amazonService: AmazonService) {
+    //init_plugins();
     this.metricasDelay();
     this.cargarPrefijosAmazon();
     this.form = new FormGroup({

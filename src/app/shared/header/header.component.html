@@ -45,14 +45,15 @@
               class="avatar-perfil"
             />
             <section class="d-flex flex-column align-items-center">
-              <small class="text-info">harold.japur@iclaro.com.pe</small>
-              <small>Harold Japur</small>
+              <small class="text-info">{{ usuario.correo }}</small>
+              <small>{{ usuario.nombre }} {{ usuario.apellido }}</small>
               <button class="btn btn-danger btn-sm my-2">Ver Perfil</button>
             </section>
           </div>
-
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)">Action</a>
+          <a class="dropdown-item" href="javascript:void(0)"
+            ><i class="icon-profile"></i> Ver Perfil</a
+          >
           <a class="dropdown-item" href="javascript:void(0)">Another action</a>
           <a class="dropdown-item" href="javascript:void(0)"
             >Something else here</a

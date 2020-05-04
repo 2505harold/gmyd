@@ -1,12 +1,46 @@
+//function init_plugins() {
 $(function () {
   "use strict";
 
-  $("body").on("click", ".btn-menu", function (e) {
-    e.stopPropagation();
-    if ($("body .modos").hasClass("movil")) {
+  $(function () {
+    $(".preloader").fadeOut();
+  });
+
+  // ==============================================================
+  // comportamiento segun el dispositivo
+  // ==============================================================
+  var set = function () {
+    var width = window.innerWidth > 0 ? window.innerWidth : this.screen.width;
+    var topOffset = 0;
+    console.log("function set");
+    if (width < 768) {
+      $("body").addClass("movil-sidebar").removeClass("mini-sidebar");
+    } else if (width >= 768 && width < 1200) {
+      $("body").addClass("mini-sidebar").removeClass("movil-sidebar");
+    } else {
+      $("body").removeClass("mini-sidebar").removeClass("movil-sidebar");
+    }
+    // if (width <= 575.98) {
+    //   $(".modos").addClass("movil").removeClass("mini-sidebar");
+    // } else {
+    //   $(".modos").removeClass("movil");
+    // }
+  };
+  $(window).ready(set);
+  $(window).on("resize", set);
+
+  // ==============================================================
+  // click en el boton menu
+  // ==============================================================
+
+  $("body .btn-menu").on("click", function (e) {
+    console.log("jjjj");
+    if ($("body").hasClass("movil-sidebar")) {
+      $("body").trigger("resize");
       $(".sidebar").toggleClass("show");
     } else {
-      $(".modos").toggleClass("mini-sidebar");
+      $("body").trigger("resize");
+      $("body").toggleClass("mini-sidebar");
       $(".item-menu .submenu").removeClass("show");
       $(".item-menu > a").attr("aria-expanded", "false");
     }
@@ -23,28 +57,6 @@ $(function () {
     console.log(checkelement);
     $(this).addClass("active");
   });
-
-  // ==============================================================
-  // This is for the top header part and sidebar part
-  // ==============================================================
-  var set = function () {
-    var width = window.innerWidth > 0 ? window.innerWidth : this.screen.width;
-    var topOffset = 0;
-    if (width <= 575.98) {
-      $(".modos").addClass("movil").removeClass("mini-sidebar");
-    } else {
-      $(".modos").removeClass("movil");
-    }
-    //if (width < 1170) {
-    //$("body").addClass("mini-sidebar");
-    //console.log(width);
-    //console.log(window.innerWidth);
-    //} else {
-    //$("body").removeClass("mini-sidebar");
-    //  console.log(width);
-    //  console.log(window.innerWidth);
-    // }
-  };
-  $(window).ready(set);
-  $(window).on("resize", set);
 });
+// });
+//}

@@ -20,7 +20,7 @@
         <div *ngFor="let item of progressNacional" class="operador my-2">
           <div class="d-flex justify-content-between">
             <h6>{{ item.operador }}</h6>
-            <span class="ml-auto">{{ item.puntos }} Kbps</span>
+            <span class="ml-auto">{{ item.puntos }} Mbps</span>
           </div>
           <div class="progress">
             <div
@@ -46,10 +46,7 @@
   <div class="col-12 col-lg-6">
     <div class="card shadow-sm my-1">
       <div class="card-body chart-body">
-        <h5>
-          <span class="text-primary">Mi</span> velocidad
-          media local
-        </h5>
+        <h5><span class="text-primary">Mi</span> velocidad media local</h5>
         <app-grafico-lineas-ngxcharts
           [showYAxisLabel]="'true'"
           [yAxisLabel]="'Mbps'"
@@ -59,11 +56,11 @@
     </div>
     <div class="card shadow-sm my-2">
       <div class="card-body">
-        <h5><span class="text-primary">Velocidad</span> promedio local</h5>
+        <h5><span class="text-primary">Mi</span> ultimo promedio local</h5>
         <div *ngFor="let item of progressLocal" class="operador my-2">
           <div class="d-flex justify-content-between">
             <h6>{{ item.operador }}</h6>
-            <span class="ml-auto">{{ item.puntos }}</span>
+            <span class="ml-auto">{{ item.puntos }} Mbps</span>
           </div>
           <div class="progress">
             <div

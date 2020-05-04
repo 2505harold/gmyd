@@ -99,17 +99,11 @@ CONTENEDOR DE CHART NGX
 }
 
 /*---------------------------*/
-/*  SIDEBAR EN MODO MOVIL */
+/*  LEYENDA EN GRAFICAS NGXCHARTS */
 /*---------------------------*/
-
-.movil aside.sidebar.show {
-  left: 0px;
-  z-index: 100;
-}
-
-.movil aside.sidebar.show .scroll-sidebar > ul > li > a span.item,
-.movil .sidebar.show .scroll-sidebar > ul > li > a span.icon {
-  display: inline-block;
+.legend-labels {
+  display: flex !important;
+  flex-wrap: wrap !important;
 }
 
 /*--
@@ -327,7 +321,19 @@ span.groupbox {
   .sidebar {
     left: -100%;
     width: 70px;
-    transition: 0.2s ease-out;
+    transition: 0.2s ease;
+  }
+
+  .sidebar.show {
+    left: 0;
+    width: 70px;
+    transition: 0.2s ease-in;
+    z-index: 100;
+  }
+
+  .sidebar.show .scroll-sidebar > ul > li > a span.item,
+  .sidebar.show .scroll-sidebar > ul > li > a span.icon {
+    display: inline-block;
   }
 
   .login-box {
@@ -337,6 +343,15 @@ span.groupbox {
   .sidebar .scroll-sidebar > ul > li > a span.item,
   .sidebar .scroll-sidebar > ul > li > a span.icon {
     display: none;
+  }
+
+  .navbar-nav > .nav-item.show .dropdown-menu {
+    width: 100%;
+    margin-top: 0px;
+  }
+
+  .navbar-nav > .nav-item.show .dropdown-menu {
+    position: absolute;
   }
 }
 

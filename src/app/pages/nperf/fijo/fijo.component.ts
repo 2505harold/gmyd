@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { NperfFijoNacional } from "src/app/models/nperf.fijo.nacional";
-import { NperfFijoLocal } from "src/app/models/nperf.fijo.local";
 import { NperfService, UsuarioService } from "src/app/services/service.index";
+
+//declare function init_plugins();
 
 @Component({
   selector: "app-fijo",
@@ -29,6 +29,7 @@ export class FijoComponent implements OnInit {
   }
 
   ngOnInit() {
+    //init_plugins();
     this.loadDatosChartNacional();
     this.loadUltimosDatosNacional();
     this.loadDatosChartLocal(this.idUser);

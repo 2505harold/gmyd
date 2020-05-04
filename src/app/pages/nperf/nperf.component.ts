@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { NperfService } from "src/app/services/service.index";
 
+//declare function init_plugins();
+
 @Component({
   selector: "app-nperf",
   templateUrl: "./nperf.component.html",
@@ -26,6 +28,7 @@ export class NperfComponent implements OnInit {
   constructor(private _nperfService: NperfService) {}
 
   ngOnInit() {
+    //init_plugins();
     this.loadDatosChart();
     this.loadDatosTables();
     this.loadDatosTablesVelocidades();

@@ -4,6 +4,8 @@ import { NgForm } from "@angular/forms";
 import { UsuarioService } from "../services/service.index";
 import Swal from "sweetalert2";
 
+//declare function init_plugins();
+
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
@@ -13,7 +15,9 @@ export class LoginComponent implements OnInit {
   correo: string;
   constructor(public router: Router, private _usuarioService: UsuarioService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    //init_plugins();
+  }
 
   ingresar(form: NgForm) {
     if (form.invalid) {
