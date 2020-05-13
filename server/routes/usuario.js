@@ -1,5 +1,6 @@
 const express = require("express");
 const Usuario = require("../models/usuario");
+const bcrypt = require("bcryptjs");
 const app = express();
 
 // ====================================

@@ -1,6 +1,8 @@
 const express = require("express");
 const IpsAmazon = require("../models/prefix-amazon");
 const RegionesAmazon = require("../models/region-amazon");
+const PcsAmazon = require("../models/amazon/pcs");
+const MetricasDelay = require("../models/amazon/metricas-delay");
 const URL_PREFIX_AMAZON = require("../config/variables").URL_PREFIX_AMAZON;
 const { isInSubnet } = require("is-in-subnet");
 const axios = require("axios");
@@ -225,6 +227,89 @@ app.get("/ping/:ip", (req, res) => {
     .catch((err) => {
       res.json({
         error: err,
+      });
+    });
+});
+
+// ====================================
+// Guardar PCs amazon
+// ====================================
+app.post("/pc", (req, res) => {
+  const body = req.body;
+  const pcAmazon = new PcsAmazon(body);
+  pcAmazon.save((err, pcguardada) => {
+    if (err) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Error al guardar pc",
+        errors: err,
+      });
+    }
+    return res.status(200).json({
+      ok: true,
+      pc: pcguardada,
+    });
+  });
+});
+
+// ====================================
+// Leer PCs de amazon
+// ====================================
+app.get("/pcs/ec2", (req, res) => {
+  PcsAmazon.find({}).exec((err, datos) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Ocurrio un error con obtener la lista",
+        error: err,
+      });
+    }
+    return res.status(200).json({
+      ok: true,
+      pcs: datos,
+    });
+  });
+});
+
+// ====================================
+// Guardar metrias de delay
+// ====================================
+app.post("/metricas/delay", (req, res) => {
+  const body = req.body;
+  const metrica = new MetricasDelay(body);
+  metrica.save((err, metricaGuardada) => {
+    if (err) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Error al guardar metricas",
+        errors: err,
+      });
+    }
+    return res.status(200).json({
+      ok: true,
+      metrica: metricaGuardada,
+    });
+  });
+});
+
+// ====================================
+// Obtener metricas delay
+// ====================================
+app.get("/metricas/delay", (req, res) => {
+  MetricasDelay.find({})
+    .populate("pc", "region")
+    .sort({ fecha: "asc" })
+    .exec((err, datos) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        datos,
       });
     });
 });

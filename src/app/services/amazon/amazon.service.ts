@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { URL_SERVICIOS } from "../../config/global";
 import { map } from "rxjs/operators";
 import Swal from "sweetalert2";
+import { PcsAmazon } from "src/app/models/pcs-amazon.model";
 
 @Injectable()
 export class AmazonService {
@@ -80,6 +81,49 @@ export class AmazonService {
         });
 
         return true;
+      })
+    );
+  }
+
+  guardarPc(pc: PcsAmazon) {
+    const url = URL_SERVICIOS + "/amazon/pc";
+    return this.http.post(url, pc).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Pc guardada",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        return true;
+      })
+    );
+  }
+
+  obtenerPcs() {
+    const url = URL_SERVICIOS + "/amazon/pcs/ec2";
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.pcs;
+      })
+    );
+  }
+
+  guardarMetricasDelay(datos: any) {
+    const url = URL_SERVICIOS + "/amazon/metricas/delay";
+    return this.http.post(url, datos).pipe(
+      map((resp) => {
+        return true;
+      })
+    );
+  }
+
+  obtenerMetricasDelay() {
+    const url = URL_SERVICIOS + "/amazon/metricas/delay";
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.datos;
       })
     );
   }

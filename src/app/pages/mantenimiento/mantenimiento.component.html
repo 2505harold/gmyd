@@ -1,1 +1,118 @@
-<p>mantenimiento works!</p>
+<div class="row">
+  <div class="col-lg-6 col-12">
+    <div class="card my-1">
+      <div class="card-body">
+        <form #form="ngForm" ngNativeValidate (ngSubmit)="Guardar(form)">
+          <div class="form-inline">
+            <h5>Datos de la computadora Amazon</h5>
+            <button type="submit" class="btn btn-outline-danger btn-sm ml-auto">
+              Guardar
+            </button>
+          </div>
+          <div class="form-group">
+            <label>IP EC2</label>
+            <input
+              [(ngModel)]="pc.ip"
+              name="ip"
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Region</label>
+            <input
+              [(ngModel)]="pc.region"
+              name="region"
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>IP Public DNS</label>
+            <input
+              [(ngModel)]="pc.dns"
+              name="dns"
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Nombre de imagen</label>
+            <input
+              [(ngModel)]="pc.img"
+              name="imagen"
+              type="text"
+              class="form-control"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Fecha Creacion</label>
+            <input
+              [(ngModel)]="pc.fecha"
+              type="date"
+              name="fecha"
+              class="form-control"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Vista previa de imagen</label>
+            <img src="" alt="Imagen previa" />
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="card my-1">
+      <div class="card-body">
+        <h5>Actualizar imagen</h5>
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="customFile" />
+          <label class="custom-file-label" for="customFile"
+            >Seleccione imagen</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-12">
+    <div class="card my-1">
+      <div class="card-body">
+        <h5>Detalle de PCs</h5>
+
+        <div class="tableFixHead">
+          <table class="table">
+            <thead>
+              <tr class="column-dark">
+                <th scope="col">Region</th>
+                <th scope="col">IP</th>
+                <th scope="col">DNS</th>
+                <th scope="col">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pcs">
+                <td>{{ item.region }}</td>
+                <td>{{ item.ip }}</td>
+                <td>{{ item.dns }}</td>
+                <td>
+                  <button type="button" class="btn btn-outline-dark btn-sm">
+                    Editar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

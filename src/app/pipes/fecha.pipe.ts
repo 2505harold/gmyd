@@ -5,7 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FechaPipe implements PipeTransform {
 
-  transform(value: any, ...args: any[]): any {
+  transform(fecha: string): any {
+    
+    
     return null;
   }
 

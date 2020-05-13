@@ -1,8 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700);
-@font-face{font-family:icomoon;src:url(assets/fonts/icomoon/icomoon.eot?2ymfb5);src:url(assets/fonts/icomoon/icomoon.eot?2ymfb5#iefix) format('embedded-opentype'),url(assets/fonts/icomoon/icomoon.ttf?2ymfb5) format('truetype'),url(assets/fonts/icomoon/icomoon.woff?2ymfb5) format('woff'),url(assets/fonts/icomoon/icomoon.svg?2ymfb5#icomoon) format('svg');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:icomoon;src:url(assets/fonts/icomoon/icomoon.eot?pzmfop);src:url(assets/fonts/icomoon/icomoon.eot?pzmfop#iefix) format("embedded-opentype"),url(assets/fonts/icomoon/icomoon.ttf?pzmfop) format("truetype"),url(assets/fonts/icomoon/icomoon.woff?pzmfop) format("woff"),url(assets/fonts/icomoon/icomoon.svg?pzmfop#icomoon) format("svg");font-weight:400;font-style:normal;font-display:block}
 [class*=" icon-"],[class^=icon-]{font-family:icomoon!important;speak:none;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.icon-user-o:before{content:"\e900"}
+.icon-profile:before{content:"\e923"}
+.icon-switch:before{content:"\e9b6"}
 .icon-plus:before{content:"\ea0a"}
+.icon-user-o:before{content:"\e900"}
 .icon-amazon:before{content:"\e901"}
 .icon-menu:before{content:"\e902"}
 .icon-cubes:before{content:"\e903"}
@@ -19,14 +21,15 @@ body{background:#fff;font-family:Montserrat,sans-serif;margin:0;overflow-x:hidde
 .tableFixHead th{box-shadow:inset 1px 1px rgba(0,0,0,.125),0 1px rgba(0,0,0,.125)}
 .chart-container{display:grid;height:400px}
 .chart-body{height:530px}
+.chart{display:grid;height:300px}
 .w-25{width:25%!important}
 .card .card-subtitle{font-weight:300;margin-bottom:15px;color:#99abb4}
 .card .card-title{position:relative}
 .mini-sidebar .sidebar .scroll-sidebar>ul>li>a span.item{display:none}
 .mini-sidebar aside.sidebar{width:65px}
 .mini-sidebar .main{margin-left:65px}
-.movil aside.sidebar.show{left:0;z-index:100}
-.movil .sidebar.show .scroll-sidebar>ul>li>a span.icon,.movil aside.sidebar.show .scroll-sidebar>ul>li>a span.item{display:inline-block}
+.mini-sidebar .has-arrow::after{display:none}
+.legend-labels{display:flex!important;flex-wrap:wrap!important}
 .preload{position:fixed;top:0;width:100%;height:100vh;background:#77b3d4;display:flex;justify-content:center;align-items:center;transition:all .5s ease}
 .cloud1,.cloud2,.cloud3{height:100px;position:absolute;right:0;z-index:-1}
 .cloud1{top:25%;transform:translateX(100%,-25%);animation:clouds 3s ease infinite}
@@ -53,7 +56,11 @@ to{right:130%}
 }
 @media (max-width:412px){
 .main{margin-left:0;transition:.2s ease-in}
-.sidebar{left:-100%;width:70px;transition:.2s ease-out}
+.sidebar{left:-100%;width:70px;transition:.2s ease}
+.sidebar.show{left:0;width:70px;transition:.2s ease-in;z-index:100}
+.sidebar.show .scroll-sidebar>ul>li>a span.icon,.sidebar.show .scroll-sidebar>ul>li>a span.item{display:inline-block}
 .login-box{width:100%}
 .sidebar .scroll-sidebar>ul>li>a span.icon,.sidebar .scroll-sidebar>ul>li>a span.item{display:none}
+.navbar-nav>.nav-item.show .dropdown-menu{width:100%;margin-top:0}
+.navbar-nav>.nav-item.show .dropdown-menu{position:absolute}
 }

@@ -51,13 +51,6 @@ export class AmazonComponent implements OnDestroy {
       delay: null,
     },
     {
-      img: "../../../assets/images/francia.svg",
-      region: "paris",
-      public_dns_ipv4: "ec2-35-180-64-184.eu-west-3.compute.amazonaws.com",
-      ip: "35.180.64.184",
-      delay: null,
-    },
-    {
       img: "../../../assets/images/brasil.svg",
       region: "brasil",
       ip: "54.233.154.2",
@@ -70,6 +63,7 @@ export class AmazonComponent implements OnDestroy {
 
   constructor(public _amazonService: AmazonService) {
     //init_plugins();
+
     this.metricasDelay();
     this.cargarPrefijosAmazon();
     this.form = new FormGroup({
@@ -99,19 +93,24 @@ export class AmazonComponent implements OnDestroy {
 
   metricasDelay() {
     this.intervalo = setInterval(() => {
-      this.pcs.forEach((pc, index) => {
-        let start = performance.now();
-        this._amazonService
-          .pingAngular(pc.public_dns_ipv4)
-          .subscribe((resp: any) => {
+      this._amazonService.obtenerPcs().subscribe((resp) => {
+        let fecha = new Date();
+        resp.forEach((item, index) => {
+          let start = performance.now();
+          this._amazonService.pingAngular(item.dns).subscribe((resp: any) => {
             let end = performance.now();
             let time = end - start - 7;
-            pc.delay = time;
+            this._amazonService
+              .guardarMetricasDelay({
+                fecha,
+                pc: item._id,
+                delay: time,
+              })
+              .subscribe();
           });
+        });
       });
-      this.data.push({ fecha: new Date(), delays: this.pcs });
-    }, 5000);
-    this.loadDatosChart();
+    }, 300000);
   }
 
   loadDatosChart() {

@@ -22,7 +22,7 @@ const pagesRoute: Routes = [
       { path: "nperf/fijo/:id", component: EditarFijoComponent },
       { path: "nperf/:id", component: NperfEditarComponent },
       { path: "nperf/velocidad/:id", component: TestvelocidadComponent },
-      { path: "", redirectTo: "nperf", pathMatch: "full" },
+      { path: "", redirectTo: "nperf/movil", pathMatch: "full" },
     ],
   },
 ];
