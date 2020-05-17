@@ -68,7 +68,7 @@ export class UsuarioService {
   }
 
   estaLogeado() {
-    return this.usuario.nombre && this.usuario.rol ? true : false;
+    return this.usuario.nombre ? true : false;
   }
 
   obtenerDepartamentos() {

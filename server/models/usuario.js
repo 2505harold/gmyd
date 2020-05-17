@@ -10,7 +10,7 @@ const usuarioSchema = new Schema({
   departamento: { type: String },
   provincia: { type: String },
   distrito: { type: String },
-  rol: { type: String },
+  rol: { type: String, default: "USER_ROLE" },
   fecha_creacion: { type: String, default: new Date() },
 });
 
