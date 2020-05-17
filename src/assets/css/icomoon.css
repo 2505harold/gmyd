@@ -1,75 +1,83 @@
 @font-face {
-  font-family: "icomoon";
-  src: url("../fonts/icomoon/icomoon.eot?pzmfop");
-  src: url("../fonts/icomoon/icomoon.eot?pzmfop#iefix")
-      format("embedded-opentype"),
-    url("../fonts/icomoon/icomoon.ttf?pzmfop") format("truetype"),
-    url("../fonts/icomoon/icomoon.woff?pzmfop") format("woff"),
-    url("../fonts/icomoon/icomoon.svg?pzmfop#icomoon") format("svg");
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
+    font-family: 'icomoon';
+    src: url('../fonts/icomoon/icomoon.eot?40sn03');
+    src: url('../fonts/icomoon/icomoon.eot?40sn03#iefix') format('embedded-opentype'), url('../fonts/icomoon/icomoon.ttf?40sn03') format('truetype'), url('../fonts/icomoon/icomoon.woff?40sn03') format('woff'), url('../fonts/icomoon/icomoon.svg?40sn03#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
 }
 
 [class^="icon-"],
 [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "icomoon" !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-profile:before {
-  content: "\e923";
+.icon-save:before {
+    content: "\e900";
 }
 
-.icon-switch:before {
-  content: "\e9b6";
+.icon-cross:before {
+    content: "\ea0f";
 }
 
-.icon-plus:before {
-  content: "\ea0a";
+.icon-calendar:before {
+    content: "\e901";
 }
 
 .icon-user-o:before {
-  content: "\e900";
+    content: "\e902";
 }
 
 .icon-amazon:before {
-  content: "\e901";
+    content: "\e903";
 }
 
 .icon-menu:before {
-  content: "\e902";
+    content: "\e904";
 }
 
 .icon-cubes:before {
-  content: "\e903";
+    content: "\e905";
 }
 
 .icon-search:before {
-  content: "\e904";
+    content: "\e906";
 }
 
 .icon-angle-double-left:before {
-  content: "\e905";
+    content: "\e907";
 }
 
 .icon-angle-double-right:before {
-  content: "\e906";
+    content: "\e908";
+}
+
+.icon-profile:before {
+    content: "\e923";
 }
 
 .icon-meter2:before {
-  content: "\e9a7";
+    content: "\e9a7";
 }
 
 .icon-lab:before {
-  content: "\e9aa";
+    content: "\e9aa";
+}
+
+.icon-switch:before {
+    content: "\e9b6";
+}
+
+.icon-plus:before {
+    content: "\ea0a";
 }

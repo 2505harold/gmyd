@@ -43,6 +43,19 @@ ESTILOS TABLA
   box-shadow: inset 1px 1px rgba(0, 0, 0, 0.125), 0 1px rgba(0, 0, 0, 0.125);
 }
 
+.h-800 {
+  height: 800px;
+}
+
+.h-700 {
+  height: 700px;
+}
+
+.bg-table-header-dark {
+  background-color: #343a40 !important;
+  color: #fff;
+}
+
 /*-- =====================================================
 CONTENEDOR DE CHART NGX 
 ========================================================*/
@@ -58,6 +71,10 @@ CONTENEDOR DE CHART NGX
 .chart {
   display: grid;
   height: 300px;
+}
+
+.card-body-chart {
+  height: 500px;
 }
 
 /*---------------------------*/
@@ -352,6 +369,14 @@ span.groupbox {
 
   .navbar-nav > .nav-item.show .dropdown-menu {
     position: absolute;
+  }
+
+  .card-body-chart {
+    height: 550px;
+  }
+
+  .chart-body {
+    height: 580px;
   }
 }
 

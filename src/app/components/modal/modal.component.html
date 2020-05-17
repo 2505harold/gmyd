@@ -1,0 +1,79 @@
+<div
+  class="modal fade animated fadeIn"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  [ngClass]="_modalService.show"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Crear equipo</h5>
+        <button
+          type="button"
+          class="close"
+          (click)="_modalService.ocultarModal()"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #form="ngForm" ngNativeValidate (ngSubmit)="guardar(form)">
+          <div class="form-group">
+            <input
+              type="text"
+              name="equipo"
+              [(ngModel)]="link.equipo"
+              class="form-control"
+              placeholder="Equipo"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="link.proveedor"
+              name="proveedor"
+              placeholder="Proveedor (Teliasonera, Internexa, etc)"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="link.delayves"
+              name="delayves"
+              placeholder="Delay VES (ms)"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="link.delaypolo"
+              name="delaypolo"
+              placeholder="Delay Polo1 (ms)"
+            />
+          </div>
+          <a
+            href="javascript: void(0)"
+            (click)="_modalService.ocultarModal()"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancelar
+          </a>
+          <button type="submit" class="btn btn-danger mx-2">
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

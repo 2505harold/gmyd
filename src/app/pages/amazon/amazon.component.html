@@ -1,33 +1,68 @@
 <div class="d-flex justify-content-between">
-  <h4>Amazon</h4>
-
-  <section>
-    <div class="btn-group">
-      <button
-        type="button"
-        class="btn btn-outline-info dropdown-toggle"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        Actualizar
-      </button>
-      <div class="dropdown-menu dropdown-menu-right">
-        <a (click)="prefixAmazon()" class="dropdown-item">Prefijos</a>
-        <a (click)="regionAmazon()" class="dropdown-item">Regiones</a>
-      </div>
-    </div>
-  </section>
+  <h4>Prefijos Amazon</h4>
 </div>
 
 <br />
 
 <div class="row my-1">
-  <div class="col-sm-6">
-    <app-grafico-lineas-ngxcharts></app-grafico-lineas-ngxcharts>
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="form-inline">
+          <div class="input-group m-1 flex-nowrap">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="addon-wrapping"
+                ><i class="icon-calendar"></i> Desde</span
+              >
+            </div>
+            <input
+              [(ngModel)]="inicio"
+              type="date"
+              name="inicio"
+              class="form-control"
+            />
+          </div>
+          <div class="input-group m-1 flex-nowrap">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="addon-wrapping"
+                ><i class="icon-calendar"></i> Hasta</span
+              >
+            </div>
+            <input
+              [(ngModel)]="fin"
+              type="date"
+              name="fin"
+              class="form-control"
+            />
+          </div>
+          <button
+            type="button"
+            (click)="actualizarGrafico()"
+            class="btn btn-secondary m-1 ml-auto"
+          >
+            Actualizar Grafico
+          </button>
+        </div>
+      </div>
+      <div class="card-body card-body-chart">
+        <div
+          class="alert alert-primary text-center"
+          *ngIf="loadGraficoDelay"
+          role="alert"
+        >
+          Cargando datos...
+        </div>
+        <app-grafico-lineas-ngxcharts
+          *ngIf="!loadGraficoDelay"
+          [results]="datos"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+        ></app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
   </div>
   <div class="col-sm-6">
-    <ul class="list-group">
+    <!-- <ul class="list-group">
       <li
         *ngFor="let item of pcs"
         class="list-group-item d-flex justify-content-between align-items-center"
@@ -48,7 +83,7 @@
           >{{ item.delay | number: "1.0-0" }} ms</span
         >
       </li>
-    </ul>
+    </ul> -->
   </div>
 </div>
 
@@ -78,7 +113,6 @@
 
 <div class="card my-1">
   <div class="card-body">
-    <span>Tiempo IDA {{ tiempo | number: "1.0-0" }} ms</span>
     <div class="table-responsive">
       <div class="tableFixHead">
         <div
@@ -96,6 +130,10 @@
               <th scope="col">Codigo</th>
               <th scope="col">Servicio</th>
               <th scope="col">Prefijo</th>
+              <th scope="col">Router principal</th>
+              <th scope="col">Salida Internet Actual</th>
+              <th scope="col">Delay VES (ms)</th>
+              <th scope="col">Delay Polo (ms)</th>
             </tr>
           </thead>
           <tbody>
@@ -104,6 +142,34 @@
               <td>{{ prefijo.region }}</td>
               <td>{{ prefijo.service }}</td>
               <td>{{ prefijo.ip_prefix }}</td>
+              <td>
+                {{
+                  prefijo.link_internacional
+                    ? prefijo.link_internacional.equipo
+                    : prefijo.link_internacional
+                }}
+              </td>
+              <td>
+                {{
+                  prefijo.link_internacional
+                    ? prefijo.link_internacional.proveedor
+                    : prefijo.link_internacional
+                }}
+              </td>
+              <td>
+                {{
+                  prefijo.link_internacional
+                    ? prefijo.link_internacional.delayves
+                    : prefijo.link_internacional
+                }}
+              </td>
+              <td>
+                {{
+                  prefijo.link_internacional
+                    ? prefijo.link_internacional.delaypolo
+                    : prefijo.link_internacional
+                }}
+              </td>
             </tr>
           </tbody>
         </table>

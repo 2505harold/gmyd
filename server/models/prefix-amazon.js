@@ -7,6 +7,8 @@ const prefixAmazonSchema = new Schema(
     region: { type: String },
     service: { type: String },
     network_border_group: { type: String },
+    link_internacional: { type: Schema.Types.ObjectId, ref: "LinksIntern" },
+    estado: { type: String },
   },
   { collection: "ipsamazon" }
 );

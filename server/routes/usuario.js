@@ -4,6 +4,58 @@ const bcrypt = require("bcryptjs");
 const app = express();
 
 // ====================================
+// Obtener todos los usuarios
+// ====================================
+app.get("/", (req, res) => {
+  Usuario.find({}).exec((err, usuarios) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Ocurrio un error con obtener la lista de usuarios",
+        error: err,
+      });
+    }
+    return res.status(200).json({
+      ok: true,
+      usuarios,
+    });
+  });
+});
+
+// ====================================
+// Actualizar usuario
+// ====================================
+app.put("/:id", (req, res) => {
+  const id = req.params.id;
+  Usuario.findById(id, (err, usuario) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar usuario",
+        error: err,
+      });
+    }
+
+    if (!usuario) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "El usuario con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    usuario.rol = req.body.rol;
+
+    usuario.save((err, usuarioActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        usuario: usuarioActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
 // Crear nuevo usuario
 // ====================================
 app.post("/", (req, res) => {

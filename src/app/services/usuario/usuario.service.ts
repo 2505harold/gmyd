@@ -4,6 +4,7 @@ import { URL_SERVICIOS } from "src/app/config/global";
 import { map } from "rxjs/operators";
 import { Usuario } from "src/app/models/usuario.model";
 import { Router } from "@angular/router";
+import Swal from "sweetalert2";
 
 @Injectable()
 export class UsuarioService {
@@ -67,15 +68,37 @@ export class UsuarioService {
   }
 
   estaLogeado() {
-    return this.usuario.nombre ? true : false;
+    return this.usuario.nombre && this.usuario.rol ? true : false;
   }
 
   obtenerDepartamentos() {
     let url = URL_SERVICIOS + "/usuario/departamentos";
     return this.http.get(url).pipe(
       map((resp: any) => {
-        console.log(resp);
         return resp.departamentos;
+      })
+    );
+  }
+
+  actualizarUsuario(usuario: Usuario) {
+    let url = URL_SERVICIOS + "/usuario/" + usuario._id;
+    return this.http.put(url, usuario).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Usuario actualizado",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+    );
+  }
+
+  obtenerUsuarios() {
+    let url = URL_SERVICIOS + "/usuario";
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.usuarios;
       })
     );
   }

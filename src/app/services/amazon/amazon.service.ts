@@ -4,15 +4,22 @@ import { URL_SERVICIOS } from "../../config/global";
 import { map } from "rxjs/operators";
 import Swal from "sweetalert2";
 import { PcsAmazon } from "src/app/models/pcs-amazon.model";
+import { IpsAmazon } from "src/app/models/ips.amazon.model";
 
 @Injectable()
 export class AmazonService {
   constructor(public http: HttpClient) {}
 
-  obtenerPrefixAmazon(desde?: number) {
+  //obtiene los prefijos con el detalle de la region
+  obtenerPrefixAmazon(buscar: string, desde?: number, limite?: number) {
     var url = URL_SERVICIOS + "/amazon/";
-    if (desde) {
-      url += "?desde=" + desde;
+
+    if (limite && desde) {
+      url += "?buscar=" + buscar + "&desde=" + desde + "&limite=" + limite;
+    } else if (desde) {
+      url += "?buscar=" + buscar + "&desde=" + desde;
+    } else if (limite) {
+      url += "?buscar=" + buscar + "&limite=" + limite;
     }
 
     return this.http.get(url).pipe(
@@ -22,7 +29,7 @@ export class AmazonService {
     );
   }
 
-  buscarPrefixAmazon(ip: string, desde: number = 0) {
+  buscarIpPrefixAmazon(ip: string, desde: number = 0) {
     const url = URL_SERVICIOS + "/amazon/" + ip + "?desde=" + desde;
     return this.http.get(url).pipe(
       map((resp: any) => {
@@ -53,6 +60,7 @@ export class AmazonService {
     );
   }
 
+  //metodo para actualizar prefijos de amazon
   cargarPrefixAmazon() {
     const url = URL_SERVICIOS + "/amazon/ips";
     return this.http.post(url, {}).pipe(
@@ -60,6 +68,22 @@ export class AmazonService {
         Swal.fire({
           icon: "success",
           title: "Prefijo actualizados",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        return true;
+      })
+    );
+  }
+
+  actualizarEquipoPrefijosAmazon(prefijo: IpsAmazon) {
+    const url = URL_SERVICIOS + "/amazon/ips/" + prefijo._id;
+    return this.http.put(url, prefijo).pipe(
+      map((resp: any) => {
+        Swal.fire({
+          icon: "success",
+          title: "Prefijo actualizado",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -119,11 +143,52 @@ export class AmazonService {
     );
   }
 
-  obtenerMetricasDelay() {
-    const url = URL_SERVICIOS + "/amazon/metricas/delay";
+  obtenerMetricasDelayGrafico(desde: string, hasta: string) {
+    const url =
+      URL_SERVICIOS +
+      "/amazon/metricas/delay" +
+      "?inicio=" +
+      desde +
+      "&fin=" +
+      hasta;
     return this.http.get(url).pipe(
       map((resp: any) => {
-        return resp.datos;
+        var datos = [];
+        const pcs = resp.pcs;
+        const delays = resp.delays;
+        pcs.forEach((pc) => {
+          var series = delays.reduce((series, item) => {
+            if (item.pc === pc._id) {
+              series.push({ name: new Date(item.fecha), value: item.delay });
+            }
+            return series;
+          }, []);
+          datos.push({ name: pc.region, series });
+        });
+        return datos;
+      })
+    );
+  }
+
+  obtenerAgrupadoMetricasDelayByDias() {
+    const url = URL_SERVICIOS + "/amazon/metricas/delay/guardados";
+    return this.http.get(url).pipe(
+      map((resp) => {
+        return resp;
+      })
+    );
+  }
+
+  eliminarMetricaDelayByFecha(fecha: string) {
+    const url = URL_SERVICIOS + "/amazon/metricas/delay/" + fecha;
+    return this.http.delete(url).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Metrica delay eliminada",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
     );
   }

@@ -1,0 +1,75 @@
+<h4>Mantenimiento <span class="text-primary">Usuarios</span></h4>
+<br />
+<div class="card">
+  <div class="card-body">
+    <div class="tableFixHead h-700">
+      <table class="table">
+        <thead>
+          <tr class="column-dark">
+            <th scope="col" class="bg-table-header-dark">#</th>
+            <th scope="col" class="bg-table-header-dark">Usuario</th>
+            <th scope="col" class="bg-table-header-dark">Role</th>
+            <th scope="col" class="bg-table-header-dark">Correo</th>
+            <th scope="col" class="bg-table-header-dark">Departamento</th>
+            <th scope="col" class="bg-table-header-dark">Provincia</th>
+            <th scope="col" class="bg-table-header-dark">Distrito</th>
+            <th
+              scope="col"
+              [ngClass]="{
+                'd-none': rolUsuario == 'USER_ROLE'
+              }"
+              class="bg-table-header-dark"
+            >
+              Accion
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+            <td
+              [ngClass]="{
+                'd-none': rolUsuario == 'ADMIN_ROLE'
+              }"
+            >
+              {{ usuario.rol }}
+            </td>
+            <td
+              [ngClass]="{
+                'd-none': rolUsuario == 'USER_ROLE'
+              }"
+            >
+              <select
+                #equipo
+                [(ngModel)]="usuario.rol"
+                class="form-control"
+                name="role"
+              >
+                <option value="ADMIN_ROLE">ADMIN_ROLE</option>
+                <option value="USER_ROLE">USER_ROLE</option>
+              </select>
+            </td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.departamento }}</td>
+            <td>{{ usuario.provincia }}</td>
+            <td>{{ usuario.distrito }}</td>
+            <td
+              [ngClass]="{
+                'd-none': rolUsuario == 'USER_ROLE'
+              }"
+            >
+              <button
+                type="button"
+                (click)="actualizarUsuario(usuario)"
+                class="btn btn-danger btn-sm"
+              >
+                <i class="icon-save"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

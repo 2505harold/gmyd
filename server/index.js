@@ -9,6 +9,7 @@ const nperfRoutes = require("./routes/nperf");
 const locationRoutes = require("./routes/location");
 const usuarioRoutes = require("./routes/usuario");
 const loginRoutes = require("./routes/login");
+const internacionalRoutes = require("./routes/internacional");
 
 //CORS
 app.use(function (req, res, next) {
@@ -31,6 +32,7 @@ app.use("/nperf", nperfRoutes);
 app.use("/locacion", locationRoutes);
 app.use("/usuario", usuarioRoutes);
 app.use("/login", loginRoutes);
+app.use("/internacional", internacionalRoutes);
 
 //conexion a la base de datos
 mongoose.connect(

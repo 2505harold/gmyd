@@ -20,13 +20,48 @@ app.post("/ips", (req, res) => {
   instance
     .get()
     .then(async (resp) => {
-      //eliminamos todoslos registros para insertar nuevos
-      await IpsAmazon.deleteMany({});
-      //guardamos nuevos registros
-      var prefix = new IpsAmazon();
-      prefix.collection.insertMany(
-        resp.data.prefixes,
-        (err, prefixGuardados) => {
+      IpsAmazon.find({}).exec(async (err, ipsamazon) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Ocurrio un error con obtener la lista",
+            error: err,
+          });
+        }
+
+        let redesAmazon = resp.data.prefixes;
+        if (ipsamazon.length === 0) {
+          var prefix = new IpsAmazon();
+          prefix.collection.insertMany(redesAmazon, (err, prefixGuardados) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "error al guardar los datos",
+                error: err,
+              });
+            }
+            return res.status(200).json({
+              ok: true,
+              prefixGuardados,
+            });
+          });
+        }
+
+        redesAmazon.forEach((red, index) => {
+          let prefijoGuardado = ipsamazon.filter((item) => {
+            return (
+              item.ip_prefix === red.ip_prefix && item.service === red.service
+            );
+          });
+          if (prefijoGuardado[0].link_internacional) {
+            redesAmazon[index]["link_internacional"] =
+              prefijoGuardado[0].link_internacional;
+          }
+        });
+
+        await IpsAmazon.deleteMany({});
+        var prefix = new IpsAmazon();
+        prefix.collection.insertMany(redesAmazon, (err, prefixGuardados) => {
           if (err) {
             return res.status(500).json({
               ok: false,
@@ -38,8 +73,8 @@ app.post("/ips", (req, res) => {
             ok: true,
             prefixGuardados,
           });
-        }
-      );
+        });
+      });
     })
     .catch((error) => {
       res.json(error);
@@ -97,6 +132,7 @@ app.get("/:ip", (req, res) => {
 
     IpsAmazon.find({ $or: prefix })
       .skip(Number(desde))
+      .populate("link_internacional")
       .limit(10)
       .exec((err, ipsamazon) => {
         if (err) {
@@ -155,15 +191,17 @@ app.get("/:ip", (req, res) => {
 // Obtener las IPs con sus regiones
 // ====================================
 app.get("/", (req, res) => {
-  const buscar = req.query.buscar || "";
+  const buscar = req.query.buscar === "todo" ? "" : req.query.buscar;
   const desde = req.query.desde || 0;
+  const limite = req.query.limite || 10;
   const regex = new RegExp(buscar, "i");
 
   IpsAmazon.find({
     $or: [{ ip_prefix: regex }, { service: regex }, { region: regex }],
   })
     .skip(Number(desde))
-    .limit(10)
+    .populate("link_internacional")
+    .limit(Number(limite))
     .exec((err, ipsamazon) => {
       if (err) {
         return res.status(500).json({
@@ -296,22 +334,139 @@ app.post("/metricas/delay", (req, res) => {
 // Obtener metricas delay
 // ====================================
 app.get("/metricas/delay", (req, res) => {
-  MetricasDelay.find({})
-    .populate("pc", "region")
-    .sort({ fecha: "asc" })
-    .exec((err, datos) => {
+  const inicio = req.query.inicio;
+  const fin = req.query.fin;
+
+  Promise.all([obtenerDelayAmazon(inicio, fin), obtenerPcsAmazon()]).then(
+    (respuestas) => {
+      res.status(200).json({
+        ok: true,
+        pcs: respuestas[1],
+        delays: respuestas[0],
+      });
+    }
+  );
+});
+
+function obtenerDelayAmazon(inicio, fin) {
+  return new Promise((resolve, reject) => {
+    MetricasDelay.find({
+      fecha: {
+        $gte: new Date(inicio),
+        $lte: new Date(fin),
+      },
+    })
+      .sort({ fecha: "asc" })
+      .exec((err, delays) => {
+        if (err) {
+          reject("error al cargar las metricas");
+        } else {
+          resolve(delays);
+        }
+      });
+  });
+}
+
+function obtenerPcsAmazon() {
+  return new Promise((resolve, reject) => {
+    PcsAmazon.find({}).exec((err, pcs) => {
+      if (err) {
+        reject("error al cargar las pcs");
+      } else {
+        resolve(pcs);
+      }
+    });
+  });
+}
+
+// ====================================
+// Actualizar IPs prefix amazon con link internacional
+// ====================================
+app.put("/ips/:id", (req, res) => {
+  const id = req.params.id;
+  IpsAmazon.findById(id, (err, prefijo) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar prefijo",
+        error: err,
+      });
+    }
+
+    if (!prefijo) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "El prefijo con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    prefijo.link_internacional = req.body.link_internacional;
+
+    prefijo.save((err, prefijoActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        link: prefijoActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
+// Obtener grupo de fechas almacenados
+// ====================================
+app.get("/metricas/delay/guardados", (req, res) => {
+  MetricasDelay.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+        cantidad: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: -1 } },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Ocurrio un error con obtener la lista",
+        error: err,
+      });
+    }
+
+    const dias = datos.length;
+
+    return res.status(200).json({
+      ok: true,
+      dias,
+      metricas: datos,
+    });
+  });
+});
+
+// ====================================
+// Eliminar metricas delay por fecha
+// ====================================
+app.delete("/metricas/delay/:fecha", (req, res) => {
+  const fecha = req.params.fecha;
+  const actual = new Date(fecha);
+  let siguiente = actual.setDate(actual.getDate() + 1);
+
+  MetricasDelay.deleteMany(
+    { fecha: { $gte: fecha, $lte: siguiente } },
+    (err, result) => {
       if (err) {
         return res.status(500).json({
           ok: false,
-          mensaje: "Ocurrio un error con obtener la lista",
+          mensaje: "Error al eliminar datos",
           error: err,
         });
       }
-      return res.status(200).json({
+      res.status(200).json({
         ok: true,
-        datos,
+        datos: result,
       });
-    });
+    }
+  );
 });
 
 module.exports = app;

@@ -5,10 +5,19 @@ import { HttpClientModule } from "@angular/common/http";
 import { NperfService } from "./nperf/nperf.service";
 import { UsuarioService } from "./usuario/usuario.service";
 import { LoginGuard } from "./service.index";
+import { ModalService } from "../components/modal/modal.service";
+import { InternacionalService } from "./internacional.service";
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, HttpClientModule],
-  providers: [AmazonService, NperfService, UsuarioService, LoginGuard],
+  providers: [
+    AmazonService,
+    NperfService,
+    UsuarioService,
+    LoginGuard,
+    ModalService,
+    InternacionalService,
+  ],
 })
 export class ServiceModule {}
