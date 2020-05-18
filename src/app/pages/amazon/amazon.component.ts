@@ -34,7 +34,7 @@ export class AmazonComponent implements OnDestroy {
     public _usuarioService: UsuarioService
   ) {
     const usuario = _usuarioService.usuario;
-    if (usuario.correo === "harold.japur@iclaro.com.pe") {
+    if (usuario.correo === "test3@test.com") {
       console.log("contador delay");
       this.metricasDelay();
     }
