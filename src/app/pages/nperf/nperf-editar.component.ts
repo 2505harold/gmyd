@@ -3,6 +3,7 @@ import { NperfMeter } from "src/app/models/nperf.meter.model";
 import { NgForm } from "@angular/forms";
 import { NperfService } from "src/app/services/service.index";
 import { ActivatedRoute } from "@angular/router";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "app-nperf-editar",
@@ -15,7 +16,8 @@ export class NperfEditarComponent implements OnInit {
 
   constructor(
     public _nperfService: NperfService,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    public datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -42,8 +44,10 @@ export class NperfEditarComponent implements OnInit {
       this.metricas.usuario = localStorage.getItem("id");
       this._nperfService.actualizarMetricaPorId(this.metricas).subscribe();
     } else {
-      form.value.usuario = localStorage.getItem("id");
-      this._nperfService.guardarMetricas(form.value).subscribe();
+      const fecha = this.datePipe.transform(new Date(), "yyyy-MM-ddThh:mm");
+      this.metricas.usuario = localStorage.getItem("id");
+      this.metricas.fecha_ingreso = fecha;
+      this._nperfService.guardarMetricas(this.metricas).subscribe();
       form.reset();
     }
   }
