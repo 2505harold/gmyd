@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
-import { NperfService } from "src/app/services/service.index";
+import { NperfService, UsuarioService } from "src/app/services/service.index";
 
 //declare function init_plugins();
 
@@ -25,16 +25,25 @@ export class NperfComponent implements OnInit {
   datos = [];
   datosVelocidades = [];
 
-  constructor(private _nperfService: NperfService) {}
+  constructor(
+    private _nperfService: NperfService,
+    public _usuarioService: UsuarioService
+  ) {}
 
   ngOnInit() {
-    //init_plugins();
+    //grafico de historico puntaje nacional movil
     this.loadDatosChart();
-    this.loadDatosTables();
-    this.loadDatosTablesVelocidades();
-    this.loadUltimosPuntajes();
+    //grafico de historico velocidad nacional movil
     this.loadDatosChartVelocidades();
+    //Tabla de usuarios ingresaron datos puntaje nacional movil
+    this.loadDatosTables();
+    //Tabla de usuarios ingresaron datos velocidad nacional movil
+    this.loadDatosTablesVelocidades();
+    //progress bar de puntaje nacional movil
+    this.loadUltimosPuntajes();
+    //progress bar de puntaje velocidad nacional movil
     this.loadUltimasVelocidades();
+    console.log(this._usuarioService.usuario.correo);
   }
 
   loadUltimosPuntajes() {

@@ -48,6 +48,94 @@ app.post("/velocidad", (req, res) => {
 });
 
 // ====================================
+// Actualizar metrica por ID
+// ====================================
+app.put("/:id", (req, res) => {
+  let body = req.body;
+  let id = req.params.id;
+
+  Nperf.findById(id, (err, metrica) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar metrica",
+        error: err,
+      });
+    }
+
+    if (!metrica) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "La metrica con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    metrica.claro = body.claro;
+    metrica.bitel = body.bitel;
+    metrica.entel = body.entel;
+    metrica.movistar = body.movistar;
+    metrica.pruebas = body.pruebas;
+    metrica.downlink_max = body.downlink_max;
+    metrica.downlink_avg = body.downlink_avg;
+    metrica.uplink_max = body.uplink_max;
+    metrica.uplink_avg = body.uplink_avg;
+    metrica.latency_min = body.latency_min;
+    metrica.latency_avg = body.latency_avg;
+    metrica.latency_jitter = body.latency_jitter;
+    metrica.navegacion = body.navegacion;
+    metrica.streaming = body.streaming;
+    metrica.fecha_ingreso = body.fecha_ingreso;
+
+    metrica.save((err, metricaActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        metrica: metricaActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
+// Actualizar metricas de velocidad por ID
+// ====================================
+app.put("/velocidad/movil/:id", (req, res) => {
+  let body = req.body;
+  let id = req.params.id;
+
+  velocidadesNperf.findById(id, (err, metrica) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar metrica",
+        error: err,
+      });
+    }
+
+    if (!metrica) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "La metrica con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    metrica.claro = body.claro;
+    metrica.bitel = body.bitel;
+    metrica.entel = body.entel;
+    metrica.movistar = body.movistar;
+    metrica.pruebas = body.pruebas;
+
+    metrica.save((err, metricaActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        metrica: metricaActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
 // Guardar metricas nperf fijo nacional
 // ====================================
 app.post("/fijo/nacional", (req, res) => {
@@ -168,7 +256,7 @@ app.get("/velocidades/movil", (req, res) => {
   velocidadesNperf
     .find({ tipo: "Movil" })
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -180,6 +268,53 @@ app.get("/velocidades/movil", (req, res) => {
       return res.status(200).json({
         ok: true,
         metricas,
+      });
+    });
+});
+
+// ====================================
+// Obtener metricas de velocidades por ID: -1 Mayor a Menor
+// ====================================
+app.get("/velocidades/movil/:id", (req, res) => {
+  const id = req.params.id;
+  velocidadesNperf
+    .findById(id)
+    .sort({ fecha_ingreso: "asc" })
+    .populate("usuario", "nombre correo")
+    .exec((err, metricas) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        metricas,
+      });
+    });
+});
+
+// ====================================
+// Obtener metricas por ID: -1 Mayor a Menor
+// ====================================
+app.get("/:id", (req, res) => {
+  const id = req.params.id;
+  Nperf.findById(id)
+    .sort({ fecha_ingreso: "asc" })
+    .populate("usuario", "nombre correo")
+    .exec((err, metrica) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        metrica,
       });
     });
 });
@@ -252,7 +387,7 @@ app.get("/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -292,7 +427,7 @@ app.get("/velocidades/movil/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({

@@ -31,6 +31,22 @@ export class NperfService {
     );
   }
 
+ actualizarMetricaPorId(metrica: NperfMeter) {
+    const url = URL_SERVICIOS + "/nperf/" + metrica._id;
+    return this.http.put(url, metrica).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Accion realizada",
+          text: "Se actualizaron los parametros indicados",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return resp;
+      })
+    );
+  }
+
   guardarMetricasNperfFijo(datos: any) {
     const url = URL_SERVICIOS + "/nperf/fijo";
     return this.http.post(url, datos).pipe(
@@ -55,6 +71,22 @@ export class NperfService {
           icon: "success",
           title: "Accion realizada",
           text: "Se crearon los parametros indicados",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return resp;
+      })
+    );
+  }
+
+  actualizarMetricaVelocidad(metrica: NperfVelocidad) {
+    const url = URL_SERVICIOS + "/nperf/velocidad/movil/" + metrica._id;
+    return this.http.put(url, metrica).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Accion realizada",
+          text: "Se actualizaron los datos",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -127,6 +159,15 @@ export class NperfService {
     );
   }
 
+  obtenerMetricasVelocidadMovilPorId(id: string) {
+    var url = URL_SERVICIOS + "/nperf/velocidades/movil/" + id;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.metricas;
+      })
+    );
+  }
+
   obtenerSorterMetricas(
     campo: string,
     order: string,
@@ -140,6 +181,16 @@ export class NperfService {
     return this.http.get(url).pipe(
       map((resp) => {
         return resp;
+      })
+    );
+  }
+
+  obtenerMetricaPorId(id: string) {
+    var url = URL_SERVICIOS + "/nperf/" + id;
+
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.metrica;
       })
     );
   }

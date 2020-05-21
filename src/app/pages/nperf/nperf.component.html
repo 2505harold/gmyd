@@ -100,18 +100,11 @@
     </div>
     <br />
     <div class="table-responsive">
-      <div class="alert alert-info" *ngIf="loadTablaPuntos" role="alert">
-        <div class="d-flex align-items-center justify-content-center">
-          <div class="spinner-border text-info" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <span class="ml-2">Cargando datos ...</span>
-        </div>
-      </div>
       <div class="tableFixHead mb-2">
         <table class="table table-striped table-hover">
           <thead>
             <tr>
+              <th>#</th>
               <th scope="col">Fecha</th>
               <th scope="col">Usuario</th>
               <th scope="col">Claro</th>
@@ -119,11 +112,25 @@
               <th scope="col">Bitel</th>
               <th scope="col">Movistar</th>
               <th scope="col">Acciones</th>
-              <th></th>
             </tr>
           </thead>
+          <tbody *ngIf="loadTablaPuntos">
+            <tr>
+              <td colspan="8">
+                <div class="alert alert-info" role="alert">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <div class="spinner-border text-info" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="ml-2">Cargando datos ...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody>
-            <tr *ngFor="let puntos of puntajes">
+            <tr *ngFor="let puntos of puntajes; let i = index">
+              <td>{{ i + 1 }}</td>
               <td>{{ puntos.fecha_ingreso | date: "medium" }}</td>
               <td>
                 <i class="icon-user-o"></i>
@@ -134,7 +141,30 @@
               <td>{{ puntos.bitel }}</td>
               <td>{{ puntos.movistar }}</td>
               <td>
-                <button type="button" class="btn btn-outline-dark btn-sm mx-1">
+                <button
+                  type="button"
+                  [ngClass]="{
+                    'btn-secondary':
+                      _usuarioService.usuario.correo !==
+                        puntos.usuario.correo &&
+                      _usuarioService.usuario.correo !==
+                        'harold.japur@iclaro.com.pe',
+                    'btn-dark':
+                      _usuarioService.usuario.correo ===
+                        puntos.usuario.correo ||
+                      _usuarioService.usuario.correo ===
+                        'harold.japur@iclaro.com.pe'
+                  }"
+                  [attr.disabled]="
+                    _usuarioService.usuario.correo !== puntos.usuario.correo &&
+                    _usuarioService.usuario.correo !==
+                      'harold.japur@iclaro.com.pe'
+                      ? 'disabled'
+                      : null
+                  "
+                  class="btn btn-sm mx-1"  [routerLink]="['/nperf/', puntos._id]"
+                >
+               
                   Editar
                 </button>
               </td>
@@ -178,18 +208,11 @@
     </div>
     <br />
     <div class="table-responsive">
-      <div class="alert alert-info" *ngIf="loadTablaVelocidades" role="alert">
-        <div class="d-flex align-items-center justify-content-center">
-          <div class="spinner-border text-info" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <span class="ml-2">Cargando datos ...</span>
-        </div>
-      </div>
       <div class="tableFixHead mb-2">
         <table class="table table-striped table-hover">
           <thead>
             <tr>
+              <th>#</th>
               <th scope="col">Fecha</th>
               <th scope="col">Usuario</th>
               <th scope="col">Claro</th>
@@ -199,8 +222,23 @@
               <th scope="col">Accion</th>
             </tr>
           </thead>
+          <tbody *ngIf="loadTablaVelocidades">
+            <tr>
+              <td colspan="8">
+                <div class="alert alert-info" role="alert">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <div class="spinner-border text-info" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="ml-2">Cargando datos ...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
           <tbody>
-            <tr *ngFor="let puntos of velocidades">
+            <tr *ngFor="let puntos of velocidades; let i = index">
+              <td>{{ i + 1 }}</td>
               <td>{{ puntos.fecha_ingreso | date: "medium" }}</td>
               <td>
                 <i class="icon-user-o"></i>
@@ -211,7 +249,30 @@
               <td>{{ puntos.bitel }}</td>
               <td>{{ puntos.movistar }}</td>
               <td>
-                <button type="button" class="btn btn-outline-dark btn-sm mx-1">
+                <button
+                  [ngClass]="{
+                    'btn-secondary':
+                      _usuarioService.usuario.correo !==
+                        puntos.usuario.correo &&
+                      _usuarioService.usuario.correo !==
+                        'harold.japur@iclaro.com.pe',
+                    'btn-dark':
+                      _usuarioService.usuario.correo ===
+                        puntos.usuario.correo ||
+                      _usuarioService.usuario.correo ===
+                        'harold.japur@iclaro.com.pe'
+                  }"
+                  [attr.disabled]="
+                    _usuarioService.usuario.correo !== puntos.usuario.correo &&
+                    _usuarioService.usuario.correo !==
+                      'harold.japur@iclaro.com.pe'
+                      ? 'disabled'
+                      : null
+                  "
+                  type="button"
+                  class="btn btn-sm mx-1"
+                  [routerLink]="['/nperf/velocidad', puntos._id]"
+                >
                   Editar
                 </button>
               </td>

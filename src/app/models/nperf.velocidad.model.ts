@@ -1,5 +1,6 @@
 export class NperfVelocidad {
   constructor(
+    public _id?: string,
     public claro?: number,
     public bitel?: number,
     public movistar?: number,
