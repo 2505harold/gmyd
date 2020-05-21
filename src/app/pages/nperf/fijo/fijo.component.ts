@@ -23,7 +23,10 @@ export class FijoComponent implements OnInit {
   campos_locales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
   loadTablaFijoNacional: boolean;
 
-  constructor(private _nperfService: NperfService) {
+  constructor(
+    private _nperfService: NperfService,
+    public _usuarioService: UsuarioService
+  ) {
     this.distUser = JSON.parse(localStorage.getItem("usuario")).distrito;
     this.idUser = localStorage.getItem("id");
   }

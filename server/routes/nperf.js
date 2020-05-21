@@ -233,7 +233,7 @@ function guardarFijoNacional(datos) {
 app.get("/", (req, res) => {
   Nperf.find({})
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -256,7 +256,7 @@ app.get("/velocidades/movil", (req, res) => {
   velocidadesNperf
     .find({ tipo: "Movil" })
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre correo")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -280,7 +280,7 @@ app.get("/velocidades/movil/:id", (req, res) => {
   velocidadesNperf
     .findById(id)
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre correo")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -303,7 +303,7 @@ app.get("/:id", (req, res) => {
   const id = req.params.id;
   Nperf.findById(id)
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre correo")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metrica) => {
       if (err) {
         return res.status(500).json({
@@ -325,7 +325,7 @@ app.get("/:id", (req, res) => {
 app.get("/velocidades/fijo/nacional", (req, res) => {
   FijoNacionalNperf.find({})
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -352,7 +352,7 @@ app.get("/velocidades/fijo/local", (req, res) => {
   }
   FijoLocalNperf.find(find)
     .sort({ fecha_ingreso: "asc" })
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -387,7 +387,7 @@ app.get("/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre correo")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -427,7 +427,7 @@ app.get("/velocidades/movil/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre correo")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -466,7 +466,7 @@ app.get("/velocidades/fijo/local/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({
@@ -505,7 +505,7 @@ app.get("/velocidades/fijo/nacional/sorter/:campo/:sort", (req, res) => {
     .sort(sorter)
     .skip(Number(desde))
     .limit(Number(limite))
-    .populate("usuario", "nombre")
+    .populate("usuario", "nombre apellido correo")
     .exec((err, metricas) => {
       if (err) {
         return res.status(500).json({

@@ -124,7 +124,7 @@ export class NperfComponent implements OnInit {
   }
 
   loadDatosTablesVelocidades(desde?: number) {
-    this.loadTablaPuntos = true;
+    this.loadTablaVelocidades = true;
     this._nperfService
       .obtenerSorterMetricasVelocidades("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {

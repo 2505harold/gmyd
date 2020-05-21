@@ -130,11 +130,12 @@
           </tbody>
           <tbody>
             <tr *ngFor="let puntos of puntajes; let i = index">
-              <td>{{ i + 1 }}</td>
+              <td>{{ i + 1 + desde }}</td>
               <td>{{ puntos.fecha_ingreso | date: "medium" }}</td>
               <td>
                 <i class="icon-user-o"></i>
                 {{ puntos.usuario.nombre | titlecase }}
+                {{ puntos.usuario.apellido | titlecase }}
               </td>
               <td>{{ puntos.claro }}</td>
               <td>{{ puntos.entel }}</td>
@@ -162,9 +163,9 @@
                       ? 'disabled'
                       : null
                   "
-                  class="btn btn-sm mx-1"  [routerLink]="['/nperf/', puntos._id]"
+                  class="btn btn-sm mx-1"
+                  [routerLink]="['/nperf/', puntos._id]"
                 >
-               
                   Editar
                 </button>
               </td>
@@ -176,14 +177,14 @@
       <div class="mb-3">
         <a
           href="javascript: void(0)"
-          (click)="continuar(-5)"
+          (click)="continuar(-10)"
           class="btn btn-outline-secondary"
         >
           <i class="icon-angle-double-left"></i> Atras
         </a>
         <a
           href="javascript: void(0)"
-          (click)="continuar(5)"
+          (click)="continuar(10)"
           class="btn btn-outline-secondary mx-1"
         >
           Siguiente <i class="icon-angle-double-right"></i>
@@ -238,11 +239,12 @@
           </tbody>
           <tbody>
             <tr *ngFor="let puntos of velocidades; let i = index">
-              <td>{{ i + 1 }}</td>
+              <td>{{ i + 1 + desde2 }}</td>
               <td>{{ puntos.fecha_ingreso | date: "medium" }}</td>
               <td>
                 <i class="icon-user-o"></i>
                 {{ puntos.usuario.nombre | titlecase }}
+                {{ puntos.usuario.apellido | titlecase }}
               </td>
               <td>{{ puntos.claro }}</td>
               <td>{{ puntos.entel }}</td>
@@ -284,14 +286,14 @@
       <div class="mb-3">
         <a
           href="javascript: void(0)"
-          (click)="continuarT2(-5)"
+          (click)="continuarT2(-10)"
           class="btn btn-outline-secondary"
         >
           <i class="icon-angle-double-left"></i> Atras
         </a>
         <a
           href="javascript: void(0)"
-          (click)="continuarT2(5)"
+          (click)="continuarT2(10)"
           class="btn btn-outline-secondary mx-1"
         >
           Siguiente <i class="icon-angle-double-right"></i>
