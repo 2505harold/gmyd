@@ -44,7 +44,7 @@ export class NperfEditarComponent implements OnInit {
       this.metricas.usuario = localStorage.getItem("id");
       this._nperfService.actualizarMetricaPorId(this.metricas).subscribe();
     } else {
-      const fecha = this.datePipe.transform(new Date(), "yyyy-MM-ddThh:mm");
+      const fecha = this.datePipe.transform(new Date(), "yyyy-MM-ddTHH:mm");
       this.metricas.usuario = localStorage.getItem("id");
       this.metricas.fecha_ingreso = fecha;
       this._nperfService.guardarMetricas(this.metricas).subscribe();
