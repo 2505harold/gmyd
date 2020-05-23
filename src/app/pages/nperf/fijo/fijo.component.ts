@@ -11,8 +11,11 @@ import { NperfService, UsuarioService } from "src/app/services/service.index";
 export class FijoComponent implements OnInit {
   nacional: any = [];
   nacionalTabla: any = [];
-  totalRegistroNacional: any = [];
-  desde: number;
+  localTabla: any = [];
+  totalRegistroNacional: number;
+  totalRegistroLocal: number;
+  desde: number = 0;
+  desde2: number = 0;
   progressNacional: any = [];
   local: any = [];
   progressLocal: any = [];
@@ -22,6 +25,7 @@ export class FijoComponent implements OnInit {
   campos_nacionales = ["claro", "americatel_peru", "movistar"];
   campos_locales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
   loadTablaFijoNacional: boolean;
+  loadTablaFijoLocal: boolean;
 
   constructor(
     private _nperfService: NperfService,
@@ -34,10 +38,15 @@ export class FijoComponent implements OnInit {
   ngOnInit() {
     //init_plugins();
     this.loadDatosChartNacional();
-    this.loadUltimosDatosNacional();
     this.loadDatosChartLocal(this.idUser);
+    //progressbar datos fijo nacional
+    this.loadUltimosDatosNacional();
+    //progressbar datos fijo local
     this.loadUltimosDatosLocal();
+    //datos de tabla fijo nacional
     this.loadDatosTablaFijoNacional();
+    //datos de tabla fijo local
+    this.loadDatosTablaFijoLocal();
   }
 
   loadDatosChartNacional() {
@@ -131,6 +140,17 @@ export class FijoComponent implements OnInit {
       });
   }
 
+  loadDatosTablaFijoLocal(desde?: number) {
+    this.loadTablaFijoLocal = true;
+    this._nperfService
+      .obtenerSorterMetricasFijoLocal("fecha_ingreso", "desc", desde)
+      .subscribe((resp: any) => {
+        this.localTabla = resp.metricas;
+        this.totalRegistroLocal = resp.total;
+        this.loadTablaFijoLocal = false;
+      });
+  }
+
   //click en siguiente o anterior en la tabla
   continuar(valor: number) {
     const desde = this.desde + valor;
@@ -143,5 +163,18 @@ export class FijoComponent implements OnInit {
 
     this.desde += valor;
     this.loadDatosTablaFijoNacional(desde);
+  }
+
+  continuarT2(valor: number) {
+    const desde = this.desde2 + valor;
+    if (desde >= this.totalRegistroLocal) {
+      return;
+    }
+    if (desde < 0) {
+      return;
+    }
+
+    this.desde2 += valor;
+    this.loadDatosTablaFijoLocal(desde);
   }
 }

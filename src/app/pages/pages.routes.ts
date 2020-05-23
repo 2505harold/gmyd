@@ -21,7 +21,7 @@ const pagesRoute: Routes = [
       { path: "mantenimiento/usuarios", component: MantUsuariosComponent },
       { path: "nperf/movil", component: NperfComponent },
       { path: "nperf/fijo", component: FijoComponent },
-      { path: "nperf/fijo/:id", component: EditarFijoComponent },
+      { path: "nperf/fijo/:id/:area", component: EditarFijoComponent },
       { path: "nperf/:id", component: NperfEditarComponent },
       { path: "nperf/velocidad/:id", component: TestvelocidadComponent },
       { path: "", redirectTo: "nperf/movil", pathMatch: "full" },

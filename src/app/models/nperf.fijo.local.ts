@@ -1,5 +1,6 @@
 export class NperfFijoLocal {
   constructor(
+    public _id?: String,
     public movistar?: Number,
     public claro?: Number,
     public americatel_peru?: Number,

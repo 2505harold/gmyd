@@ -92,7 +92,7 @@
         <span class="text-primary">Tabla</span> test velocidad fijo nacional
       </h5>
       <button
-        [routerLink]="['/nperf/fijo', 'nuevo']"
+        [routerLink]="['/nperf/fijo', 'nuevo', 'general']"
         class="btn btn-outline-primary ml-auto"
       >
         Agregar
@@ -100,14 +100,6 @@
     </div>
     <br />
     <div class="table-responsive">
-      <div class="alert alert-info" *ngIf="loadTablaFijoNacional" role="alert">
-        <div class="d-flex align-items-center justify-content-center">
-          <div class="spinner-border text-info" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <span class="ml-2">Cargando datos ...</span>
-        </div>
-      </div>
       <div class="tableFixHead mb-2">
         <table class="table table-striped table-hover">
           <thead>
@@ -121,7 +113,21 @@
               <th scope="col">Accion</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="loadTablaFijoNacional">
+            <tr>
+              <td colspan="7">
+                <div class="alert alert-info" role="alert">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <div class="spinner-border text-info" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="ml-2">Cargando datos ...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="!loadTablaFijoNacional">
             <tr *ngFor="let item of nacionalTabla; let i = index">
               <td>{{ i + 1 + desde }}</td>
               <td>{{ item.fecha_ingreso | date: "medium" }}</td>
@@ -154,7 +160,7 @@
                       : null
                   "
                   class="btn btn-sm mx-1"
-                  [routerLink]="['/nperf/fijo/', item._id]"
+                  [routerLink]="['/nperf/fijo/', item._id, 'nacional']"
                 >
                   Editar
                 </button>
@@ -175,6 +181,105 @@
         <a
           href="javascript: void(0)"
           (click)="continuar(10)"
+          class="btn btn-outline-secondary mx-1"
+        >
+          Siguiente <i class="icon-angle-double-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div class="card my-1 animated fadeIn">
+  <div class="card-body">
+    <div class="form-inline">
+      <h5><span class="text-primary">Tabla</span> test velocidad fijo local</h5>
+    </div>
+    <br />
+    <div class="table-responsive">
+      <div class="tableFixHead mb-2">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Claro</th>
+              <th scope="col">Movistar</th>
+              <th scope="col">AmericaTel</th>
+              <th scope="col">Winet telecom</th>
+              <th scope="col">Accion</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="loadTablaFijoLocal">
+            <tr>
+              <td colspan="8">
+                <div class="alert alert-info" role="alert">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <div class="spinner-border text-info" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="ml-2">Cargando datos ...</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="!loadTablaFijoLocal">
+            <tr *ngFor="let item of localTabla; let i = index">
+              <td>{{ i + 1 + desde }}</td>
+              <td>{{ item.fecha_ingreso | date: "medium" }}</td>
+              <td>
+                <i class="icon-user-o"></i>
+                {{ item.usuario.nombre | titlecase }}
+                {{ item.usuario.apellido | titlecase }}
+              </td>
+              <td>{{ item.claro }}</td>
+              <td>{{ item.movistar }}</td>
+              <td>{{ item.americatel_peru }}</td>
+              <td>{{ item.winet_telecom }}</td>
+              <td>
+                <button
+                  type="button"
+                  [ngClass]="{
+                    'btn-secondary':
+                      _usuarioService.usuario.correo !== item.usuario.correo &&
+                      _usuarioService.usuario.correo !==
+                        'harold.japur@iclaro.com.pe',
+                    'btn-dark':
+                      _usuarioService.usuario.correo === item.usuario.correo ||
+                      _usuarioService.usuario.correo ===
+                        'harold.japur@iclaro.com.pe'
+                  }"
+                  [attr.disabled]="
+                    _usuarioService.usuario.correo !== item.usuario.correo &&
+                    _usuarioService.usuario.correo !==
+                      'harold.japur@iclaro.com.pe'
+                      ? 'disabled'
+                      : null
+                  "
+                  class="btn btn-sm mx-1"
+                  [routerLink]="['/nperf/fijo/', item._id, 'local']"
+                >
+                  Editar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mb-3">
+        <a
+          href="javascript: void(0)"
+          (click)="continuarT2(-10)"
+          class="btn btn-outline-secondary"
+        >
+          <i class="icon-angle-double-left"></i> Atras
+        </a>
+        <a
+          href="javascript: void(0)"
+          (click)="continuarT2(10)"
           class="btn btn-outline-secondary mx-1"
         >
           Siguiente <i class="icon-angle-double-right"></i>

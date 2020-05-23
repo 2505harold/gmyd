@@ -136,6 +136,86 @@ app.put("/velocidad/movil/:id", (req, res) => {
 });
 
 // ====================================
+// Actualizar metrica fijo nacional por ID
+// ====================================
+app.put("/velocidades/fijo/nacional/:id", (req, res) => {
+  let body = req.body;
+  let id = req.params.id;
+
+  FijoNacionalNperf.findById(id, (err, metrica) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar metrica",
+        error: err,
+      });
+    }
+
+    if (!metrica) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "La metrica con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    metrica.movistar = body.movistar;
+    metrica.claro = body.claro;
+    metrica.claro_movil = body.claro_movil;
+    metrica.americatel_peru = body.americatel_peru;
+    metrica.movistar_movil = body.movistar_movil;
+    metrica.pruebas = body.pruebas;
+
+    metrica.save((err, metricaActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        metrica: metricaActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
+// Actualizar metrica fijo local por ID
+// ====================================
+app.put("/velocidades/fijo/local/:id", (req, res) => {
+  let body = req.body;
+  let id = req.params.id;
+
+  FijoLocalNperf.findById(id, (err, metrica) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Error al buscar metrica",
+        error: err,
+      });
+    }
+
+    if (!metrica) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "La metrica con ID " + id + " no existe",
+        error: err,
+      });
+    }
+
+    metrica.movistar = body.movistar;
+    metrica.claro = body.claro;
+    metrica.claro_movil = body.claro_movil;
+    metrica.americatel_peru = body.americatel_peru;
+    metrica.winet_telecom = body.winet_telecom;
+    metrica.pruebas = body.pruebas;
+
+    metrica.save((err, metricaActualizado) => {
+      return res.status(200).json({
+        ok: true,
+        metrica: metricaActualizado,
+      });
+    });
+  });
+});
+
+// ====================================
 // Guardar metricas nperf fijo nacional
 // ====================================
 app.post("/fijo/nacional", (req, res) => {
@@ -273,7 +353,7 @@ app.get("/velocidades/movil", (req, res) => {
 });
 
 // ====================================
-// Obtener metricas de velocidades por ID: -1 Mayor a Menor
+// Obtener metricas de velocidades movil por ID: -1 Mayor a Menor
 // ====================================
 app.get("/velocidades/movil/:id", (req, res) => {
   const id = req.params.id;
@@ -303,6 +383,50 @@ app.get("/:id", (req, res) => {
   const id = req.params.id;
   Nperf.findById(id)
     .sort({ fecha_ingreso: "asc" })
+    .populate("usuario", "nombre apellido correo")
+    .exec((err, metrica) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        metrica,
+      });
+    });
+});
+
+// ====================================
+// Obtener metricas fijo nacional por ID
+// ====================================
+app.get("/velocidades/fijo/nacional/:id", (req, res) => {
+  const id = req.params.id;
+  FijoNacionalNperf.findById(id)
+    .populate("usuario", "nombre apellido correo")
+    .exec((err, metrica) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        metrica,
+      });
+    });
+});
+
+// ====================================
+// Obtener metricas fijo nacional por ID
+// ====================================
+app.get("/velocidades/fijo/local/:id", (req, res) => {
+  const id = req.params.id;
+  FijoLocalNperf.findById(id)
     .populate("usuario", "nombre apellido correo")
     .exec((err, metrica) => {
       if (err) {

@@ -31,7 +31,7 @@ export class NperfService {
     );
   }
 
- actualizarMetricaPorId(metrica: NperfMeter) {
+  actualizarMetricaPorId(metrica: NperfMeter) {
     const url = URL_SERVICIOS + "/nperf/" + metrica._id;
     return this.http.put(url, metrica).pipe(
       map((resp) => {
@@ -195,6 +195,16 @@ export class NperfService {
     );
   }
 
+  obtenerMetricaFijoPorId(id: string, area: string) {
+    var url = URL_SERVICIOS + "/nperf/velocidades/fijo/" + area + "/" + id;
+
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.metrica;
+      })
+    );
+  }
+
   obtenerSorterMetricasVelocidades(
     campo: string,
     order: string,
@@ -252,6 +262,24 @@ export class NperfService {
     else if (limite) url += "?limite=" + limite;
     return this.http.get(url).pipe(
       map((resp) => {
+        return resp;
+      })
+    );
+  }
+
+  actualizarMetricaFijo(metrica: any, area: string) {
+    console.log(metrica);
+    const url =
+      URL_SERVICIOS + "/nperf/velocidades/fijo/" + area + "/" + metrica._id;
+    return this.http.put(url, metrica).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Accion realizada",
+          text: "Se actualizaron los parametros indicados",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return resp;
       })
     );
