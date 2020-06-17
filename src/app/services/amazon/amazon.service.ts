@@ -51,15 +51,6 @@ export class AmazonService {
       );
   }
 
-  testping(ip: string) {
-    const url = URL_SERVICIOS + "/amazon/ping/" + ip;
-    return this.http.get(url).pipe(
-      map((resp: any) => {
-        return resp;
-      })
-    );
-  }
-
   //metodo para actualizar prefijos de amazon
   cargarPrefixAmazon() {
     const url = URL_SERVICIOS + "/amazon/ips";
@@ -189,6 +180,29 @@ export class AmazonService {
           showConfirmButton: false,
           timer: 1500,
         });
+      })
+    );
+  }
+
+  obtenerPruebasPingAmazon(region: string, desde: string, hasta) {
+    const url = `${URL_SERVICIOS}/ping/amazon/${region}?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        const ips = resp.datos.map((el) => el._id.ip);
+        let datos = [];
+        ips.forEach((ip) => {
+          var series = resp.datos.reduce((series, item) => {
+            if (item._id.ip === ip) {
+              series.push({
+                name: item._id.operador,
+                value: parseFloat(item.avg.$numberDecimal).toFixed(1),
+              });
+            }
+            return series;
+          }, []);
+          datos.push({ name: ip, series });
+        });
+        return datos;
       })
     );
   }

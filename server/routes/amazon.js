@@ -253,23 +253,6 @@ app.get("/", (req, res) => {
 });
 
 // ====================================
-// obtener latencia
-// ====================================
-app.get("/ping/:ip", (req, res) => {
-  const ip = req.params.ip;
-  ping.promise
-    .probe(ip.trim())
-    .then(function (resp) {
-      res.json(resp);
-    })
-    .catch((err) => {
-      res.json({
-        error: err,
-      });
-    });
-});
-
-// ====================================
 // Guardar PCs amazon
 // ====================================
 app.post("/pc", (req, res) => {

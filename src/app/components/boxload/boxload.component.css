@@ -1,0 +1,11 @@
+/*---------------------------*/
+/*  CAJA DE LOAD */
+/*---------------------------*/
+.div-load {
+  height: 100%;
+  background-color: rgba(238, 238, 238, 0.5);
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+}

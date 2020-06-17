@@ -123,6 +123,10 @@ CONTENEDOR DE CHART NGX
   flex-wrap: wrap !important;
 }
 
+.chart-legend .legend-label-text {
+  color: #6c757d;
+}
+
 /*--
 ESTILOS SORT TABLE
 */

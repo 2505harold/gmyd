@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-between">
+  <h4>Prefijos Tutela</h4>
+</div>
+
+<br />
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card shadow-sm">
+      <div class="card-body" style="height: 900px;">
+        <app-boxload [show]="showloadCharVideo"></app-boxload>
+        <app-ngxcharts-group-bar-horizontal
+          [results]="dataPing"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'ms'"
+          [showDataLabel]="true"
+          [yAxisLabel]="'IPs Tutela Video'"
+        ></app-ngxcharts-group-bar-horizontal>
+      </div>
+    </div>
+  </div>
+</div>

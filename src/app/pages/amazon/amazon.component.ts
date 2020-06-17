@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AmazonService, UsuarioService } from "src/app/services/service.index";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { DatePipe, JsonPipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 
 //declare function init_plugins();
 
@@ -13,6 +13,7 @@ import { DatePipe, JsonPipe } from "@angular/common";
 export class AmazonComponent implements OnDestroy {
   inicio;
   fin;
+  hoy;
   form: FormGroup;
   prefijos: any;
   carga: boolean = true;
@@ -22,6 +23,14 @@ export class AmazonComponent implements OnDestroy {
   tiempo: Array<number>;
   imageSrc: string = "";
   data: Array<object> = [];
+  dataPing: any = [];
+  dataPing2: any = []; //north california
+  dataPing3: any = []; //ohio
+  dataPing4: any = []; //north virginia
+  showloadCharNorthCalifornia: boolean = true;
+  showloadCharOhio: boolean = true;
+  showloadCharNorthVirginia: boolean = true;
+  showloadCharBrasil: boolean = true;
   timeStart: number;
   intervalo;
   loadGraficoDelay: boolean = true;
@@ -40,6 +49,14 @@ export class AmazonComponent implements OnDestroy {
     }
 
     this.inicializarFechas();
+    this.obtenerPruebasPingAmazonBrasil("sa-east-1", this.hoy, this.fin);
+    this.obtenerPruebasPingAmazonNorthCalifornia(
+      "us-west-1",
+      this.hoy,
+      this.fin
+    );
+    this.obtenerPruebasPingAmazonOhio("us-east-2", this.hoy, this.fin);
+    this.obtenerPruebasPingAmazonNorthVirginia("us-east-1", this.hoy, this.fin);
     this.loadDatosChart(this.inicio, this.fin);
     this.cargarPrefijosAmazon();
     this.form = new FormGroup({
@@ -58,10 +75,12 @@ export class AmazonComponent implements OnDestroy {
 
   inicializarFechas() {
     let actual = new Date();
-    let siguiente = actual.setDate(actual.getDate() + 1);
-    let anterior = actual.setDate(actual.getDate() - 2);
+    let siguiente = actual.setDate(actual.getDate() + 1); // sumo un dia al actual
+    let anterior = actual.setDate(actual.getDate() - 2); // le resto dos dias
+    let hoy = actual.setDate(actual.getDate() + 1); //le sumo un dia
     this.inicio = this.datePipe.transform(anterior, "yyyy-MM-dd");
     this.fin = this.datePipe.transform(siguiente, "yyyy-MM-dd");
+    this.hoy = this.datePipe.transform(hoy, "yyyy-MM-dd");
   }
 
   //llenar tabla de prefijos amazon
@@ -141,5 +160,47 @@ export class AmazonComponent implements OnDestroy {
 
     this.desde += valor;
     this.cargarPrefijosAmazon();
+  }
+
+  //obtiene el comprativo de ping
+  obtenerPruebasPingAmazonBrasil(region: string, desde: string, hasta: string) {
+    this._amazonService
+      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .subscribe((resp) => {
+        this.dataPing = resp;
+        this.showloadCharBrasil = false;
+      });
+  }
+  obtenerPruebasPingAmazonNorthCalifornia(
+    region: string,
+    desde: string,
+    hasta: string
+  ) {
+    this._amazonService
+      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .subscribe((resp) => {
+        this.dataPing2 = resp;
+        this.showloadCharNorthCalifornia = false;
+      });
+  }
+  obtenerPruebasPingAmazonOhio(region: string, desde: string, hasta: string) {
+    this._amazonService
+      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .subscribe((resp) => {
+        this.dataPing3 = resp;
+        this.showloadCharOhio = false;
+      });
+  }
+  obtenerPruebasPingAmazonNorthVirginia(
+    region: string,
+    desde: string,
+    hasta: string
+  ) {
+    this._amazonService
+      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .subscribe((resp) => {
+        this.dataPing4 = resp;
+        this.showloadCharNorthVirginia = false;
+      });
   }
 }

@@ -3,6 +3,74 @@
 </div>
 
 <br />
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card shadow-sm">
+      <div class="card-body" style="height: 900px;">
+        <app-boxload [show]="showloadCharBrasil"></app-boxload>
+        <app-ngxcharts-group-bar-horizontal
+          [results]="dataPing"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'ms'"
+          [showDataLabel]="true"
+          [yAxisLabel]="'IPs Amazon Brasil'"
+        ></app-ngxcharts-group-bar-horizontal>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card shadow-sm">
+      <div class="card-body" style="height: 900px;">
+        <app-boxload [show]="showloadCharNorthCalifornia"></app-boxload>
+        <app-ngxcharts-group-bar-horizontal
+          [results]="dataPing2"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'ms'"
+          [showDataLabel]="true"
+          [yAxisLabel]="'IPs Amazon North California'"
+        ></app-ngxcharts-group-bar-horizontal>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card shadow-sm">
+      <div class="card-body" style="height: 900px;">
+        <app-boxload [show]="showloadCharOhio"></app-boxload>
+        <app-ngxcharts-group-bar-horizontal
+          [results]="dataPing3"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'ms'"
+          [showDataLabel]="true"
+          [yAxisLabel]="'IPs Amazon Ohio'"
+        ></app-ngxcharts-group-bar-horizontal>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card shadow-sm">
+      <div class="card-body" style="height: 900px;">
+        <app-boxload [show]="showloadCharNorthVirginia"></app-boxload>
+        <app-ngxcharts-group-bar-horizontal
+          [results]="dataPing4"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'ms'"
+          [showDataLabel]="true"
+          [yAxisLabel]="'IPs Amazon North Virginia'"
+        ></app-ngxcharts-group-bar-horizontal>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
 
 <div class="row my-1">
   <div class="col-sm-12">

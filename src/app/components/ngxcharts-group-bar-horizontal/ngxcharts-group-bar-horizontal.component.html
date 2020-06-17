@@ -1,0 +1,21 @@
+<div class="chart-container" style="height: 800px;">
+  <ngx-charts-bar-horizontal-2d
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="results"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [legendPosition]="legendPosition"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [showDataLabel]="showDataLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)"
+  >
+  </ngx-charts-bar-horizontal-2d>
+</div>

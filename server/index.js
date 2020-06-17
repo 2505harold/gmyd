@@ -6,10 +6,12 @@ const app = express();
 //definir las rutas
 const ipsAmazonRoutes = require("./routes/amazon");
 const nperfRoutes = require("./routes/nperf");
+const ipsTutelaRoutes = require("./routes/tutela");
 const locationRoutes = require("./routes/location");
 const usuarioRoutes = require("./routes/usuario");
 const loginRoutes = require("./routes/login");
 const internacionalRoutes = require("./routes/internacional");
+const pingRoutes = require("./routes/ping");
 
 //CORS
 app.use(function (req, res, next) {
@@ -28,11 +30,13 @@ app.use(express.json());
 
 //rutas
 app.use("/amazon", ipsAmazonRoutes);
+app.use("/tutela", ipsTutelaRoutes);
 app.use("/nperf", nperfRoutes);
 app.use("/locacion", locationRoutes);
 app.use("/usuario", usuarioRoutes);
 app.use("/login", loginRoutes);
 app.use("/internacional", internacionalRoutes);
+app.use("/ping", pingRoutes);
 
 //conexion a la base de datos
 mongoose.connect(

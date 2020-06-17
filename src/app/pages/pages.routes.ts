@@ -9,6 +9,7 @@ import { FijoComponent } from "./nperf/fijo/fijo.component";
 import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
 import { MantUsuariosComponent } from "./mantenimiento/usuarios/mant-usuarios.component";
 import { MantenimientoComponent } from "./mantenimiento/amazon/mantenimiento.component";
+import { TutelaComponent } from "./tutela/tutela.component";
 
 const pagesRoute: Routes = [
   {
@@ -17,6 +18,7 @@ const pagesRoute: Routes = [
     canActivate: [LoginGuard],
     children: [
       { path: "amazon", component: AmazonComponent },
+      { path: "tutela", component: TutelaComponent },
       { path: "mantenimiento/amazon", component: MantenimientoComponent },
       { path: "mantenimiento/usuarios", component: MantUsuariosComponent },
       { path: "nperf/movil", component: NperfComponent },
