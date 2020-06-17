@@ -24,7 +24,8 @@ import { DropdownButtonComponent } from "../components/dropdown-button/dropdown-
 import { ModalComponent } from "../components/modal/modal.component";
 import { MantUsuariosComponent } from "./mantenimiento/usuarios/mant-usuarios.component";
 import { MantenimientoComponent } from "./mantenimiento/amazon/mantenimiento.component";
-import { TutelaComponent } from './tutela/tutela.component';
+import { TutelaComponent } from "./tutela/tutela.component";
+import { MantTutelaComponent } from './mantenimiento/tutela/mant-tutela.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TutelaComponent } from './tutela/tutela.component';
     EditarFijoComponent,
     MantUsuariosComponent,
     TutelaComponent,
+    MantTutelaComponent,
   ],
   providers: [DatePipe],
   imports: [

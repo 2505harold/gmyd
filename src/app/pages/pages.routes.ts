@@ -10,6 +10,7 @@ import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
 import { MantUsuariosComponent } from "./mantenimiento/usuarios/mant-usuarios.component";
 import { MantenimientoComponent } from "./mantenimiento/amazon/mantenimiento.component";
 import { TutelaComponent } from "./tutela/tutela.component";
+import { MantTutelaComponent } from "./mantenimiento/tutela/mant-tutela.component";
 
 const pagesRoute: Routes = [
   {
@@ -21,6 +22,7 @@ const pagesRoute: Routes = [
       { path: "tutela", component: TutelaComponent },
       { path: "mantenimiento/amazon", component: MantenimientoComponent },
       { path: "mantenimiento/usuarios", component: MantUsuariosComponent },
+      { path: "mantenimiento/tutela", component: MantTutelaComponent },
       { path: "nperf/movil", component: NperfComponent },
       { path: "nperf/fijo", component: FijoComponent },
       { path: "nperf/fijo/:id/:area", component: EditarFijoComponent },

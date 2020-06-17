@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { URL_SERVICIOS } from "../../config/global";
 import { map } from "rxjs/operators";
 import { IpsTutela } from "src/app/models/ips.tutela.model";
+import Swal from "sweetalert2";
 
 @Injectable()
 export class TutelaService {
@@ -27,6 +28,20 @@ export class TutelaService {
           datos.push({ name: ip, series });
         });
         return datos;
+      })
+    );
+  }
+
+  guardarIp(iptutela: IpsTutela) {
+    const url = `${URL_SERVICIOS}/tutela`;
+    return this.http.post(url, iptutela).pipe(
+      map((resp: any) => {
+        Swal.fire({
+          icon: "success",
+          title: "IP creada satisfactoriamente",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
     );
   }
