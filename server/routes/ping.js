@@ -91,6 +91,7 @@ app.get("/tutela/grafico/:tipo", (req, res) => {
       },
     },
     { $sort: { fecha: 1 } },
+    { $sort: { operador: 1 } },
   ]).exec((err, resp) => {
     const hostsRep = resp.map((item) => item.host);
     const hosts = [...new Set(hostsRep)];
