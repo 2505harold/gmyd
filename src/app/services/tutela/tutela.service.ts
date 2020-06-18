@@ -45,4 +45,27 @@ export class TutelaService {
       })
     );
   }
+
+  obtenerIpsTutela() {
+    const url = URL_SERVICIOS + "/tutela";
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.ips;
+      })
+    );
+  }
+
+  obtenerGraficoPing(tipo: string, desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/ping/tutela/grafico/${tipo}?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        resp.datos.forEach((element) => {
+          element.metricas.map((item) => {
+            item.series.map((el) => (el.name = new Date(el.name)));
+          });
+        });
+        return resp;
+      })
+    );
+  }
 }

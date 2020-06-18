@@ -29,7 +29,6 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
       "#00E396",
       "#008FFB",
       "#775DD0",
-
       "#FEB019",
       "#00695C",
       "#3F729B",

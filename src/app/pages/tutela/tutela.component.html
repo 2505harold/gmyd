@@ -1,5 +1,79 @@
 <div class="d-flex justify-content-between">
-  <h4>Prefijos Tutela</h4>
+  <h4>Prefijos <span class="text-primary">Tutela</span></h4>
+</div>
+<br />
+<h5>Servidores de descarga de throughput</h5>
+
+<div class="row">
+  <div class="col-12" *ngIf="showLoadServerThrDownload">
+    <div class="alert alert-primary" role="alert">
+      Cargando datos espere un momento porfavor ...
+    </div>
+  </div>
+
+  <div class="col-sm-6" *ngFor="let item of datosPingServerThrDownload">
+    <div class="card shadow-sm my-2">
+      <div class="card-body" style="height: 530px;">
+        <h5 class="font-weight-light">{{ item.host }}</h5>
+        <app-grafico-lineas-ngxcharts
+          [results]="item.metricas"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+        >
+        </app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+<h5>Servidores de subida de throughput</h5>
+
+<div class="row">
+  <div class="col-12" *ngIf="showLoadServerThrUpload">
+    <div class="alert alert-primary" role="alert">
+      Cargando datos espere un momento porfavor ...
+    </div>
+  </div>
+
+  <div class="col-sm-6" *ngFor="let item of datosPingServerThrUpload">
+    <div class="card shadow-sm my-2">
+      <div class="card-body" style="height: 530px;">
+        <h5 class="font-weight-light">{{ item.host }}</h5>
+        <app-grafico-lineas-ngxcharts
+          [results]="item.metricas"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+        >
+        </app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+<h5>Servidores de video</h5>
+
+<div class="row">
+  <div class="col-12" *ngIf="showLoadServerVideo">
+    <div class="alert alert-primary" role="alert">
+      Cargando datos espere un momento porfavor ...
+    </div>
+  </div>
+
+  <div class="col-sm-6" *ngFor="let item of datosPingServerVideo">
+    <div class="card shadow-sm my-2">
+      <div class="card-body" style="height: 530px;">
+        <h5 class="font-weight-light">{{ item.host }}</h5>
+        <app-grafico-lineas-ngxcharts
+          [results]="item.metricas"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+        >
+        </app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
+  </div>
 </div>
 
 <br />

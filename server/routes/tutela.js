@@ -26,4 +26,21 @@ app.post("/", (req, res) => {
   });
 });
 
+// ====================================
+// Obtener IPs o URL de Tutela
+// ====================================
+app.get("/", (req, res) => {
+  IpsTutela.find({})
+    .populate("user")
+    .exec((err, ips) => {
+      if (err) {
+        res
+          .status(200)
+          .json({ ok: false, mensaje: "Error en el servidor", error: err });
+      }
+
+      res.status(200).json({ ok: true, ips });
+    });
+});
+
 module.exports = app;

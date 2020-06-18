@@ -10,7 +10,8 @@ import { DatePipe } from "@angular/common";
   templateUrl: "./mant-tutela.component.html",
 })
 export class MantTutelaComponent implements OnInit {
-  ipsTutela: IpsTutela = new IpsTutela();
+  ipTutela: IpsTutela = new IpsTutela();
+  ipsTutela: IpsTutela[];
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -18,14 +19,23 @@ export class MantTutelaComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.cargarTablaIpsTutela();
+  }
 
   Guardar(form: NgForm) {
     if (form.valid) {
-      this.ipsTutela.user = this._usuarioService.id;
-      this.ipsTutela.fecha = this.datePipe.transform(new Date(), "yyyy-MM-dd");
-      this._tutelaService.guardarIp(this.ipsTutela).subscribe();
+      this.ipTutela.user = this._usuarioService.id;
+      this.ipTutela.fecha = this.datePipe.transform(new Date(), "yyyy-MM-dd");
+      this._tutelaService.guardarIp(this.ipTutela).subscribe();
+      this.cargarTablaIpsTutela();
       form.reset();
     }
+  }
+
+  cargarTablaIpsTutela() {
+    this._tutelaService.obtenerIpsTutela().subscribe((resp) => {
+      this.ipsTutela = resp;
+    });
   }
 }

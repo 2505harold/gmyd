@@ -26,7 +26,7 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   timeline: boolean = false;
 
   colorScheme = {
-    domain: ["#dc3545", "#007bff", "#28a745", "#ffc107", "#a8385d", "#aae3f5"],
+    domain: ["#dc3545", "#28a745", "#007bff", "#ffc107", "#a8385d", "#aae3f5"],
   };
 
   constructor() {}
