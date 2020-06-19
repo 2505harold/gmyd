@@ -26,6 +26,8 @@ import { MantUsuariosComponent } from "./mantenimiento/usuarios/mant-usuarios.co
 import { MantenimientoComponent } from "./mantenimiento/amazon/mantenimiento.component";
 import { TutelaComponent } from "./tutela/tutela.component";
 import { MantTutelaComponent } from './mantenimiento/tutela/mant-tutela.component';
+import { OpensignalComponent } from './opensignal/opensignal.component';
+import { MantOpensignalComponent } from './mantenimiento/opensignal/mant-opensignal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { MantTutelaComponent } from './mantenimiento/tutela/mant-tutela.componen
     MantUsuariosComponent,
     TutelaComponent,
     MantTutelaComponent,
+    OpensignalComponent,
+    MantOpensignalComponent,
   ],
   providers: [DatePipe],
   imports: [

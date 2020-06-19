@@ -5,6 +5,16 @@
         <a
           routerLinkActive="active"
           class="has-arrow"
+          [routerLink]="['/opensignal']"
+        >
+          <span class="icon-podcast icon"></span>
+          <span class="item">Open Signal</span>
+        </a>
+      </li>
+      <li class="item-menu">
+        <a
+          routerLinkActive="active"
+          class="has-arrow"
           [routerLink]="['/tutela']"
         >
           <span class="icon-wi-fi icon"></span>
@@ -72,6 +82,13 @@
               routerLinkActive="active"
               [routerLink]="['/mantenimiento/tutela']"
               >Tutela</a
+            >
+          </li>
+          <li>
+            <a
+              routerLinkActive="active"
+              [routerLink]="['/mantenimiento/opensignal']"
+              >Open Signal</a
             >
           </li>
         </ul>

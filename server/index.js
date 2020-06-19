@@ -7,6 +7,7 @@ const app = express();
 const ipsAmazonRoutes = require("./routes/amazon");
 const nperfRoutes = require("./routes/nperf");
 const ipsTutelaRoutes = require("./routes/tutela");
+const opensignalRoutes = require("./routes/opensignal");
 const locationRoutes = require("./routes/location");
 const usuarioRoutes = require("./routes/usuario");
 const loginRoutes = require("./routes/login");
@@ -31,6 +32,7 @@ app.use(express.json());
 //rutas
 app.use("/amazon", ipsAmazonRoutes);
 app.use("/tutela", ipsTutelaRoutes);
+app.use("/opensignal", opensignalRoutes);
 app.use("/nperf", nperfRoutes);
 app.use("/locacion", locationRoutes);
 app.use("/usuario", usuarioRoutes);

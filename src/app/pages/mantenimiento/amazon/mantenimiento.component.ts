@@ -19,7 +19,7 @@ export class MantenimientoComponent implements OnInit {
   pc: PcsAmazon = new PcsAmazon();
   prefijo: IpsAmazon = new IpsAmazon();
   links: LinksInternacionales[] = [];
-  prefijos: IpsAmazon[] = [];
+  prefijos: any[];
   metricas: any[] = [];
   dias: number;
   pcs: PcsAmazon[] = [];

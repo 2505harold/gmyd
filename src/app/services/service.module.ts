@@ -8,6 +8,7 @@ import { LoginGuard } from "./service.index";
 import { ModalService } from "../components/modal/modal.service";
 import { InternacionalService } from "./internacional.service";
 import { TutelaService } from "./tutela/tutela.service";
+import { OpensignalService } from "./opensignal/opensignal.service";
 
 @NgModule({
   declarations: [],
@@ -20,6 +21,7 @@ import { TutelaService } from "./tutela/tutela.service";
     ModalService,
     InternacionalService,
     TutelaService,
+    OpensignalService,
   ],
 })
 export class ServiceModule {}

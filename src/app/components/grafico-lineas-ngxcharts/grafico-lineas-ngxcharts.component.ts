@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-grafico-lineas-ngxcharts",
@@ -24,14 +25,35 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   xAxisLabel: string = "Fecha";
   //yAxisLabel: string = "Puntos";
   timeline: boolean = false;
+  colorScheme: object;
 
-  colorScheme = {
-    domain: ["#dc3545", "#007bff", "#28a745", "#ffc107", "#a8385d", "#aae3f5"],
-  };
+  constructor(private router: Router) {}
 
-  constructor() {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    switch (this.router.url) {
+      case "/tutela":
+        this.colorScheme = {
+          domain: ["#FF4560", "#00E396"],
+        };
+        break;
+      case "/opensignal":
+        this.colorScheme = {
+          domain: ["#FF4560", "#00E396"],
+        };
+        break;
+      default:
+        this.colorScheme = {
+          domain: [
+            "#dc3545",
+            "#007bff",
+            "#28a745",
+            "#ffc107",
+            "#a8385d",
+            "#aae3f5",
+          ],
+        };
+    }
+  }
 
   onSelect(data): void {
     console.log("Item clicked", JSON.parse(JSON.stringify(data)));

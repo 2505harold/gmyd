@@ -11,7 +11,7 @@ import { DatePipe } from "@angular/common";
 })
 export class MantTutelaComponent implements OnInit {
   ipTutela: IpsTutela = new IpsTutela();
-  ipsTutela: IpsTutela[];
+  ipsTutela: any[];
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -27,8 +27,10 @@ export class MantTutelaComponent implements OnInit {
     if (form.valid) {
       this.ipTutela.user = this._usuarioService.id;
       this.ipTutela.fecha = this.datePipe.transform(new Date(), "yyyy-MM-dd");
-      this._tutelaService.guardarIp(this.ipTutela).subscribe();
-      this.cargarTablaIpsTutela();
+      this._tutelaService
+        .guardarIp(this.ipTutela)
+        .subscribe((resp) => this.cargarTablaIpsTutela());
+
       form.reset();
     }
   }
