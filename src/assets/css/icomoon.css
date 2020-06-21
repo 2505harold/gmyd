@@ -1,11 +1,11 @@
 @font-face {
   font-family: "icomoon";
-  src: url("../fonts/icomoon/icomoon.eot?vy6382");
-  src: url("../fonts/icomoon/icomoon.eot?vy6382#iefix")
+  src: url("../fonts/icomoon/icomoon.eot?fj6ul2");
+  src: url("../fonts/icomoon/icomoon.eot?fj6ul2#iefix")
       format("embedded-opentype"),
-    url("../fonts/icomoon/icomoon.ttf?vy6382") format("truetype"),
-    url("../fonts/icomoon/icomoon.woff?vy6382") format("woff"),
-    url("../fonts/icomoon/icomoon.svg?vy6382#icomoon") format("svg");
+    url("../fonts/icomoon/icomoon.ttf?fj6ul2") format("truetype"),
+    url("../fonts/icomoon/icomoon.woff?fj6ul2") format("woff"),
+    url("../fonts/icomoon/icomoon.svg?fj6ul2#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,8 +26,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-podcast:before {
-  content: "\e91c";
+.icon-trash:before {
+  content: "\e90a";
+}
+
+.icon-pencil:before {
+  content: "\e90b";
 }
 
 .icon-wi-fi:before {
@@ -68,6 +72,10 @@
 
 .icon-angle-double-right:before {
   content: "\e909";
+}
+
+.icon-podcast:before {
+  content: "\e91c";
 }
 
 .icon-profile:before {

@@ -1,199 +1,150 @@
 <h4>Mantenimiento <span class="text-primary">Amazon</span></h4>
 <br />
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a
-      class="nav-link active"
-      id="pcs-tab"
-      data-toggle="tab"
-      href="#pcs"
-      role="tab"
-      aria-controls="pcs"
-      aria-selected="true"
-      >PCs</a
-    >
-  </li>
-  <li class="nav-item" role="presentation">
-    <a
-      class="nav-link"
-      id="delays-tab"
-      data-toggle="tab"
-      href="#delays"
-      role="tab"
-      aria-controls="delays"
-      aria-selected="false"
-      >Salidas Prefix</a
-    >
-  </li>
-  <li class="nav-item" role="presentation">
-    <a
-      class="nav-link"
-      id="links-tab"
-      data-toggle="tab"
-      href="#links"
-      role="tab"
-      aria-controls="links"
-      aria-selected="false"
-      >Enlaces Int.</a
-    >
-  </li>
-  <li class="nav-item" role="presentation">
-    <a
-      class="nav-link"
-      id="control-tab"
-      data-toggle="tab"
-      href="#control"
-      role="tab"
-      aria-controls="control"
-      aria-selected="false"
-      >Control de fechas</a
-    >
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div
-    class="tab-pane fade show active"
-    id="pcs"
-    role="tabpanel"
-    aria-labelledby="pcs-tab"
-  >
-    <div class="row my-1">
-      <div class="col-lg-6 col-12">
-        <div class="card my-1">
-          <div class="card-body">
-            <form #form="ngForm" ngNativeValidate (ngSubmit)="Guardar(form)">
-              <div class="form-inline">
-                <h5>Datos de la computadora Amazon</h5>
-                <button
-                [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
-                  type="submit"
-                  class="btn btn-outline-danger btn-sm ml-auto"
-                >
-                  Guardar
-                </button>
-              </div>
-              <div class="form-group">
-                <label>IP EC2</label>
-                <input
-                  [(ngModel)]="pc.ip"
-                  name="ip"
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Region</label>
-                <input
-                  [(ngModel)]="pc.region"
-                  name="region"
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>IP Public DNS</label>
-                <input
-                  [(ngModel)]="pc.dns"
-                  name="dns"
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Nombre de imagen</label>
-                <input
-                  [(ngModel)]="pc.img"
-                  name="imagen"
-                  type="text"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Fecha Creacion</label>
-                <input
-                  [(ngModel)]="pc.fecha"
-                  type="date"
-                  name="fecha"
-                  class="form-control"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Vista previa de imagen</label>
-                <img src="" alt="Imagen previa" />
-              </div>
-            </form>
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="PCs regionales">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-lg-6 col-12">
+          <div class="card my-1">
+            <div class="card-body">
+              <form #form="ngForm" ngNativeValidate (ngSubmit)="Guardar(form)">
+                <div class="form-inline">
+                  <h5>Datos de la computadora Amazon</h5>
+                  <button
+                    [attr.disabled]="
+                      _usuarioService.usuario.rol === 'USER_ROLE'
+                        ? 'disabled'
+                        : null
+                    "
+                    type="submit"
+                    class="btn btn-outline-danger btn-sm ml-auto"
+                  >
+                    Guardar
+                  </button>
+                </div>
+                <div class="form-group">
+                  <label>IP EC2</label>
+                  <input
+                    [(ngModel)]="pc.ip"
+                    name="ip"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Region</label>
+                  <input
+                    [(ngModel)]="pc.region"
+                    name="region"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>IP Public DNS</label>
+                  <input
+                    [(ngModel)]="pc.dns"
+                    name="dns"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Nombre de imagen</label>
+                  <input
+                    [(ngModel)]="pc.img"
+                    name="imagen"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Fecha Creacion</label>
+                  <input
+                    [(ngModel)]="pc.fecha"
+                    type="date"
+                    name="fecha"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Vista previa de imagen</label>
+                  <img src="" alt="Imagen previa" />
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="card my-1">
-          <div class="card-body">
-            <h5>Actualizar imagen</h5>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="customFile" />
-              <label class="custom-file-label" for="customFile"
-                >Seleccione imagen</label
-              >
+          <div class="card my-1">
+            <div class="card-body">
+              <h5>Actualizar imagen</h5>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile" />
+                <label class="custom-file-label" for="customFile"
+                  >Seleccione imagen</label
+                >
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-6 col-12">
-        <div class="card my-1">
-          <div class="card-body">
-            <h5>Detalle de PCs</h5>
+        <div class="col-lg-6 col-12">
+          <div class="card my-1">
+            <div class="card-body">
+              <h5>Detalle de PCs</h5>
 
-            <div class="tableFixHead">
-              <table class="table">
-                <thead>
-                  <tr class="column-dark">
-                    <th scope="col" class="bg-table-header-dark">Region</th>
-                    <th scope="col" class="bg-table-header-dark">IP</th>
-                    <th scope="col" class="bg-table-header-dark">DNS</th>
-                    <th scope="col" class="bg-table-header-dark">Accion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of pcs">
-                    <td>{{ item.region }}</td>
-                    <td>{{ item.ip }}</td>
-                    <td>{{ item.dns }}</td>
-                    <td>
-                      <button type="button" class="btn btn-outline-dark btn-sm">
-                        Editar
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="tableFixHead">
+                <table class="table">
+                  <thead>
+                    <tr class="column-dark">
+                      <th scope="col" class="bg-table-header-dark">Region</th>
+                      <th scope="col" class="bg-table-header-dark">IP</th>
+                      <th scope="col" class="bg-table-header-dark">DNS</th>
+                      <th scope="col" class="bg-table-header-dark">Accion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of pcs">
+                      <td>{{ item.region }}</td>
+                      <td>{{ item.ip }}</td>
+                      <td>{{ item.dns }}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-outline-dark btn-sm"
+                        >
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="delays"
-    role="tabpanel"
-    aria-labelledby="delays-tab"
-  >
-    <div class="card my-2">
+  </mat-tab>
+  <mat-tab label="Prefijos">
+    <div class="card">
       <div class="card-body">
         <div class="form-inline">
           <h4>Prefijos</h4>
           <div class="btn-group ml-auto">
             <button
-            [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
+              [attr.disabled]="
+                _usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null
+              "
               type="button"
               class="btn btn-outline-info dropdown-toggle"
               data-toggle="dropdown"
@@ -331,19 +282,16 @@
         </div>
       </div>
     </div>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="links"
-    role="tabpanel"
-    aria-labelledby="links-tab"
-  >
-    <div class="card my-2">
+  </mat-tab>
+  <mat-tab label="Enlaces Internacionales">
+    <div class="card">
       <div class="card-body">
         <div class="form-inline">
           <h4>Enlaces Internacionales</h4>
           <button
-          [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
+            [attr.disabled]="
+              _usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null
+            "
             type="button"
             (click)="agregarLinkIntern()"
             class="btn btn-primary ml-auto"
@@ -401,7 +349,11 @@
                 </td>
                 <td class="row">
                   <button
-                  [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
+                    [attr.disabled]="
+                      _usuarioService.usuario.rol === 'USER_ROLE'
+                        ? 'disabled'
+                        : null
+                    "
                     type="button"
                     (click)="actualizarLink(link)"
                     class="btn btn-outline-dark btn-sm"
@@ -409,7 +361,11 @@
                     <i class="icon-save"></i>
                   </button>
                   <button
-                  [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
+                    [attr.disabled]="
+                      _usuarioService.usuario.rol === 'USER_ROLE'
+                        ? 'disabled'
+                        : null
+                    "
                     type="button"
                     (click)="eliminarLink(link)"
                     class="btn btn-outline-danger btn-sm mx-1"
@@ -423,64 +379,128 @@
         </div>
       </div>
     </div>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="control"
-    role="tabpanel"
-    aria-labelledby="control-tab"
-  >
-    <div class="card my-2">
-      <div class="card-body">
-        <div class="form-inline">
-          <h5>Detalle de metricas guardadas</h5>
-          <button
-          [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
-            type="button"
-            (click)="llenarTablaMetricasDelayByDias()"
-            class="btn btn-secondary ml-auto"
-          >
-            Actualizar
-          </button>
-        </div>
-        <div class="form-inline mb-3">
-          <h6 class="mb-0">Dias guardados</h6>
-          <span class="badge badge-pill badge-success ml-3">{{ dias }}</span>
-        </div>
+  </mat-tab>
+  <mat-tab label="Almacenamiento">
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Ping PCs regionales">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-inline">
+              <h5>Detalle de metricas guardadas</h5>
+              <button
+                [attr.disabled]="
+                  _usuarioService.usuario.rol === 'USER_ROLE'
+                    ? 'disabled'
+                    : null
+                "
+                type="button"
+                (click)="llenarTablaMetricasDelayByDias()"
+                class="btn btn-secondary ml-auto"
+              >
+                Actualizar
+              </button>
+            </div>
+            <div class="form-inline mb-3">
+              <h6 class="mb-0">Dias guardados</h6>
+              <span class="badge badge-pill badge-success ml-3">{{
+                dias
+              }}</span>
+            </div>
 
-        <div class="tableFixHead">
-          <table class="table">
-            <thead>
-              <tr class="column-dark">
-                <th scope="col" class="bg-table-header-dark">#</th>
-                <th scope="col" class="bg-table-header-dark">Fecha</th>
-                <th scope="col" class="bg-table-header-dark">
-                  Datos Guardados
-                </th>
-                <th scope="col" class="bg-table-header-dark">Accion</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of metricas; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ item._id }}</td>
-                <td>{{ item.cantidad }}</td>
-                <td>
+            <div class="tableFixHead">
+              <table class="table">
+                <thead>
+                  <tr class="column-dark">
+                    <th scope="col" class="bg-table-header-dark">#</th>
+                    <th scope="col" class="bg-table-header-dark">Fecha</th>
+                    <th scope="col" class="bg-table-header-dark">
+                      Datos Guardados
+                    </th>
+                    <th scope="col" class="bg-table-header-dark">Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of metricas; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item._id }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>
+                      <button
+                        [attr.disabled]="
+                          _usuarioService.usuario.rol === 'USER_ROLE'
+                            ? 'disabled'
+                            : null
+                        "
+                        type="button"
+                        (click)="eliminarFecha(item)"
+                        class="btn btn-outline-danger btn-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Ping IPs Amazon">
+        <div class="card">
+          <div class="card-body">
+            <h4>
+              Dias guardados <span>{{ diasPing }}</span>
+            </h4>
+            <table mat-table [dataSource]="numPingGuardados">
+              <!-- Item Column -->
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>ITEM</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{ i + 1 }}
+                </td>
+              </ng-container>
+
+              <!-- Fecha Column -->
+              <ng-container matColumnDef="_id">
+                <th mat-header-cell *matHeaderCellDef>FECHA</th>
+                <td mat-cell *matCellDef="let element">{{ element._id }}</td>
+              </ng-container>
+
+              <!-- Datos guardados Column -->
+              <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef>CANTIDAD</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.cantidad }}
+                </td>
+              </ng-container>
+
+              <!-- Accion Column -->
+              <ng-container matColumnDef="accion">
+                <th mat-header-cell *matHeaderCellDef>ACCION</th>
+                <td mat-cell *matCellDef="let element">
                   <button
-                  [attr.disabled]="_usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null"
-                    type="button"
-                    (click)="eliminarFecha(item)"
-                    class="btn btn-outline-danger btn-sm"
+                    [disabled]="
+                      _usuarioService.usuario.rol === 'USER_ROLE'
+                        ? 'disabled'
+                        : null
+                    "
+                    mat-button
+                    color="warn"
+                    (click)="eliminarPingPorFecha(element)"
                   >
-                    Eliminar
+                    <i class="icon-trash"></i> Eliminar
                   </button>
                 </td>
-              </tr>
-            </tbody>
-          </table>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+</mat-tab-group>
+
 <app-modal></app-modal>

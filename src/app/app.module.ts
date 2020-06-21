@@ -5,6 +5,8 @@ import { FormsModule } from "@angular/forms";
 //modulos
 import { PagesModule } from "./pages/pages.module";
 import { ServiceModule } from "./services/service.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MaterialModule } from "./material/material.module";
 
 //Componentes
 import { AppComponent } from "./app.component";
@@ -17,7 +19,15 @@ import { FechaPipe } from "./pipes/fecha.pipe";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, FechaPipe, RegisterComponent],
-  imports: [BrowserModule, FormsModule, APP_ROUTES, PagesModule, ServiceModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    APP_ROUTES,
+    PagesModule,
+    ServiceModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

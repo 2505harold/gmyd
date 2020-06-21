@@ -45,4 +45,27 @@ export class OpensignalService {
       })
     );
   }
+
+  obtenerCantidadPruebasPingPorDias() {
+    const url = URL_SERVICIOS + "/opensignal/numeros/ping/guardados";
+    return this.http.get(url).pipe(
+      map((resp) => {
+        return resp;
+      })
+    );
+  }
+
+  eliminarMetricasPingPorFecha(fecha: string) {
+    const url = URL_SERVICIOS + "/opensignal/ping/" + fecha;
+    return this.http.delete(url).pipe(
+      map((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Metrica delay eliminada",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+    );
+  }
 }

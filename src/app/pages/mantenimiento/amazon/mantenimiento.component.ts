@@ -20,6 +20,7 @@ export class MantenimientoComponent implements OnInit {
   prefijo: IpsAmazon = new IpsAmazon();
   links: LinksInternacionales[] = [];
   prefijos: any[];
+  numPingGuardados: any[] = [];
   metricas: any[] = [];
   dias: number;
   pcs: PcsAmazon[] = [];
@@ -28,6 +29,8 @@ export class MantenimientoComponent implements OnInit {
   totalRegistro: number;
   actualizandoPrefijos: boolean = false;
   @ViewChild("input", { static: false }) input: ElementRef;
+  displayedColumns: string[] = ["index", "_id", "cantidad", "accion"];
+  diasPing: number;
 
   constructor(
     private _amazonService: AmazonService,
@@ -44,6 +47,7 @@ export class MantenimientoComponent implements OnInit {
     });
     this.llenarTablaPrefijos("todo", 0);
     this.llenarTablaMetricasDelayByDias();
+    this.cargarTablaNumeroPingGuardados();
   }
 
   //************************************************************** */
@@ -197,6 +201,38 @@ export class MantenimientoComponent implements OnInit {
           .eliminarMetricaDelayByFecha(item._id)
           .subscribe((resp) => {
             this.llenarTablaMetricasDelayByDias();
+          });
+      }
+    });
+  }
+
+  //************************************************************** */
+  //Metodos del TAB NUMERO DE PING GUARDADOS
+  //************************************************************** */
+  cargarTablaNumeroPingGuardados() {
+    this._amazonService
+      .obtenerCantidadPruebasPingPorDias()
+      .subscribe((resp: any) => {
+        this.diasPing = resp.dias;
+        this.numPingGuardados = resp.metricas;
+      });
+  }
+
+  eliminarPingPorFecha(item) {
+    Swal.fire({
+      title: "Estas seguro?",
+      text: "Usted no podra revertir este cambio",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, borrarlo",
+    }).then((result) => {
+      if (result.value) {
+        this._amazonService
+          .eliminarMetricasPingPorFecha(item._id)
+          .subscribe((resp) => {
+            this.cargarTablaNumeroPingGuardados();
           });
       }
     });

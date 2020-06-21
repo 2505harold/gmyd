@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700");
 @import url(./assets/css/icomoon.css);
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 body {
   background: #fff;
@@ -8,6 +9,32 @@ body {
   overflow-x: hidden;
   color: #67757c;
   font-weight: 300;
+}
+
+/*-- =====================================================
+ ANGULAR MATERIAL - Tabs
+ ========================================================*/
+
+.mat-tab-group {
+  margin-bottom: 48px;
+}
+
+.card-table-material {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.mat-tab-body-wrapper {
+  margin-top: 20px;
+}
+
+/*-- =====================================================
+ ANGULAR MATERIAL - Table
+ ========================================================*/
+
+table {
+  width: 100%;
 }
 
 /*-- =====================================================

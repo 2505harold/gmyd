@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../shared/shared.module";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MaterialModule } from "../material/material.module";
 
 //rutas
 import { PAGES_ROUTES } from "./pages.routes";
@@ -25,9 +26,9 @@ import { ModalComponent } from "../components/modal/modal.component";
 import { MantUsuariosComponent } from "./mantenimiento/usuarios/mant-usuarios.component";
 import { MantenimientoComponent } from "./mantenimiento/amazon/mantenimiento.component";
 import { TutelaComponent } from "./tutela/tutela.component";
-import { MantTutelaComponent } from './mantenimiento/tutela/mant-tutela.component';
-import { OpensignalComponent } from './opensignal/opensignal.component';
-import { MantOpensignalComponent } from './mantenimiento/opensignal/mant-opensignal.component';
+import { MantTutelaComponent } from "./mantenimiento/tutela/mant-tutela.component";
+import { OpensignalComponent } from "./opensignal/opensignal.component";
+import { MantOpensignalComponent } from "./mantenimiento/opensignal/mant-opensignal.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { MantOpensignalComponent } from './mantenimiento/opensignal/mant-opensig
     NgxChartsModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    MaterialModule,
   ],
 })
 export class PagesModule {}
