@@ -16,7 +16,7 @@ export class MantOpensignalComponent implements OnInit {
   ipOpensignal: IpsOpenSignal = new IpsOpenSignal();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   ipsOpensignal: any[];
-  displayedColumns: string[] = ["index", "_id", "cantidad", "accion"];
+  displayedColumns: string[] = ["index", "fecha", "cantidad", "accion"];
   numPingGuardados = new MatTableDataSource();
 
   constructor(
@@ -62,7 +62,6 @@ export class MantOpensignalComponent implements OnInit {
     this._opensignalService
       .obtenerCantidadPruebasPingPorDias()
       .subscribe((resp: any) => {
-        console.log(resp);
         this.numPingGuardados = resp.metricas;
       });
   }

@@ -3,6 +3,7 @@ const Nperf = require("../models/nperf/metricas-nperf");
 const velocidadesNperf = require("../models/nperf/velocidad-nperf");
 const FijoLocalNperf = require("../models/nperf/fijo-local-nperf");
 const FijoNacionalNperf = require("../models/nperf/fijo-nacional-nperf");
+const fijoLocalNperf = require("../models/nperf/fijo-local-nperf");
 const app = express();
 
 // ====================================
@@ -645,6 +646,42 @@ app.get("/velocidades/fijo/nacional/sorter/:campo/:sort", (req, res) => {
           total: cantidad,
           metricas,
         });
+      });
+    });
+});
+
+// ====================================
+// Obtener los departamentos de los usuarios que guardaron datos fijo local
+// ====================================
+app.get("/departamentos/fijo", (req, res) => {
+  fijoLocalNperf
+    .aggregate([
+      {
+        $lookup: {
+          from: "usuarios",
+          localField: "usuario",
+          foreignField: "_id",
+          as: "usuario",
+        },
+      },
+      {
+        $group: {
+          _id: { departamento: "$usuario.departamento" },
+        },
+      },
+    ])
+    .exec((err, datos) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        datos,
       });
     });
 });

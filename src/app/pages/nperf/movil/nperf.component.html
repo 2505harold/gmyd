@@ -1,4 +1,6 @@
-<h4>nPerf DashBoard Fijo</h4>
+<div class="d-flex justify-content-between">
+  <h4>nPerf DashBoard Movil</h4>
+</div>
 
 <div class="row animated fadeIn">
   <div class="col-12 col-lg-6">
@@ -9,25 +11,25 @@
         </h5>
         <app-grafico-lineas-ngxcharts
           [showYAxisLabel]="'true'"
-          [yAxisLabel]="'Mbps'"
-          [results]="nacional"
+          [yAxisLabel]="'Kbps'"
+          [results]="datosVelocidades"
         ></app-grafico-lineas-ngxcharts>
       </div>
     </div>
     <div class="card shadow-sm my-2">
       <div class="card-body">
         <h5><span class="text-primary">Velocidad</span> promedio nacional</h5>
-        <div *ngFor="let item of progressNacional" class="operador my-2">
+        <div *ngFor="let item of progressVelocidades" class="operador my-2">
           <div class="d-flex justify-content-between">
             <h6>{{ item.operador }}</h6>
-            <span class="ml-auto">{{ item.puntos }} Mbps</span>
+            <span class="ml-auto">{{ item.puntos }} Kbps</span>
           </div>
           <div class="progress">
             <div
               [ngClass]="{
                 'bg-danger': item.operador == 'claro',
                 'bg-success': item.operador == 'movistar',
-                'bg-warning': item.operador == 'winet_telecom'
+                'bg-warning': item.operador == 'bitel'
               }"
               class="progress-bar bg-danger"
               role="progressbar"
@@ -46,28 +48,28 @@
   <div class="col-12 col-lg-6">
     <div class="card shadow-sm my-1">
       <div class="card-body chart-body">
-        <h5><span class="text-primary">Mi</span> velocidad media local</h5>
+        <h5>
+          <span class="text-primary">Historico</span> puntaje nacional movil
+        </h5>
         <app-grafico-lineas-ngxcharts
-          [showYAxisLabel]="'true'"
-          [yAxisLabel]="'Mbps'"
-          [results]="local"
+          [results]="datos"
         ></app-grafico-lineas-ngxcharts>
       </div>
     </div>
     <div class="card shadow-sm my-2">
       <div class="card-body">
-        <h5><span class="text-primary">Mi</span> ultimo promedio local</h5>
-        <div *ngFor="let item of progressLocal" class="operador my-2">
+        <h5><span class="text-primary">Puntaje</span> nacional movil</h5>
+        <div *ngFor="let item of puntaje" class="operador my-2">
           <div class="d-flex justify-content-between">
             <h6>{{ item.operador }}</h6>
-            <span class="ml-auto">{{ item.puntos }} Mbps</span>
+            <span class="ml-auto">{{ item.puntos }}</span>
           </div>
           <div class="progress">
             <div
               [ngClass]="{
                 'bg-danger': item.operador == 'claro',
                 'bg-success': item.operador == 'movistar',
-                'bg-warning': item.operador == 'winet_telecom'
+                'bg-warning': item.operador == 'bitel'
               }"
               class="progress-bar bg-danger"
               role="progressbar"
@@ -85,14 +87,12 @@
   </div>
 </div>
 
-<div class="card my-1 animated fadeIn">
+<div class="card my-1 animated fadeIn shadow-sm">
   <div class="card-body">
     <div class="form-inline">
-      <h5>
-        <span class="text-primary">Tabla</span> test velocidad fijo nacional
-      </h5>
+      <h5><span class="text-primary">Tabla</span> puntaje nacional</h5>
       <button
-        [routerLink]="['/nperf/fijo', 'nuevo', 'general']"
+        [routerLink]="['/nperf', 'nuevo']"
         class="btn btn-outline-primary ml-auto"
       >
         Agregar
@@ -100,7 +100,7 @@
     </div>
     <br />
 
-    <table mat-table [dataSource]="datosTblFijoNacional">
+    <table mat-table [dataSource]="datosTblPuntajeNacional">
       <!--Column Item-->
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -134,11 +134,18 @@
           {{ element.claro }}
         </td>
       </ng-container>
-      <!--Column AmericaTel-->
-      <ng-container matColumnDef="americatel">
-        <th mat-header-cell *matHeaderCellDef>AMERICA_TEL</th>
-        <td mat-cell *matCellDef="let element" data-label="america_tel">
-          {{ element.americatel_peru }}
+      <!--Column Entel-->
+      <ng-container matColumnDef="entel">
+        <th mat-header-cell *matHeaderCellDef>ENTEL</th>
+        <td mat-cell *matCellDef="let element" data-label="entel">
+          {{ element.entel }}
+        </td>
+      </ng-container>
+      <!--Column Bitel-->
+      <ng-container matColumnDef="bitel">
+        <th mat-header-cell *matHeaderCellDef>BITEL</th>
+        <td mat-cell *matCellDef="let element" data-label="bitel">
+          {{ element.bitel }}
         </td>
       </ng-container>
       <!--Column Movistar-->
@@ -161,7 +168,7 @@
             "
             mat-mini-fab
             color="primary"
-            [routerLink]="['/nperf/fijo', element._id, 'nacional']"
+            [routerLink]="['/nperf/', element._id]"
           >
             <i class="icon-pencil"></i>
           </button>
@@ -170,18 +177,19 @@
 
       <tr
         mat-header-row
-        *matHeaderRowDef="columnsTblFijoNacional; sticky: true"
+        *matHeaderRowDef="columnsTblPuntajeNacional; sticky: true"
       ></tr>
       <tr
         mat-row
-        *matRowDef="let element; columns: columnsTblFijoNacional"
+        *matRowDef="let element; columns: columnsTblPuntajeNacional"
       ></tr>
     </table>
     <mat-paginator
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
-    <app-tableload [show]="loadTablaFijoNacional"> </app-tableload>
+    <app-tableload [show]="loadTablaPuntos"> </app-tableload>
+
     <div class="my-3">
       <a
         href="javascript: void(0)"
@@ -200,14 +208,23 @@
     </div>
   </div>
 </div>
-<br />
-<div class="card my-1 animated fadeIn">
+
+<div class="card my-1 animated fadeIn shadow-sm">
   <div class="card-body">
     <div class="form-inline">
-      <h5><span class="text-primary">Tabla</span> test velocidad fijo local</h5>
+      <h5>
+        <span class="text-primary">Tabla</span> test velocidad movil nacional
+      </h5>
+      <button
+        [routerLink]="['/nperf/velocidad', 'nuevo']"
+        class="btn btn-outline-primary ml-auto"
+      >
+        Agregar
+      </button>
     </div>
     <br />
-    <table mat-table [dataSource]="datosTblFijoLocal">
+
+    <table mat-table [dataSource]="datosTblMovilNacional">
       <!--Column Item-->
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -241,25 +258,25 @@
           {{ element.claro }}
         </td>
       </ng-container>
-      <!--Column AmericaTel-->
+      <!--Column Entel-->
+      <ng-container matColumnDef="entel">
+        <th mat-header-cell *matHeaderCellDef>ENTEL</th>
+        <td mat-cell *matCellDef="let element" data-label="entel">
+          {{ element.entel }}
+        </td>
+      </ng-container>
+      <!--Column Bitel-->
+      <ng-container matColumnDef="bitel">
+        <th mat-header-cell *matHeaderCellDef>BITEL</th>
+        <td mat-cell *matCellDef="let element" data-label="bitel">
+          {{ element.bitel }}
+        </td>
+      </ng-container>
+      <!--Column Movistar-->
       <ng-container matColumnDef="movistar">
         <th mat-header-cell *matHeaderCellDef>MOVISTAR</th>
         <td mat-cell *matCellDef="let element" data-label="movistar">
           {{ element.movistar }}
-        </td>
-      </ng-container>
-      <!--Column Movistar-->
-      <ng-container matColumnDef="americatel">
-        <th mat-header-cell *matHeaderCellDef>AMERICATEL</th>
-        <td mat-cell *matCellDef="let element" data-label="americatel">
-          {{ element.americatel_peru }}
-        </td>
-      </ng-container>
-      <!--Column Winet-->
-      <ng-container matColumnDef="winet">
-        <th mat-header-cell *matHeaderCellDef>WINET_TELECOM</th>
-        <td mat-cell *matCellDef="let element" data-label="winet telecom">
-          {{ element.winet_telecom }}
         </td>
       </ng-container>
       <!-- Column Acciones -->
@@ -275,7 +292,7 @@
             "
             mat-mini-fab
             color="primary"
-            [routerLink]="['/nperf/fijo', element._id, 'local']"
+            [routerLink]="['/nperf/velocidad', element._id]"
           >
             <i class="icon-pencil"></i>
           </button>
@@ -284,30 +301,35 @@
 
       <tr
         mat-header-row
-        *matHeaderRowDef="columnsTblFijoLocal; sticky: true"
+        *matHeaderRowDef="columnsTblPuntajeNacional; sticky: true"
       ></tr>
-      <tr mat-row *matRowDef="let element; columns: columnsTblFijoLocal"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: columnsTblPuntajeNacional"
+      ></tr>
     </table>
     <mat-paginator
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
-    <app-tableload [show]="loadTablaFijoLocal"> </app-tableload>
-    <div class="my-3">
-      <a
-        href="javascript: void(0)"
-        (click)="continuarT2(-10)"
-        class="btn btn-outline-secondary"
-      >
-        <i class="icon-angle-double-left"></i> Atras
-      </a>
-      <a
-        href="javascript: void(0)"
-        (click)="continuarT2(10)"
-        class="btn btn-outline-secondary mx-1"
-      >
-        Siguiente <i class="icon-angle-double-right"></i>
-      </a>
-    </div>
+    <app-tableload [show]="loadTablaVelocidades"> </app-tableload>
+
+
+      <div class="my-3">
+        <a
+          href="javascript: void(0)"
+          (click)="continuarT2(-10)"
+          class="btn btn-outline-secondary"
+        >
+          <i class="icon-angle-double-left"></i> Atras
+        </a>
+        <a
+          href="javascript: void(0)"
+          (click)="continuarT2(10)"
+          class="btn btn-outline-secondary mx-1"
+        >
+          Siguiente <i class="icon-angle-double-right"></i>
+        </a>
+      </div>
   </div>
 </div>

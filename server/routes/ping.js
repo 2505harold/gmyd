@@ -26,7 +26,7 @@ app.get("/amazon/:region", (req, res) => {
         fecha: { $gte: new Date(desde), $lte: new Date(hasta) },
       },
     },
-    { $sort: { operador: -1 } },
+    { $sort: { operador: 1 } },
     {
       $group: {
         _id: {

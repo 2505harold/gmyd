@@ -16,9 +16,16 @@ import { RegisterComponent } from "./login/register.component";
 //rutas
 import { APP_ROUTES } from "./app.routes";
 import { FechaPipe } from "./pipes/fecha.pipe";
+import { AngularMaterialTableComponent } from "./components/angular-material-table/angular-material-table.component";
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, FechaPipe, RegisterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    FechaPipe,
+    RegisterComponent,
+    AngularMaterialTableComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,

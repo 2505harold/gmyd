@@ -7,6 +7,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [],
@@ -16,6 +17,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
     MatPaginatorModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatSelectModule,
   ],
 })
 export class MaterialModule {}

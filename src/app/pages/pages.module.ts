@@ -13,12 +13,11 @@ import { PAGES_ROUTES } from "./pages.routes";
 //componentes
 import { AmazonComponent } from "./amazon/amazon.component";
 import { PagesComponent } from "./pages.component";
-import { NperfComponent } from "./nperf/nperf.component";
-import { NperfEditarComponent } from "./nperf/nperf-editar.component";
+import { NperfComponent } from "./nperf/movil/nperf.component";
+import { NperfEditarComponent } from "./nperf/editar-puntuacion/nperf-editar.component";
 import { GraficoLineasNgxchartsComponent } from "../components/grafico-lineas-ngxcharts/grafico-lineas-ngxcharts.component";
 import { NgxchartsGroupBarHorizontalComponent } from "../components/ngxcharts-group-bar-horizontal/ngxcharts-group-bar-horizontal.component";
 import { BoxloadComponent } from "../components/boxload/boxload.component";
-import { TestvelocidadComponent } from "./nperf/testvelocidad/testvelocidad.component";
 import { FijoComponent } from "./nperf/fijo/fijo.component";
 import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
 import { DropdownButtonComponent } from "../components/dropdown-button/dropdown-button.component";
@@ -29,6 +28,8 @@ import { TutelaComponent } from "./tutela/tutela.component";
 import { MantTutelaComponent } from "./mantenimiento/tutela/mant-tutela.component";
 import { OpensignalComponent } from "./opensignal/opensignal.component";
 import { MantOpensignalComponent } from "./mantenimiento/opensignal/mant-opensignal.component";
+import { TestvelocidadComponent } from "./nperf/editar-test-velocidad/testvelocidad.component";
+import { TableloadComponent } from "../components/tableload/tableload.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { MantOpensignalComponent } from "./mantenimiento/opensignal/mant-opensig
     GraficoLineasNgxchartsComponent,
     NgxchartsGroupBarHorizontalComponent,
     BoxloadComponent,
+    TableloadComponent,
     ModalComponent,
     DropdownButtonComponent,
     TestvelocidadComponent,

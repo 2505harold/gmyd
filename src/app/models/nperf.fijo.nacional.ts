@@ -6,6 +6,7 @@ export class NperfFijoNacional {
     public claro_movil?: Number,
     public americatel_peru?: Number,
     public movistar_movil?: Number,
+    public winet_telecom?: Number,
     public pruebas?: Number,
     public fecha_ingreso?: Date,
     public usuario?: String

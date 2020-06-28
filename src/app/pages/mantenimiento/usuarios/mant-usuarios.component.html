@@ -1,8 +1,98 @@
 <h4>Mantenimiento <span class="text-primary">Usuarios</span></h4>
 <br />
-<div class="card">
+<div class="card shadow-sm">
   <div class="card-body">
-    <div class="tableFixHead h-700">
+    <table mat-table [dataSource]="dataTblUsuarios">
+      <!--Column Item-->
+      <ng-container matColumnDef="No.">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td
+          mat-cell
+          *matCellDef="let element; let i = index"
+          data-label="index"
+        >
+          {{ i + 1 }}
+        </td>
+      </ng-container>
+      <!--Column Usuario-->
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef>USUARIO</th>
+        <td mat-cell *matCellDef="let element" data-label="usuario">
+          {{ element.nombre | titlecase }} {{ element.apellido | titlecase }}
+        </td>
+      </ng-container>
+      <!--Column Role-->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>ROLE</th>
+        <td mat-cell *matCellDef="let element" data-label="role">
+          <mat-select
+            [(value)]="element.rol"
+            [disabled]="
+              _usuarioService.usuario.rol === 'USER_ROLE' ? 'disabled' : null
+            "
+            [(ngModel)]="element.rol"
+            name="role"
+          >
+            <mat-option value="ADMIN_ROLE">ADMIN_ROLE</mat-option>
+            <mat-option value="USER_ROLE">USER_ROLE</mat-option>
+          </mat-select>
+        </td>
+      </ng-container>
+      <!--Column Correo-->
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>CORREO</th>
+        <td mat-cell *matCellDef="let element" data-label="correo">
+          {{ element.correo }}
+        </td>
+      </ng-container>
+      <!--Column Departamento-->
+      <ng-container matColumnDef="departamento">
+        <th mat-header-cell *matHeaderCellDef>DEPARTAMENTO</th>
+        <td mat-cell *matCellDef="let element" data-label="departamento">
+          {{ element.departamento }}
+        </td>
+      </ng-container>
+      <!--Column Provincia -->
+      <ng-container matColumnDef="provincia">
+        <th mat-header-cell *matHeaderCellDef>PROVINCIA</th>
+        <td mat-cell *matCellDef="let element" data-label="provincia">
+          {{ element.provincia }}
+        </td>
+      </ng-container>
+      <!--Column Distrito -->
+      <ng-container matColumnDef="distrito">
+        <th mat-header-cell *matHeaderCellDef>DISTRITO</th>
+        <td mat-cell *matCellDef="let element" data-label="distrito">
+          {{ element.distrito }}
+        </td>
+      </ng-container>
+      <!-- Column Distrito -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+        <td mat-cell *matCellDef="let element" data-label="acciones">
+          <button
+            [disabled]="
+              _usuarioService.usuario.rol != 'ADMIN_ROLE' ? 'disabled' : null
+            "
+            mat-mini-fab
+            color="primary"
+            (click)="actualizarUsuario(element)"
+          >
+            <i class="icon-save"></i>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let element; columns: columns"></tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+    <app-tableload [show]="loadTblUsuarios"> </app-tableload>
+
+    <!-- <div class="tableFixHead h-700">
       <table class="table">
         <thead>
           <tr class="column-dark">
@@ -70,6 +160,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
   </div>
 </div>

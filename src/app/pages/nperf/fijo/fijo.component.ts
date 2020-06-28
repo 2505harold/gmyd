@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NperfService, UsuarioService } from "src/app/services/service.index";
+import { MatTableDataSource } from "@angular/material/table";
 
 //declare function init_plugins();
 
@@ -10,8 +11,6 @@ import { NperfService, UsuarioService } from "src/app/services/service.index";
 })
 export class FijoComponent implements OnInit {
   nacional: any = [];
-  nacionalTabla: any = [];
-  localTabla: any = [];
   totalRegistroNacional: number;
   totalRegistroLocal: number;
   desde: number = 0;
@@ -22,10 +21,33 @@ export class FijoComponent implements OnInit {
   departamentos: any = [];
   distUser: string;
   idUser: string;
-  campos_nacionales = ["claro", "americatel_peru", "movistar"];
+  campos_nacionales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
   campos_locales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
   loadTablaFijoNacional: boolean;
   loadTablaFijoLocal: boolean;
+
+  //valriables de angular material tables
+  columnsTblFijoNacional: string[] = [
+    "index",
+    "fecha",
+    "usuario",
+    "claro",
+    "americatel",
+    "movistar",
+    "acciones",
+  ];
+  datosTblFijoNacional = new MatTableDataSource();
+  columnsTblFijoLocal: string[] = [
+    "index",
+    "fecha",
+    "usuario",
+    "claro",
+    "movistar",
+    "americatel",
+    "winet",
+    "acciones",
+  ];
+  datosTblFijoLocal = new MatTableDataSource();
 
   constructor(
     private _nperfService: NperfService,
@@ -55,10 +77,12 @@ export class FijoComponent implements OnInit {
       this.campos_nacionales.forEach((operador) => {
         var series = [];
         resp.metricas.forEach((objeto) => {
-          series.push({
-            name: new Date(objeto.fecha_ingreso),
-            value: objeto[operador],
-          });
+          if (objeto[operador]) {
+            series.push({
+              name: new Date(objeto.fecha_ingreso),
+              value: objeto[operador],
+            });
+          }
         });
         datos.push({ name: operador, series: series });
       });
@@ -134,7 +158,8 @@ export class FijoComponent implements OnInit {
     this._nperfService
       .obtenerSorterMetricasFijoNacional("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {
-        this.nacionalTabla = resp.metricas;
+        //this.nacionalTabla = resp.metricas;
+        this.datosTblFijoNacional = resp.metricas;
         this.totalRegistroNacional = resp.total;
         this.loadTablaFijoNacional = false;
       });
@@ -145,7 +170,8 @@ export class FijoComponent implements OnInit {
     this._nperfService
       .obtenerSorterMetricasFijoLocal("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {
-        this.localTabla = resp.metricas;
+        //this.localTabla = resp.metricas;
+        this.datosTblFijoLocal = resp.metricas;
         this.totalRegistroLocal = resp.total;
         this.loadTablaFijoLocal = false;
       });

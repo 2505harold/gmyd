@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700");
 @import url(./assets/css/icomoon.css);
-@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
   background: #fff;
@@ -35,6 +35,67 @@ body {
 
 table {
   width: 100%;
+  table-layout: fixed;
+}
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+@media screen and (max-width: 500px) {
+  .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .mat-table .mat-row:nth-child(even) {
+    background: #f8f9fa;
+  }
+  .mat-table .mat-row:nth-child(odd) {
+    background: #fff;
+  }
+
+  .mat-table caption {
+    font-size: 1em;
+  }
+  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+    height: 30px;
+    margin-bottom: 2%;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .mat-table .mat-header-row {
+    display: none;
+  }
+  .mat-table .mat-cell:before {
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: normal;
+
+    font-size: 0.85em;
+  }
+  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
+  .mat-table .mat-cell:first-child {
+    margin-top: 2%;
+  }
+
+  .mat-table .mat-cell {
+    padding: 0px 5px;
+  }
+
+  .mat-table .mat-row .mat-cell:last-child {
+    padding-bottom: 3rem;
+  }
 }
 
 /*-- =====================================================

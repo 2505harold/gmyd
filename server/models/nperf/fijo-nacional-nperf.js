@@ -8,6 +8,7 @@ const fijoNacionalNperfSchema = new Schema(
     claro_movil: { type: Number },
     americatel_peru: { type: Number },
     movistar_movil: { type: Number },
+    winet_telecom: { type: Number },
     pruebas: { type: Number },
     fecha_ingreso: { type: Date },
     usuario: { type: Schema.Types.ObjectId, ref: "Usuario" },

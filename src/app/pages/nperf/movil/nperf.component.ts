@@ -1,5 +1,7 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
 import { NperfService, UsuarioService } from "src/app/services/service.index";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
 
 //declare function init_plugins();
 
@@ -9,10 +11,9 @@ import { NperfService, UsuarioService } from "src/app/services/service.index";
   styles: [],
 })
 export class NperfComponent implements OnInit {
-  puntajes: any = [];
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   puntaje: any = [];
   progressVelocidades: any = [];
-  velocidades: any = [];
   labels: any;
   loadTablaPuntos: boolean = true;
   totalRegistro: number = 0;
@@ -21,6 +22,30 @@ export class NperfComponent implements OnInit {
   totalRegistro2: number = 0;
   desde2: number = 0;
   operadores = ["claro", "entel", "movistar", "bitel"];
+
+  //valriables de angular material tables
+  columnsTblPuntajeNacional: string[] = [
+    "index",
+    "fecha",
+    "usuario",
+    "claro",
+    "entel",
+    "bitel",
+    "movistar",
+    "acciones",
+  ];
+  datosTblPuntajeNacional = new MatTableDataSource();
+  columnsTblMovilNacional: string[] = [
+    "index",
+    "fecha",
+    "usuario",
+    "claro",
+    "entel",
+    "bitel",
+    "movistar",
+    "acciones",
+  ];
+  datosTblMovilNacional = new MatTableDataSource();
 
   datos = [];
   datosVelocidades = [];
@@ -43,8 +68,11 @@ export class NperfComponent implements OnInit {
     this.loadUltimosPuntajes();
     //progress bar de puntaje velocidad nacional movil
     this.loadUltimasVelocidades();
-    console.log(this._usuarioService.usuario.correo);
   }
+
+  /************************** */
+  /** Metodos de progressbar */
+  /*************************** */
 
   loadUltimosPuntajes() {
     this._nperfService
@@ -88,6 +116,10 @@ export class NperfComponent implements OnInit {
       });
   }
 
+  /************************** */
+  /** Metodos carga de charts */
+  /*************************** */
+
   loadDatosChart() {
     this._nperfService.obtenerMetricas().subscribe((resp: any) => {
       var datos = [];
@@ -112,12 +144,17 @@ export class NperfComponent implements OnInit {
     });
   }
 
+  /************************** */
+  /** Metodos de carga de tablas */
+  /*************************** */
+
   loadDatosTables(desde?: number) {
     this.loadTablaPuntos = true;
     this._nperfService
       .obtenerSorterMetricas("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {
-        this.puntajes = resp.metricas;
+        this.datosTblPuntajeNacional = resp.metricas;
+        this.datosTblPuntajeNacional.paginator = this.paginator;
         this.totalRegistro = resp.total;
         this.loadTablaPuntos = false;
       });
@@ -128,7 +165,8 @@ export class NperfComponent implements OnInit {
     this._nperfService
       .obtenerSorterMetricasVelocidades("fecha_ingreso", "desc", desde)
       .subscribe((resp: any) => {
-        this.velocidades = resp.metricas;
+        this.datosTblMovilNacional = resp.metricas;
+        this.datosTblMovilNacional.paginator = this.paginator;
         this.totalRegistro2 = resp.total;
         this.loadTablaVelocidades = false;
       });
