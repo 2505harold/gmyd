@@ -184,8 +184,13 @@ export class AmazonService {
     );
   }
 
-  obtenerPruebasPingAmazon(region: string, desde: string, hasta) {
-    const url = `${URL_SERVICIOS}/ping/amazon/${region}?desde=${desde}&hasta=${hasta}`;
+  obtenerPruebasPingAmazon(
+    categoria: string,
+    region: string,
+    desde: string,
+    hasta
+  ) {
+    const url = `${URL_SERVICIOS}/ping/amazon/${categoria}/${region}?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         const ips = resp.datos.map((el) => el._id.ip);

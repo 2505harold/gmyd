@@ -9,6 +9,7 @@ import { ModalService } from "../components/modal/modal.service";
 import { InternacionalService } from "./internacional.service";
 import { TutelaService } from "./tutela/tutela.service";
 import { OpensignalService } from "./opensignal/opensignal.service";
+import { FechaLocalService } from "./fechas/fecha-local.service";
 
 @NgModule({
   declarations: [],
@@ -22,6 +23,7 @@ import { OpensignalService } from "./opensignal/opensignal.service";
     InternacionalService,
     TutelaService,
     OpensignalService,
+    FechaLocalService,
   ],
 })
 export class ServiceModule {}

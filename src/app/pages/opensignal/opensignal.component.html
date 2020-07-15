@@ -1,5 +1,8 @@
-<div class="d-flex justify-content-between">
-  <h4>Prefijos <span class="text-primary">Open Signal</span></h4>
+<div class="d-flex align-items-center">
+  <img src="../../../assets/images/{{ view }}.svg" width="50" alt="logo" />
+  <h4 class="mb-0 ml-1">
+    Latencia a prefijos <span class="text-primary">Open Signal</span>
+  </h4>
 </div>
 <br />
 <h5>Servidor</h5>
@@ -11,12 +14,12 @@
     </div>
   </div>
 
-  <div class="col-sm-12" *ngFor="let item of datosPingServer">
+  <div class="col-sm-12" *ngFor="let host of datosPingServer">
     <div class="card shadow-sm my-2">
       <div class="card-body" style="height: 530px;">
-        <h5 class="font-weight-light">{{ item.host }}</h5>
+        <h5 class="font-weight-light">{{ host.host }}</h5>
         <app-grafico-lineas-ngxcharts
-          [results]="item.metricas"
+          [results]="host.metricas"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
         >

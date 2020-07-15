@@ -20,9 +20,9 @@ const pagesRoute: Routes = [
     component: PagesComponent,
     canActivate: [LoginGuard],
     children: [
-      { path: "amazon", component: AmazonComponent },
-      { path: "tutela", component: TutelaComponent },
-      { path: "opensignal", component: OpensignalComponent },
+      { path: "amazon/:tipo", component: AmazonComponent },
+      { path: "tutela/:tipo", component: TutelaComponent },
+      { path: "opensignal/:id", component: OpensignalComponent },
       { path: "mantenimiento/amazon", component: MantenimientoComponent },
       { path: "mantenimiento/usuarios", component: MantUsuariosComponent },
       { path: "mantenimiento/tutela", component: MantTutelaComponent },

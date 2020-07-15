@@ -3,33 +3,72 @@
     <ul class="menu">
       <li class="item-menu">
         <a
-          routerLinkActive="active"
+          data-toggle="collapse"
+          data-target="#opensignal"
+          aria-expanded="false"
           class="has-arrow"
-          [routerLink]="['/opensignal']"
         >
           <span class="icon-podcast icon"></span>
           <span class="item">Open Signal</span>
         </a>
+        <ul class="collapse submenu" id="opensignal">
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/opensignal', 'movil']"
+              >Movil</a
+            >
+          </li>
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/opensignal', 'fijo']"
+              >Fijo</a
+            >
+          </li>
+        </ul>
       </li>
       <li class="item-menu">
         <a
-          routerLinkActive="active"
+          data-toggle="collapse"
+          data-target="#tutela"
+          aria-expanded="false"
           class="has-arrow"
-          [routerLink]="['/tutela']"
         >
           <span class="icon-wi-fi icon"></span>
           <span class="item">Tutela</span>
         </a>
+        <ul class="collapse submenu" id="tutela">
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/tutela', 'movil']"
+              >Movil</a
+            >
+          </li>
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/tutela', 'fijo']"
+              >Fijo</a
+            >
+          </li>
+        </ul>
       </li>
       <li class="item-menu">
         <a
-          routerLinkActive="active"
+          data-toggle="collapse"
+          data-target="#amazon"
+          aria-expanded="false"
           class="has-arrow"
-          [routerLink]="['/amazon']"
         >
           <span class="icon-amazon icon"></span>
           <span class="item">Amazon</span>
         </a>
+        <ul class="collapse submenu" id="amazon">
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/amazon', 'movil']"
+              >Movil</a
+            >
+          </li>
+          <li>
+            <a routerLinkActive="active" [routerLink]="['/amazon', 'fijo']"
+              >Fijo</a
+            >
+          </li>
+        </ul>
       </li>
       <li class="item-menu">
         <a

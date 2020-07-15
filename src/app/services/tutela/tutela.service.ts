@@ -9,8 +9,13 @@ import Swal from "sweetalert2";
 export class TutelaService {
   constructor(private http: HttpClient) {}
 
-  obtenerPruebasPingTutela(tipo: string, desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/ping/tutela/${tipo}?desde=${desde}&hasta=${hasta}`;
+  obtenerPruebasPingTutela(
+    categoria: string,
+    tipo: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url = `${URL_SERVICIOS}/ping/tutela/${categoria}/${tipo}?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         const ips = resp.datos.map((el) => el._id.ip);
@@ -55,8 +60,13 @@ export class TutelaService {
     );
   }
 
-  obtenerGraficoPing(tipo: string, desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/ping/tutela/grafico/${tipo}?desde=${desde}&hasta=${hasta}`;
+  obtenerGraficoPing(
+    categoria: string,
+    tipo: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url = `${URL_SERVICIOS}/ping/tutela/grafico/${categoria}/${tipo}?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.datos.forEach((element) => {

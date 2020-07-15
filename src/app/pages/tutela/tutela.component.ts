@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { TutelaService } from "src/app/services/tutela/tutela.service";
-import { DatePipe } from "@angular/common";
+import { FechaLocalService } from "src/app/services/fechas/fecha-local.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-tutela",
@@ -16,55 +17,52 @@ export class TutelaComponent implements OnInit {
   showLoadServerThrDownload: boolean = true;
   showLoadServerThrUpload: boolean = true;
   showLoadServerVideo: boolean = true;
+  view: string;
 
   constructor(
     private _tutelaService: TutelaService,
-    private datePipe: DatePipe
+    private _fechaService: FechaLocalService,
+    private activeRouter: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.obtenerPruebasPingTutelaVideo(
-      "Video",
-      this.inicializarFechas().hoy,
-      this.inicializarFechas().mañana
-    );
-    this.cagarGraficosPingServerThrDownload(
-      "throughput_server_download",
-      this.inicializarFechas().ayer,
-      this.inicializarFechas().mañana
-    );
-    this.cagarGraficosPingServerThrUpload(
-      "throughput_server_upload",
-      this.inicializarFechas().ayer,
-      this.inicializarFechas().mañana
-    );
-    this.cagarGraficosPingServerVideo(
-      "video",
-      this.inicializarFechas().ayer,
-      this.inicializarFechas().mañana
-    );
+    this.activeRouter.params.subscribe((param) => {
+      this.view = param["tipo"];
+      this.obtenerPruebasPingTutelaVideo(
+        this.view,
+        "Video",
+        this._fechaService.corta(-6),
+        this._fechaService.cortaSig()
+      );
+      this.cagarGraficosPingServerThrDownload(
+        this.view,
+        "throughput_server_download",
+        this._fechaService.corta(-6),
+        this._fechaService.cortaSig()
+      );
+      this.cagarGraficosPingServerThrUpload(
+        this.view,
+        "throughput_server_upload",
+        this._fechaService.corta(-6),
+        this._fechaService.cortaSig()
+      );
+      this.cagarGraficosPingServerVideo(
+        this.view,
+        "video",
+        this._fechaService.corta(-6),
+        this._fechaService.cortaSig()
+      );
+    });
   }
 
-  inicializarFechas() {
-    let actual = new Date();
-    let mañana = this.datePipe.transform(
-      actual.setDate(actual.getDate() + 1),
-      "yyyy-MM-dd"
-    );
-    let hoy = this.datePipe.transform(
-      actual.setDate(actual.getDate() - 1),
-      "yyyy-MM-dd"
-    );
-    let ayer = this.datePipe.transform(
-      actual.setDate(actual.getDate() - 1),
-      "yyyy-MM-dd"
-    );
-    return { mañana, hoy, ayer };
-  }
-
-  obtenerPruebasPingTutelaVideo(tipo: string, desde: string, hasta: string) {
+  obtenerPruebasPingTutelaVideo(
+    categoria: string,
+    tipo: string,
+    desde: string,
+    hasta: string
+  ) {
     this._tutelaService
-      .obtenerPruebasPingTutela(tipo, desde, hasta)
+      .obtenerPruebasPingTutela(categoria, tipo, desde, hasta)
       .subscribe((resp) => {
         this.dataPing = resp;
         this.showloadCharVideo = false;
@@ -72,30 +70,41 @@ export class TutelaComponent implements OnInit {
   }
 
   cagarGraficosPingServerThrDownload(
+    categoria: string,
     tipo: string,
     desde: string,
     hasta: string
   ) {
     this._tutelaService
-      .obtenerGraficoPing(tipo, desde, hasta)
+      .obtenerGraficoPing(categoria, tipo, desde, hasta)
       .subscribe((resp) => {
         this.datosPingServerThrDownload = resp.datos;
         this.showLoadServerThrDownload = false;
       });
   }
 
-  cagarGraficosPingServerThrUpload(tipo: string, desde: string, hasta: string) {
+  cagarGraficosPingServerThrUpload(
+    categoria: string,
+    tipo: string,
+    desde: string,
+    hasta: string
+  ) {
     this._tutelaService
-      .obtenerGraficoPing(tipo, desde, hasta)
+      .obtenerGraficoPing(categoria, tipo, desde, hasta)
       .subscribe((resp) => {
         this.datosPingServerThrUpload = resp.datos;
         this.showLoadServerThrUpload = false;
       });
   }
 
-  cagarGraficosPingServerVideo(tipo: string, desde: string, hasta: string) {
+  cagarGraficosPingServerVideo(
+    categoria: string,
+    tipo: string,
+    desde: string,
+    hasta: string
+  ) {
     this._tutelaService
-      .obtenerGraficoPing(tipo, desde, hasta)
+      .obtenerGraficoPing(categoria, tipo, desde, hasta)
       .subscribe((resp) => {
         this.datosPingServerVideo = resp.datos;
         this.showLoadServerVideo = false;

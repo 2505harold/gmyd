@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AmazonService, UsuarioService } from "src/app/services/service.index";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { DatePipe } from "@angular/common";
+import { ActivatedRoute } from "@angular/router";
+import { FechaLocalService } from "src/app/services/fechas/fecha-local.service";
 
 //declare function init_plugins();
 
@@ -34,52 +36,62 @@ export class AmazonComponent implements OnDestroy {
   timeStart: number;
   intervalo;
   loadGraficoDelay: boolean = true;
+  view: string;
 
   datos = [];
 
   constructor(
     public _amazonService: AmazonService,
     public datePipe: DatePipe,
-    public _usuarioService: UsuarioService
+    public _usuarioService: UsuarioService,
+    private activatedRoute: ActivatedRoute,
+    private _fechaService: FechaLocalService
   ) {
-    const usuario = _usuarioService.usuario;
-    if (usuario.correo === "test3@test.com") {
-      this.metricasDelay();
-    }
+    this.activatedRoute.params.subscribe((params) => {
+      this.view = params["tipo"];
+      // const usuario = _usuarioService.usuario;
+      // if (usuario.correo === "test3@test.com") {
+      //   this.metricasDelay();
+      // }
 
-    this.inicializarFechas();
-    this.obtenerPruebasPingAmazonBrasil("sa-east-1", this.hoy, this.fin);
-    this.obtenerPruebasPingAmazonNorthCalifornia(
-      "us-west-1",
-      this.hoy,
-      this.fin
-    );
-    this.obtenerPruebasPingAmazonOhio("us-east-2", this.hoy, this.fin);
-    this.obtenerPruebasPingAmazonNorthVirginia("us-east-1", this.hoy, this.fin);
-    this.loadDatosChart(this.inicio, this.fin);
-    this.cargarPrefijosAmazon();
-    this.form = new FormGroup({
-      ip: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(
-          "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-        ),
-      ]),
+      this.obtenerPruebasPingAmazonBrasil(
+        "sa-east-1",
+        this._fechaService.cortaAnt(),
+        this._fechaService.cortaSig()
+      );
+      this.obtenerPruebasPingAmazonNorthCalifornia(
+        "us-west-1",
+        this._fechaService.cortaAnt(),
+        this._fechaService.cortaSig()
+      );
+      this.obtenerPruebasPingAmazonOhio(
+        "us-east-2",
+        this._fechaService.cortaAnt(),
+        this._fechaService.cortaSig()
+      );
+      this.obtenerPruebasPingAmazonNorthVirginia(
+        "us-east-1",
+        this._fechaService.cortaAnt(),
+        this._fechaService.cortaSig()
+      );
+      this.loadDatosChart(
+        this._fechaService.cortaAnt(),
+        this._fechaService.cortaSig()
+      );
+      this.cargarPrefijosAmazon();
+      this.form = new FormGroup({
+        ip: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(
+            "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+          ),
+        ]),
+      });
     });
   }
 
   ngOnDestroy() {
     clearInterval(this.intervalo);
-  }
-
-  inicializarFechas() {
-    let actual = new Date();
-    let siguiente = actual.setDate(actual.getDate() + 1); // sumo un dia al actual
-    let anterior = actual.setDate(actual.getDate() - 2); // le resto dos dias
-    let hoy = actual.setDate(actual.getDate() + 1); //le sumo un dia
-    this.inicio = this.datePipe.transform(anterior, "yyyy-MM-dd");
-    this.fin = this.datePipe.transform(siguiente, "yyyy-MM-dd");
-    this.hoy = this.datePipe.transform(hoy, "yyyy-MM-dd");
   }
 
   //llenar tabla de prefijos amazon
@@ -95,27 +107,27 @@ export class AmazonComponent implements OnDestroy {
       });
   }
 
-  metricasDelay() {
-    this.intervalo = setInterval(() => {
-      this._amazonService.obtenerPcs().subscribe((resp) => {
-        let fecha = new Date();
-        resp.forEach((item, index) => {
-          let start = performance.now();
-          this._amazonService.pingAngular(item.dns).subscribe((resp: any) => {
-            let end = performance.now();
-            let time = end - start - 7;
-            this._amazonService
-              .guardarMetricasDelay({
-                fecha,
-                pc: item._id,
-                delay: time,
-              })
-              .subscribe();
-          });
-        });
-      });
-    }, 300000);
-  }
+  // metricasDelay() {
+  //   this.intervalo = setInterval(() => {
+  //     this._amazonService.obtenerPcs().subscribe((resp) => {
+  //       let fecha = new Date();
+  //       resp.forEach((item, index) => {
+  //         let start = performance.now();
+  //         this._amazonService.pingAngular(item.dns).subscribe((resp: any) => {
+  //           let end = performance.now();
+  //           let time = end - start - 7;
+  //           this._amazonService
+  //             .guardarMetricasDelay({
+  //               fecha,
+  //               pc: item._id,
+  //               delay: time,
+  //             })
+  //             .subscribe();
+  //         });
+  //       });
+  //     });
+  //   }, 300000);
+  // }
 
   actualizarGrafico() {
     this.loadDatosChart(this.inicio, this.fin);
@@ -147,7 +159,7 @@ export class AmazonComponent implements OnDestroy {
     }
   }
 
-  //click en siguinete o anterior
+  //click en siguiente o anterior
   continuar(valor: number) {
     const desde = this.desde + valor;
     if (desde >= this.totalRegistro) {
@@ -164,7 +176,7 @@ export class AmazonComponent implements OnDestroy {
   //obtiene el comprativo de ping
   obtenerPruebasPingAmazonBrasil(region: string, desde: string, hasta: string) {
     this._amazonService
-      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing = resp;
         this.showloadCharBrasil = false;
@@ -176,7 +188,7 @@ export class AmazonComponent implements OnDestroy {
     hasta: string
   ) {
     this._amazonService
-      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing2 = resp;
         this.showloadCharNorthCalifornia = false;
@@ -184,7 +196,7 @@ export class AmazonComponent implements OnDestroy {
   }
   obtenerPruebasPingAmazonOhio(region: string, desde: string, hasta: string) {
     this._amazonService
-      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing3 = resp;
         this.showloadCharOhio = false;
@@ -196,7 +208,7 @@ export class AmazonComponent implements OnDestroy {
     hasta: string
   ) {
     this._amazonService
-      .obtenerPruebasPingAmazon(region, desde, hasta)
+      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing4 = resp;
         this.showloadCharNorthVirginia = false;

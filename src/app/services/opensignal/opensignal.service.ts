@@ -4,13 +4,14 @@ import { URL_SERVICIOS } from "../../config/global";
 import { map } from "rxjs/operators";
 import { IpsOpenSignal } from "src/app/models/ips.opensignal.model";
 import Swal from "sweetalert2";
+import * as _ from "lodash";
 
 @Injectable()
 export class OpensignalService {
   constructor(private http: HttpClient) {}
 
-  obtenerGraficoPing(desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/ping/opensignal/grafico?desde=${desde}&hasta=${hasta}`;
+  obtenerGraficoPing(desde: string, hasta: string, categoria: string) {
+    const url = `${URL_SERVICIOS}/ping/opensignal/grafico/${categoria}?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.datos.forEach((element) => {
