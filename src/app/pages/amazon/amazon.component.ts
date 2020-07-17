@@ -148,8 +148,9 @@ export class AmazonComponent implements OnDestroy {
     this.cargarPrefijosAmazon();
   }
 
-  //obtiene el comprativo de ping
+  //obtiene el comparativo de ping
   obtenerPruebasPingAmazonBrasil(region: string, desde: string, hasta: string) {
+    this.showloadCharBrasil = true;
     this._amazonService
       .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
@@ -162,6 +163,7 @@ export class AmazonComponent implements OnDestroy {
     desde: string,
     hasta: string
   ) {
+    this.showloadCharNorthCalifornia = true;
     this._amazonService
       .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
@@ -170,6 +172,7 @@ export class AmazonComponent implements OnDestroy {
       });
   }
   obtenerPruebasPingAmazonOhio(region: string, desde: string, hasta: string) {
+    this.showloadCharOhio = true;
     this._amazonService
       .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
@@ -182,6 +185,7 @@ export class AmazonComponent implements OnDestroy {
     desde: string,
     hasta: string
   ) {
+    this.showloadCharNorthVirginia = true;
     this._amazonService
       .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
       .subscribe((resp) => {
