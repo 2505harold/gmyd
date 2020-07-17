@@ -12,6 +12,7 @@ const pingSchema = new Schema(
     alive: { type: Boolean },
     fecha: { type: String },
     prefijo: { type: Schema.Types.ObjectId, ref: "IpsTutela" },
+    categoria: { type: String },
     operador: { type: String },
   },
   { collection: "ping_tutela" }

@@ -355,36 +355,39 @@ app.get("/ping/:tipo/promedio", (req, res) => {
   const hasta = req.query.hasta;
   const categoria = req.params.tipo;
 
-  PingAmazon.aggregate([
-    {
-      $lookup: {
-        from: "ipsamazon",
-        localField: "prefijo",
-        foreignField: "_id",
-        as: "region",
-      },
-    },
-    {
-      $match: {
-        avg: { $ne: "unknown" },
-        fecha: { $gte: desde, $lte: hasta },
-        categoria: { $regex: new RegExp(categoria, "i") },
-      },
-    },
-    {
-      $sort: { fecha: -1 },
-    },
-    {
-      $group: {
-        _id: {
-          fecha: "$fecha",
-          region: "$region.network_border_group",
-          operador: "$operador",
+  PingAmazon.aggregate(
+    [
+      {
+        $lookup: {
+          from: "ipsamazon",
+          localField: "prefijo",
+          foreignField: "_id",
+          as: "region",
         },
-        avg: { $avg: { $toDecimal: "$avg" } },
       },
-    },
-  ]).exec((err, latencias) => {
+      {
+        $match: {
+          avg: { $ne: "unknown" },
+          fecha: { $gte: desde, $lte: hasta },
+          categoria: { $regex: new RegExp(categoria, "i") },
+        },
+      },
+      {
+        $sort: { fecha: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            fecha: "$fecha",
+            region: "$region.network_border_group",
+            operador: "$operador",
+          },
+          avg: { $avg: { $toDecimal: "$avg" } },
+        },
+      },
+    ],
+    { allowDiskUse: true }
+  ).exec((err, latencias) => {
     if (err) {
       return res.status(500).json({
         ok: false,
