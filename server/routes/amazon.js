@@ -372,9 +372,6 @@ app.get("/ping/:tipo/promedio", (req, res) => {
       },
     },
     {
-      $sort: { fecha: -1 },
-    },
-    {
       $group: {
         _id: {
           fecha: "$fecha",
@@ -395,13 +392,14 @@ app.get("/ping/:tipo/promedio", (req, res) => {
         });
       }
 
-      //res.json({ datos: groupBy(latencias, "_id.region") });
+      //ordenar por fecha
+      const _latencias = orderBy(latencias, "_id.fecha", "asc");
 
       //creamos el objeto que retornaremos
       let datos = [];
       //obtenemos los operadores
       const operadores = [
-        ...new Set(latencias.map((item) => item._id.operador)),
+        ...new Set(_latencias.map((item) => item._id.operador)),
       ];
       //Obtensmos las regiones
       RegionesAmazon.find({}).exec((err, regiones) => {
@@ -415,7 +413,7 @@ app.get("/ping/:tipo/promedio", (req, res) => {
 
         //cambiamos el valor del key region de 'res'
         regiones.forEach((region) => {
-          latencias.map((item) => {
+          _latencias.map((item) => {
             if (item._id.region[0] === region.code) {
               return (item._id.region[0] = region.full_name);
             }
@@ -427,7 +425,7 @@ app.get("/ping/:tipo/promedio", (req, res) => {
           const metricas = [];
           regionesMostrar.forEach((regionMostrar) => {
             const series = [];
-            latencias.forEach((latencia) => {
+            _latencias.forEach((latencia) => {
               if (
                 latencia._id.region[0] === regionMostrar &&
                 latencia._id.operador === operador
