@@ -38,7 +38,7 @@ export class AmazonComponent implements OnDestroy {
   loadGraficoDelay: boolean = true;
   view: string;
 
-  datos = [];
+  datos: any[];
 
   constructor(
     public _amazonService: AmazonService,
@@ -49,33 +49,30 @@ export class AmazonComponent implements OnDestroy {
   ) {
     this.activatedRoute.params.subscribe((params) => {
       this.view = params["tipo"];
-      // const usuario = _usuarioService.usuario;
-      // if (usuario.correo === "test3@test.com") {
-      //   this.metricasDelay();
-      // }
 
       this.obtenerPruebasPingAmazonBrasil(
         "sa-east-1",
-        this._fechaService.cortaAnt(),
+        this._fechaService.localCorta(),
         this._fechaService.cortaSig()
       );
       this.obtenerPruebasPingAmazonNorthCalifornia(
         "us-west-1",
-        this._fechaService.cortaAnt(),
+        this._fechaService.localCorta(),
         this._fechaService.cortaSig()
       );
       this.obtenerPruebasPingAmazonOhio(
         "us-east-2",
-        this._fechaService.cortaAnt(),
+        this._fechaService.localCorta(),
         this._fechaService.cortaSig()
       );
       this.obtenerPruebasPingAmazonNorthVirginia(
         "us-east-1",
-        this._fechaService.cortaAnt(),
+        this._fechaService.localCorta(),
         this._fechaService.cortaSig()
       );
       this.loadDatosChart(
-        this._fechaService.cortaAnt(),
+        this.view,
+        this._fechaService.corta(-6),
         this._fechaService.cortaSig()
       );
       this.cargarPrefijosAmazon();
@@ -107,36 +104,14 @@ export class AmazonComponent implements OnDestroy {
       });
   }
 
-  // metricasDelay() {
-  //   this.intervalo = setInterval(() => {
-  //     this._amazonService.obtenerPcs().subscribe((resp) => {
-  //       let fecha = new Date();
-  //       resp.forEach((item, index) => {
-  //         let start = performance.now();
-  //         this._amazonService.pingAngular(item.dns).subscribe((resp: any) => {
-  //           let end = performance.now();
-  //           let time = end - start - 7;
-  //           this._amazonService
-  //             .guardarMetricasDelay({
-  //               fecha,
-  //               pc: item._id,
-  //               delay: time,
-  //             })
-  //             .subscribe();
-  //         });
-  //       });
-  //     });
-  //   }, 300000);
-  // }
-
   actualizarGrafico() {
-    this.loadDatosChart(this.inicio, this.fin);
+    this.loadDatosChart(this.view, this.inicio, this.fin);
   }
 
-  loadDatosChart(desde: string, hasta: string) {
+  loadDatosChart(categoria: string, desde: string, hasta: string) {
     this.loadGraficoDelay = true;
     this._amazonService
-      .obtenerMetricasDelayGrafico(desde, hasta)
+      .obtenerPingGrafico(categoria, desde, hasta)
       .subscribe((resp) => {
         this.datos = resp;
         this.loadGraficoDelay = false;

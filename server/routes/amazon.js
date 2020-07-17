@@ -8,7 +8,8 @@ const URL_PREFIX_AMAZON = require("../config/variables").URL_PREFIX_AMAZON;
 const { isInSubnet } = require("is-in-subnet");
 const axios = require("axios");
 const awsRegions = require("aws-regions");
-const ping = require("ping");
+const dateformat = require("dateformat");
+const { orderBy, groupBy } = require("lodash");
 const app = express();
 
 // ====================================
@@ -29,8 +30,10 @@ app.post("/ips", (req, res) => {
             error: err,
           });
         }
-
+        //prefijos de amazon desde su servidor
         let redesAmazon = resp.data.prefixes;
+
+        //en caso recien se esta cargando los prefijos anuestra base de datos
         if (ipsamazon.length === 0) {
           var prefix = new IpsAmazon();
           prefix.collection.insertMany(redesAmazon, (err, prefixGuardados) => {
@@ -48,33 +51,44 @@ app.post("/ips", (req, res) => {
           });
         }
 
+        //obtenemos los nuevos prefijos
+        let prefixNoGuardados = [];
         redesAmazon.forEach((red, index) => {
           let prefijoGuardado = ipsamazon.filter((item) => {
             return (
               item.ip_prefix === red.ip_prefix && item.service === red.service
             );
           });
-          if (prefijoGuardado[0].link_internacional) {
-            redesAmazon[index]["link_internacional"] =
-              prefijoGuardado[0].link_internacional;
+          if (prefijoGuardado.length === 0) {
+            prefixNoGuardados.push(red);
           }
         });
 
-        await IpsAmazon.deleteMany({});
-        var prefix = new IpsAmazon();
-        prefix.collection.insertMany(redesAmazon, (err, prefixGuardados) => {
-          if (err) {
-            return res.status(500).json({
-              ok: false,
-              mensaje: "error al guardar los datos",
-              error: err,
-            });
-          }
+        //Guardamos los nuevos prefijos
+        if (prefixNoGuardados.length > 0) {
+          var prefix = new IpsAmazon();
+          prefix.collection.insertMany(
+            prefixNoGuardados,
+            (err, prefixGuardados) => {
+              if (err) {
+                return res.status(500).json({
+                  ok: false,
+                  mensaje: "error al guardar los datos",
+                  error: err,
+                });
+              }
+              return res.status(200).json({
+                ok: true,
+                prefixGuardados,
+              });
+            }
+          );
+        } else {
           return res.status(200).json({
             ok: true,
-            prefixGuardados,
+            mensaje: "No hay prefijos nuevos",
           });
-        });
+        }
       });
     })
     .catch((error) => {
@@ -294,6 +308,25 @@ app.get("/pcs/ec2", (req, res) => {
 });
 
 // ====================================
+// Obtener regiones de amazon
+// ====================================
+app.get("/regiones/total", (req, res) => {
+  RegionesAmazon.find({}).exec((err, datos) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Ocurrio un error con obtener la lista",
+        error: err,
+      });
+    }
+    return res.status(200).json({
+      ok: true,
+      regiones: datos,
+    });
+  });
+});
+
+// ====================================
 // Guardar metrias de delay
 // ====================================
 app.post("/metricas/delay", (req, res) => {
@@ -315,53 +348,138 @@ app.post("/metricas/delay", (req, res) => {
 });
 
 // ====================================
-// Obtener metricas delay
+// Obtener promedio de latencias por fecha captura
 // ====================================
-app.get("/metricas/delay", (req, res) => {
-  const inicio = req.query.inicio;
-  const fin = req.query.fin;
+app.get("/ping/:tipo/promedio", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  const categoria = req.params.tipo;
 
-  Promise.all([obtenerDelayAmazon(inicio, fin), obtenerPcsAmazon()]).then(
-    (respuestas) => {
-      res.status(200).json({
-        ok: true,
-        pcs: respuestas[1],
-        delays: respuestas[0],
+  PingAmazon.aggregate([
+    {
+      $lookup: {
+        from: "ipsamazon",
+        localField: "prefijo",
+        foreignField: "_id",
+        as: "region",
+      },
+    },
+    {
+      $match: {
+        avg: { $ne: "unknown" },
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: { $regex: new RegExp(categoria, "i") },
+      },
+    },
+    {
+      $sort: { fecha: -1 },
+    },
+    {
+      $group: {
+        _id: {
+          fecha: "$fecha",
+          region: "$region.network_border_group",
+          operador: "$operador",
+        },
+        avg: { $avg: { $toDecimal: "$avg" } },
+      },
+    },
+  ]).exec((err, latencias) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        mensaje: "Ocurrio un error con obtener la lista",
+        error: err,
       });
     }
-  );
-});
 
-function obtenerDelayAmazon(inicio, fin) {
-  return new Promise((resolve, reject) => {
-    MetricasDelay.find({
-      fecha: {
-        $gte: new Date(inicio),
-        $lte: new Date(fin),
-      },
-    })
-      .sort({ fecha: "asc" })
-      .exec((err, delays) => {
-        if (err) {
-          reject("error al cargar las metricas");
-        } else {
-          resolve(delays);
-        }
+    //res.json({ datos: groupBy(latencias, "_id.region") });
+
+    //creamos el objeto que retornaremos
+    let datos = [];
+    //obtenemos los operadores
+    const operadores = [...new Set(latencias.map((item) => item._id.operador))];
+    //Obtensmos las regiones
+    RegionesAmazon.find({}).exec((err, regiones) => {
+      const regionesMostrar = [
+        "US East (N. Virginia)",
+        "US East (Ohio)",
+        "US West (N. California)",
+        "US West (Oregon)",
+        "South America (São Paulo)",
+      ];
+
+      //cambiamos el valor del key region de 'res'
+      regiones.forEach((region) => {
+        latencias.map((item) => {
+          if (item._id.region[0] === region.code) {
+            return (item._id.region[0] = region.full_name);
+          }
+        });
       });
-  });
-}
 
-function obtenerPcsAmazon() {
-  return new Promise((resolve, reject) => {
-    PcsAmazon.find({}).exec((err, pcs) => {
-      if (err) {
-        reject("error al cargar las pcs");
-      } else {
-        resolve(pcs);
-      }
+      //agrupamos por operador
+      operadores.forEach((operador) => {
+        const metricas = [];
+        regionesMostrar.forEach((regionMostrar) => {
+          const series = [];
+          latencias.forEach((latencia) => {
+            if (
+              latencia._id.region[0] === regionMostrar &&
+              latencia._id.operador === operador
+            ) {
+              series.push({
+                name: latencia._id.fecha,
+                value: parseFloat(latencia.avg),
+              });
+            }
+          });
+          metricas.push({ name: regionMostrar, series });
+        });
+
+        datos.push({ operador, metricas });
+      });
+
+      const _datos = orderBy(datos, ["operador"], ["asc"]);
+
+      return res.status(200).json({
+        ok: true,
+        datos: _datos,
+      });
     });
   });
-}
+});
+
+// function obtenerDelayAmazon(inicio, fin) {
+//   return new Promise((resolve, reject) => {
+//     MetricasDelay.find({
+//       fecha: {
+//         $gte: new Date(inicio),
+//         $lte: new Date(fin),
+//       },
+//     })
+//       .sort({ fecha: "asc" })
+//       .exec((err, delays) => {
+//         if (err) {
+//           reject("error al cargar las metricas");
+//         } else {
+//           resolve(delays);
+//         }
+//       });
+//   });
+// }
+
+// function obtenerPcsAmazon() {
+//   return new Promise((resolve, reject) => {
+//     PcsAmazon.find({}).exec((err, pcs) => {
+//       if (err) {
+//         reject("error al cargar las pcs");
+//       } else {
+//         resolve(pcs);
+//       }
+//     });
+//   });
+// }
 
 // ====================================
 // Actualizar IPs prefix amazon con link internacional
@@ -403,7 +521,9 @@ app.get("/metricas/delay/guardados", (req, res) => {
   MetricasDelay.aggregate([
     {
       $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+        },
         cantidad: { $sum: 1 },
       },
     },
@@ -428,13 +548,15 @@ app.get("/metricas/delay/guardados", (req, res) => {
 });
 
 // ====================================
-// Obtener grupo de fechas almacenados
+// Obtener grupo de ping almacenados por dia
 // ====================================
 app.get("/numeros/ping/guardados", (req, res) => {
   PingAmazon.aggregate([
     {
       $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+        },
         cantidad: { $sum: 1 },
       },
     },
@@ -489,11 +611,13 @@ app.delete("/metricas/delay/:fecha", (req, res) => {
 // ====================================
 app.delete("/ping/:fecha", (req, res) => {
   const fecha = req.params.fecha;
-  const actual = new Date(fecha);
-  let siguiente = actual.setDate(actual.getDate() + 1);
+  const _fecha = dateformat(fecha, "yyyy-m-d");
+  const next = new Date(fecha);
+  next.setDate(next.getDate() + 2);
+  let _next = dateformat(next, "yyyy-m-d");
 
   PingAmazon.deleteMany(
-    { fecha: { $gte: fecha, $lte: siguiente } },
+    { fecha: { $gte: _fecha, $lte: _next } },
     (err, result) => {
       if (err) {
         return res.status(500).json({

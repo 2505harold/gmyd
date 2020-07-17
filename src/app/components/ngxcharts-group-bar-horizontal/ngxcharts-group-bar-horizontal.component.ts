@@ -12,6 +12,7 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
   @Input() showXAxisLabel: boolean;
   @Input() xAxisLabel: string;
   @Input() showDataLabel: boolean;
+  @Input() height: number;
 
   multi: any[];
   view: any[];

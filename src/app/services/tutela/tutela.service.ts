@@ -78,4 +78,36 @@ export class TutelaService {
       })
     );
   }
+
+  obtenerCantidadPruebasPingPorDias() {
+    const url = URL_SERVICIOS + "/tutela/numeros/ping/guardados";
+    return this.http.get(url).pipe(
+      map((resp) => {
+        return resp;
+      })
+    );
+  }
+
+  eliminarMetricasPingPorFecha(fecha: string) {
+    const url = URL_SERVICIOS + "/tutela/ping/" + fecha;
+    return this.http.delete(url).pipe(
+      map((resp: any) => {
+        if (resp.datos.deletedCount > 0) {
+          Swal.fire({
+            icon: "success",
+            title: "Metrica delay eliminada",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "No se realizo la accion. Validar el formato de fechas",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }
+      })
+    );
+  }
 }

@@ -98,6 +98,7 @@
   <mat-tab label="Datos guardados">
     <div class="card">
       <div class="card-body">
+        <app-boxload [show]="loadTblPing"></app-boxload>
         <table mat-table [dataSource]="numPingGuardados">
           <!-- Item Column -->
           <ng-container matColumnDef="index">
@@ -141,10 +142,6 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 20]"
-          showFirstLastButtons
-        ></mat-paginator>
       </div>
     </div>
   </mat-tab>

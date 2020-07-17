@@ -31,7 +31,7 @@ export class TutelaComponent implements OnInit {
       this.obtenerPruebasPingTutelaVideo(
         this.view,
         "Video",
-        this._fechaService.corta(-6),
+        this._fechaService.localCorta(),
         this._fechaService.cortaSig()
       );
       this.cagarGraficosPingServerThrDownload(

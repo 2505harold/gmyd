@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const IpsOpenSignal = require("../models/opensignal/prefix");
 const PingOpenSignal = require("../models/ping/ping-opensignal");
+const dateformat = require("dateformat");
 
 // ====================================
 // Guardar Ips de Open signal
@@ -49,7 +50,9 @@ app.get("/numeros/ping/guardados", (req, res) => {
   PingOpenSignal.aggregate([
     {
       $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+        },
         cantidad: { $sum: 1 },
       },
     },
@@ -78,11 +81,13 @@ app.get("/numeros/ping/guardados", (req, res) => {
 // ====================================
 app.delete("/ping/:fecha", (req, res) => {
   const fecha = req.params.fecha;
-  const actual = new Date(fecha);
-  let siguiente = actual.setDate(actual.getDate() + 1);
+  const _fecha = dateformat(fecha, "yyyy-m-d");
+  let _next = new Date(fecha);
+  _next.setDate(_next.getDate() + 2);
+  let next = dateformat(_next, "yyyy-m-d");
 
   PingOpenSignal.deleteMany(
-    { fecha: { $gte: fecha, $lte: siguiente } },
+    { fecha: { $gte: fecha, $lte: next } },
     (err, result) => {
       if (err) {
         return res.status(500).json({

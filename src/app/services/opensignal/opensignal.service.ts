@@ -5,10 +5,14 @@ import { map } from "rxjs/operators";
 import { IpsOpenSignal } from "src/app/models/ips.opensignal.model";
 import Swal from "sweetalert2";
 import * as _ from "lodash";
+import { FechaLocalService } from "../fechas/fecha-local.service";
 
 @Injectable()
 export class OpensignalService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private _fechaService: FechaLocalService
+  ) {}
 
   obtenerGraficoPing(desde: string, hasta: string, categoria: string) {
     const url = `${URL_SERVICIOS}/ping/opensignal/grafico/${categoria}?desde=${desde}&hasta=${hasta}`;
@@ -59,13 +63,22 @@ export class OpensignalService {
   eliminarMetricasPingPorFecha(fecha: string) {
     const url = URL_SERVICIOS + "/opensignal/ping/" + fecha;
     return this.http.delete(url).pipe(
-      map((resp) => {
-        Swal.fire({
-          icon: "success",
-          title: "Metrica delay eliminada",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      map((resp: any) => {
+        if (resp.datos.deletedCount > 0) {
+          Swal.fire({
+            icon: "success",
+            title: "Metrica delay eliminada",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "No se realizo la accion. Validar el formato de fechas",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }
       })
     );
   }

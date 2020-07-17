@@ -4,7 +4,6 @@ import { OpensignalService } from "src/app/services/opensignal/opensignal.servic
 import { IpsOpenSignal } from "src/app/models/ips.opensignal.model";
 import { UsuarioService } from "src/app/services/service.index";
 import { DatePipe } from "@angular/common";
-import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import Swal from "sweetalert2";
 
@@ -14,10 +13,10 @@ import Swal from "sweetalert2";
 })
 export class MantOpensignalComponent implements OnInit {
   ipOpensignal: IpsOpenSignal = new IpsOpenSignal();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   ipsOpensignal: any[];
   displayedColumns: string[] = ["index", "fecha", "cantidad", "accion"];
   numPingGuardados = new MatTableDataSource();
+  loadTblPing: boolean = false;
 
   constructor(
     private _opensignalService: OpensignalService,
@@ -77,10 +76,12 @@ export class MantOpensignalComponent implements OnInit {
       confirmButtonText: "Si, borrarlo",
     }).then((result) => {
       if (result.value) {
+        this.loadTblPing = true;
         this._opensignalService
           .eliminarMetricasPingPorFecha(element._id)
           .subscribe((resp) => {
             this.cargarTablaNumeroPingGuardados();
+            this.loadTblPing = false;
           });
       }
     });

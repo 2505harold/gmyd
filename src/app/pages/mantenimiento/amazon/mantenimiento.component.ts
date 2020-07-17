@@ -15,6 +15,7 @@ import { IpsAmazon } from "src/app/models/ips.amazon.model";
 })
 export class MantenimientoComponent implements OnInit {
   carga: boolean = true;
+  loadTblPing: boolean = true;
   //link: LinksInternacionales = new LinksInternacionales();
   pc: PcsAmazon = new PcsAmazon();
   prefijo: IpsAmazon = new IpsAmazon();
@@ -215,6 +216,7 @@ export class MantenimientoComponent implements OnInit {
       .subscribe((resp: any) => {
         this.diasPing = resp.dias;
         this.numPingGuardados = resp.metricas;
+        this.loadTblPing = false;
       });
   }
 
@@ -229,10 +231,12 @@ export class MantenimientoComponent implements OnInit {
       confirmButtonText: "Si, borrarlo",
     }).then((result) => {
       if (result.value) {
+        this.loadTblPing = true;
         this._amazonService
           .eliminarMetricasPingPorFecha(item._id)
           .subscribe((resp) => {
             this.cargarTablaNumeroPingGuardados();
+            this.loadTblPing = false;
           });
       }
     });

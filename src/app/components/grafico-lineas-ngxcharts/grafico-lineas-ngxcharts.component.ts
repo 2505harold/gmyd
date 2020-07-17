@@ -10,6 +10,7 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   @Input() results: [] = [];
   @Input() showYAxisLabel: boolean;
   @Input() yAxisLabel: boolean;
+  @Input() height: number;
 
   datos = [];
   view: any[];

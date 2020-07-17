@@ -10,7 +10,7 @@ const pingSchema = new Schema(
     packetloss: { type: String },
     host: { type: String },
     alive: { type: Boolean },
-    fecha: { type: Date },
+    fecha: { type: String },
     prefijo: { type: Schema.Types.ObjectId, ref: "IpsTutela" },
     operador: { type: String },
   },

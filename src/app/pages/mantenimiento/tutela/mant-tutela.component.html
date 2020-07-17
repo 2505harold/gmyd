@@ -1,95 +1,152 @@
 <h4>Mantenimiento <span class="text-primary">Tutela</span></h4>
 <br />
-<div class="row">
-  <div class="col-12">
-    <div class="card shadow-sm">
+
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Nuevo registro">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5>Datos de la IP Tutela a monitorear</h5>
+            <p>
+              Las IP ingresada permitira realizar pruebas de ping y su resultado
+              almacenarlo.
+            </p>
+            <div class="col-sm-6">
+              <form #form="ngForm" ngNativeValidate (ngSubmit)="Guardar(form)">
+                <div class="form-group">
+                  <label>IP o DNS</label>
+                  <input
+                    [(ngModel)]="ipTutela.ip"
+                    name="ip"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Tipo</label>
+                  <input
+                    [(ngModel)]="ipTutela.tipo"
+                    name="ip"
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    placeholder="video, etc"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <button
+                    [attr.disabled]="
+                      _usuarioService.usuario.rol === 'USER_ROLE'
+                        ? 'disabled'
+                        : null
+                    "
+                    type="submit"
+                    class="btn btn-danger btn-sm ml-auto"
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="tableFixHead">
+              <table class="table">
+                <thead>
+                  <tr class="column-dark">
+                    <th scope="col" class="bg-table-header-dark">IP o URL</th>
+                    <th scope="col" class="bg-table-header-dark">Tipo</th>
+                    <th scope="col" class="bg-table-header-dark">
+                      Usuario registro
+                    </th>
+                    <th scope="col" class="bg-table-header-dark">
+                      fecha registro
+                    </th>
+                    <th scope="col" class="bg-table-header-dark">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of ipsTutela">
+                    <td>{{ item.ip }}</td>
+                    <td>{{ item.tipo }}</td>
+                    <td>{{ item.user.nombre }} {{ item.user.apellido }}</td>
+                    <td>{{ item.fecha }}</td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm m-1">
+                        <i class="icon-pencil"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm m-1">
+                        <i class="icon-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Datos guardados">
+    <div class="card">
       <div class="card-body">
-        <h5>Datos de la IP Tutela a monitorear</h5>
-        <p>
-          Las IP ingresada permitira realizar pruebas de ping y su resultado
-          almacenarlo.
-        </p>
-        <div class="col-sm-6">
-          <form #form="ngForm" ngNativeValidate (ngSubmit)="Guardar(form)">
-            <div class="form-group">
-              <label>IP o DNS</label>
-              <input
-                [(ngModel)]="ipTutela.ip"
-                name="ip"
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label>Tipo</label>
-              <input
-                [(ngModel)]="ipTutela.tipo"
-                name="ip"
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                placeholder="video, etc"
-                required
-              />
-            </div>
-            <div class="form-group">
+        <app-boxload [show]="loadTblPing"></app-boxload>
+        <table mat-table [dataSource]="datos">
+          <!-- Item Column -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>ITEM</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+
+          <!-- Fecha Column -->
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>FECHA</th>
+            <td mat-cell *matCellDef="let element">{{ element._id }}</td>
+          </ng-container>
+
+          <!-- Datos guardados Column -->
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef>CANTIDAD</th>
+            <td mat-cell *matCellDef="let element">{{ element.cantidad }}</td>
+          </ng-container>
+
+          <!-- Accion Column -->
+          <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef>ACCION</th>
+            <td mat-cell *matCellDef="let element">
               <button
-                [attr.disabled]="
+                [disabled]="
                   _usuarioService.usuario.rol === 'USER_ROLE'
                     ? 'disabled'
                     : null
                 "
-                type="submit"
-                class="btn btn-danger btn-sm ml-auto"
+                mat-button
+                color="warn"
+                (click)="eliminarFecha(element)"
               >
-                Guardar
+                <i class="icon-trash"></i> Eliminar
               </button>
-            </div>
-          </form>
-        </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
       </div>
     </div>
-  </div>
-</div>
-<br />
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="tableFixHead">
-          <table class="table">
-            <thead>
-              <tr class="column-dark">
-                <th scope="col" class="bg-table-header-dark">IP o URL</th>
-                <th scope="col" class="bg-table-header-dark">Tipo</th>
-                <th scope="col" class="bg-table-header-dark">
-                  Usuario registro
-                </th>
-                <th scope="col" class="bg-table-header-dark">fecha registro</th>
-                <th scope="col" class="bg-table-header-dark">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of ipsTutela">
-                <td>{{ item.ip }}</td>
-                <td>{{ item.tipo }}</td>
-                <td>{{ item.user.nombre }} {{ item.user.apellido }}</td>
-                <td>{{ item.fecha }}</td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm m-1">
-                    <i class="icon-pencil"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger btn-sm m-1">
-                    <i class="icon-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  </mat-tab>
+</mat-tab-group>

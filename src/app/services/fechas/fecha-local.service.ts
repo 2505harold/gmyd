@@ -54,11 +54,11 @@ export class FechaLocalService {
     if (fecha) {
       const _fecha = new Date(fecha);
       const _next = _fecha.setDate(_fecha.getDate() + 1);
-      return this.datePipe.transform(_next, "yyyy-M-dd");
+      return this.datePipe.transform(_next, "yyyy-M-d");
     } else {
       const _fecha = new Date();
       const _next = _fecha.setDate(_fecha.getDate() + 1);
-      return this.datePipe.transform(_next, "yyyy-M-dd");
+      return this.datePipe.transform(_next, "yyyy-M-d");
     }
   }
 
@@ -78,11 +78,11 @@ export class FechaLocalService {
     if (fecha) {
       let _fecha = new Date(fecha);
       let _next = _fecha.setDate(_fecha.getDate() + numero);
-      return this.datePipe.transform(_next, "yyyy-M-dd");
+      return this.datePipe.transform(_next, "yyyy-M-d");
     } else {
       const _fecha = new Date();
       const _next = _fecha.setDate(_fecha.getDate() + numero);
-      return this.datePipe.transform(_next, "yyyy-M-dd");
+      return this.datePipe.transform(_next, "yyyy-M-d");
     }
   }
 
@@ -90,5 +90,15 @@ export class FechaLocalService {
     return new Date(fecha).toLocaleString("es-PE", {
       timeZone: "America/Lima",
     });
+  }
+
+  localCorta(fecha?: string) {
+    if (fecha) {
+      return this.datePipe.transform(new Date(fecha), "yyyy-M-d");
+    }
+    else {
+      return this.datePipe.transform(new Date(), "yyyy-M-d");
+    }
+    
   }
 }

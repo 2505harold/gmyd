@@ -8,6 +8,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatSelectModule } from "@angular/material/select";
+import { MatDividerModule } from "@angular/material/divider";
 
 @NgModule({
   declarations: [],
@@ -18,6 +19,7 @@ import { MatSelectModule } from "@angular/material/select";
     MatButtonModule,
     MatButtonToggleModule,
     MatSelectModule,
+    MatDividerModule,
   ],
 })
 export class MaterialModule {}

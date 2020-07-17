@@ -10,7 +10,8 @@ const pingOpenSignalSchema = new Schema(
     packetloss: { type: String },
     host: { type: String },
     alive: { type: Boolean },
-    fecha: { type: Date },
+    fecha: { type: String },
+    categoria: { type: String },
     operador: { type: String },
   },
   { collection: "ping_opensignal" }

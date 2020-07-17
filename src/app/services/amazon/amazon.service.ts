@@ -134,29 +134,16 @@ export class AmazonService {
     );
   }
 
-  obtenerMetricasDelayGrafico(desde: string, hasta: string) {
-    const url =
-      URL_SERVICIOS +
-      "/amazon/metricas/delay" +
-      "?inicio=" +
-      desde +
-      "&fin=" +
-      hasta;
+  obtenerPingGrafico(categoria: string, desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/amazon/ping/${categoria}/promedio?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
-        var datos = [];
-        const pcs = resp.pcs;
-        const delays = resp.delays;
-        pcs.forEach((pc) => {
-          var series = delays.reduce((series, item) => {
-            if (item.pc === pc._id) {
-              series.push({ name: new Date(item.fecha), value: item.delay });
-            }
-            return series;
-          }, []);
-          datos.push({ name: pc.region, series });
+        resp.datos.forEach((element) => {
+          element.metricas.map((item) => {
+            item.series.map((el) => (el.name = new Date(el.name)));
+          });
         });
-        return datos;
+        return resp.datos;
       })
     );
   }

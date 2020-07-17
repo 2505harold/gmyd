@@ -9,8 +9,10 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 900px;">
+      <div class="card-body" style="height: 700px;">
         <app-boxload [show]="showloadCharBrasil"></app-boxload>
+        <h5 class="font-weight-light">Promedio del dia</h5>
+        <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing"
           [showXAxisLabel]="true"
@@ -18,14 +20,17 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon Brasil'"
+          [height]="580"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
   </div>
   <div class="col-sm-6">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 900px;">
+      <div class="card-body" style="height: 700px;">
         <app-boxload [show]="showloadCharNorthCalifornia"></app-boxload>
+        <h5 class="font-weight-light">Promedio del dia</h5>
+        <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing2"
           [showXAxisLabel]="true"
@@ -33,6 +38,7 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon North California'"
+          [height]="580"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
@@ -45,6 +51,8 @@
     <div class="card shadow-sm">
       <div class="card-body" style="height: 900px;">
         <app-boxload [show]="showloadCharOhio"></app-boxload>
+        <h5 class="font-weight-light">Promedio del dia</h5>
+        <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing3"
           [showXAxisLabel]="true"
@@ -52,6 +60,7 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon Ohio'"
+          [height]="780"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
@@ -60,6 +69,8 @@
     <div class="card shadow-sm">
       <div class="card-body" style="height: 900px;">
         <app-boxload [show]="showloadCharNorthVirginia"></app-boxload>
+        <h5 class="font-weight-light">Promedio del dia</h5>
+        <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing4"
           [showXAxisLabel]="true"
@@ -67,67 +78,38 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon North Virginia'"
+          [height]="780"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
   </div>
 </div>
 
-<br />
-
 <div class="row my-1">
-  <div class="col-sm-12">
+  <div
+    class="my-3"
+    [ngClass]="{
+      'col-sm-12': datos.length === 1,
+      'col-sm-6': datos.length > 1
+    }"
+    *ngFor="let item of datos"
+  >
     <div class="card">
       <div class="card-header">
-        <div class="form-inline">
-          <div class="input-group m-1 flex-nowrap">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="addon-wrapping"
-                ><i class="icon-calendar"></i> Desde</span
-              >
-            </div>
-            <input
-              [(ngModel)]="inicio"
-              type="date"
-              name="inicio"
-              class="form-control"
-            />
-          </div>
-          <div class="input-group m-1 flex-nowrap">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="addon-wrapping"
-                ><i class="icon-calendar"></i> Hasta</span
-              >
-            </div>
-            <input
-              [(ngModel)]="fin"
-              type="date"
-              name="fin"
-              class="form-control"
-            />
-          </div>
-          <button
-            type="button"
-            (click)="actualizarGrafico()"
-            class="btn btn-secondary m-1 ml-auto"
-          >
-            Actualizar Grafico
-          </button>
-        </div>
+        <h5>{{ item.operador }}</h5>
+        <p>
+          Los datos representan el promedio por fecha de captura en los ultimos
+          7 dias
+        </p>
       </div>
-      <div class="card-body card-body-chart">
-        <div
-          class="alert alert-primary text-center"
-          *ngIf="loadGraficoDelay"
-          role="alert"
-        >
-          Cargando datos...
-        </div>
+      <div class="card-body" [style.height.px]="500">
+        <app-boxload [show]="loadGraficoDelay"></app-boxload>
         <app-grafico-lineas-ngxcharts
           *ngIf="!loadGraficoDelay"
-          [results]="datos"
+          [results]="item.metricas"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
+          [height]="340"
         ></app-grafico-lineas-ngxcharts>
       </div>
     </div>

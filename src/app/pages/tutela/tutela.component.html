@@ -1,6 +1,8 @@
 <div class="d-flex align-items-center">
   <img src="../../../assets/images/{{ view }}.svg" width="50" alt="logo" />
-  <h4 class="mb-0 ml-1">Latencia a prefijos <span class="text-primary">Tutela</span></h4>
+  <h4 class="mb-0 ml-1">
+    Latencia a prefijos <span class="text-primary">Tutela</span>
+  </h4>
 </div>
 <br />
 <h5>Servidores de descarga de throughput</h5>
@@ -20,6 +22,7 @@
           [results]="item.metricas"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
+          [height]="400"
         >
         </app-grafico-lineas-ngxcharts>
       </div>
@@ -45,6 +48,7 @@
           [results]="item.metricas"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
+          [height]="400"
         >
         </app-grafico-lineas-ngxcharts>
       </div>
@@ -70,6 +74,7 @@
           [results]="item.metricas"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
+          [height]="400"
         >
         </app-grafico-lineas-ngxcharts>
       </div>
@@ -81,8 +86,10 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 900px;">
+      <div class="card-body" style="height: 700px;">
         <app-boxload [show]="showloadCharVideo"></app-boxload>
+        <h5 class="font-weight-light">Promedio del dia</h5>
+        <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing"
           [showXAxisLabel]="true"
@@ -90,6 +97,7 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Tutela Video'"
+          [height]="550"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
