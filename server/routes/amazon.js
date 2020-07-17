@@ -355,102 +355,103 @@ app.get("/ping/:tipo/promedio", (req, res) => {
   const hasta = req.query.hasta;
   const categoria = req.params.tipo;
 
-  PingAmazon.aggregate(
-    [
-      {
-        $lookup: {
-          from: "ipsamazon",
-          localField: "prefijo",
-          foreignField: "_id",
-          as: "region",
+  PingAmazon.aggregate([
+    {
+      $lookup: {
+        from: "ipsamazon",
+        localField: "prefijo",
+        foreignField: "_id",
+        as: "region",
+      },
+    },
+    {
+      $match: {
+        avg: { $ne: "unknown" },
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: { $regex: new RegExp(categoria, "i") },
+      },
+    },
+    {
+      $sort: { fecha: -1 },
+    },
+    {
+      $group: {
+        _id: {
+          fecha: "$fecha",
+          region: "$region.network_border_group",
+          operador: "$operador",
         },
+        avg: { $avg: { $toDecimal: "$avg" } },
       },
-      {
-        $match: {
-          avg: { $ne: "unknown" },
-          fecha: { $gte: desde, $lte: hasta },
-          categoria: { $regex: new RegExp(categoria, "i") },
-        },
-      },
-      {
-        $sort: { fecha: -1 },
-      },
-      {
-        $group: {
-          _id: {
-            fecha: "$fecha",
-            region: "$region.network_border_group",
-            operador: "$operador",
-          },
-          avg: { $avg: { $toDecimal: "$avg" } },
-        },
-      },
-    ],
-    { allowDiskUse: true }
-  ).exec((err, latencias) => {
-    if (err) {
-      return res.status(500).json({
-        ok: false,
-        mensaje: "Ocurrio un error con obtener la lista",
-        error: err,
-      });
-    }
-
-    //res.json({ datos: groupBy(latencias, "_id.region") });
-
-    //creamos el objeto que retornaremos
-    let datos = [];
-    //obtenemos los operadores
-    const operadores = [...new Set(latencias.map((item) => item._id.operador))];
-    //Obtensmos las regiones
-    RegionesAmazon.find({}).exec((err, regiones) => {
-      const regionesMostrar = [
-        "US East (N. Virginia)",
-        "US East (Ohio)",
-        "US West (N. California)",
-        "US West (Oregon)",
-        "South America (São Paulo)",
-      ];
-
-      //cambiamos el valor del key region de 'res'
-      regiones.forEach((region) => {
-        latencias.map((item) => {
-          if (item._id.region[0] === region.code) {
-            return (item._id.region[0] = region.full_name);
-          }
+    },
+  ])
+    .allowDiskUse(true)
+    .exec((err, latencias) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Ocurrio un error con obtener la lista",
+          error: err,
         });
-      });
+      }
 
-      //agrupamos por operador
-      operadores.forEach((operador) => {
-        const metricas = [];
-        regionesMostrar.forEach((regionMostrar) => {
-          const series = [];
-          latencias.forEach((latencia) => {
-            if (
-              latencia._id.region[0] === regionMostrar &&
-              latencia._id.operador === operador
-            ) {
-              series.push({
-                name: latencia._id.fecha,
-                value: parseFloat(latencia.avg),
-              });
+      //res.json({ datos: groupBy(latencias, "_id.region") });
+
+      //creamos el objeto que retornaremos
+      let datos = [];
+      //obtenemos los operadores
+      const operadores = [
+        ...new Set(latencias.map((item) => item._id.operador)),
+      ];
+      //Obtensmos las regiones
+      RegionesAmazon.find({}).exec((err, regiones) => {
+        const regionesMostrar = [
+          "US East (N. Virginia)",
+          "US East (Ohio)",
+          "US West (N. California)",
+          "US West (Oregon)",
+          "South America (São Paulo)",
+        ];
+
+        //cambiamos el valor del key region de 'res'
+        regiones.forEach((region) => {
+          latencias.map((item) => {
+            if (item._id.region[0] === region.code) {
+              return (item._id.region[0] = region.full_name);
             }
           });
-          metricas.push({ name: regionMostrar, series });
         });
 
-        datos.push({ operador, metricas });
-      });
+        //agrupamos por operador
+        operadores.forEach((operador) => {
+          const metricas = [];
+          regionesMostrar.forEach((regionMostrar) => {
+            const series = [];
+            latencias.forEach((latencia) => {
+              if (
+                latencia._id.region[0] === regionMostrar &&
+                latencia._id.operador === operador
+              ) {
+                series.push({
+                  name: latencia._id.fecha,
+                  value: parseFloat(latencia.avg),
+                });
+              }
+            });
+            metricas.push({ name: regionMostrar, series });
+          });
 
-      const _datos = orderBy(datos, ["operador"], ["asc"]);
+          datos.push({ operador, metricas });
+        });
 
-      return res.status(200).json({
-        ok: true,
-        datos: _datos,
+        const _datos = orderBy(datos, ["operador"], ["asc"]);
+
+        return res.status(200).json({
+          ok: true,
+          datos: _datos,
+        });
       });
     });
-  });
 });
 
 // function obtenerDelayAmazon(inicio, fin) {
