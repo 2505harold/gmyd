@@ -10,10 +10,15 @@ const { orderBy, sortBy } = require("lodash");
 // ====================================
 app.get("/amazon/:categoria/:region", (req, res) => {
   const region = req.params.region;
-  const desde = req.query.desde;
-  const hasta = req.query.hasta;
+  const desde = new Date(req.query.desde);
+  const hasta = new Date(req.query.hasta);
   const categoria = req.params.categoria;
   PingAmazon.aggregate([
+    {
+      $addFields: {
+        convertedDate: { $toDate: "$fecha" },
+      },
+    },
     {
       $lookup: {
         from: "ipsamazon",
@@ -25,7 +30,7 @@ app.get("/amazon/:categoria/:region", (req, res) => {
     {
       $match: {
         avg: { $ne: "unknown" },
-        fecha: { $gte: desde, $lte: hasta },
+        convertedDate: { $gte: desde, $lte: hasta },
         categoria: { $regex: new RegExp(categoria, "i") },
       },
     },
@@ -52,14 +57,19 @@ app.get("/amazon/:categoria/:region", (req, res) => {
 // ====================================
 app.get("/tutela/:categoria/:tipo", (req, res) => {
   const tipo = req.params.tipo;
-  const desde = req.query.desde;
-  const hasta = req.query.hasta;
+  const desde = new Date(req.query.desde);
+  const hasta = new Date(req.query.hasta);
   const categoria = req.params.categoria;
   PingTutela.aggregate([
     {
+      $addFields: {
+        convertedDate: { $toDate: "$fecha" },
+      },
+    },
+    {
       $match: {
         avg: { $ne: "unknown" },
-        fecha: { $gte: desde, $lte: hasta },
+        convertedDate: { $gte: desde, $lte: hasta },
         categoria: { $regex: new RegExp(categoria, "i") },
       },
     },
@@ -87,15 +97,20 @@ app.get("/tutela/:categoria/:tipo", (req, res) => {
 // ====================================
 app.get("/tutela/grafico/:categoria/:tipo/", (req, res) => {
   const tipo = req.params.tipo;
-  const desde = req.query.desde;
-  const hasta = req.query.hasta;
+  const desde = new Date(req.query.desde);
+  const hasta = new Date(req.query.hasta);
   const categoria = req.params.categoria;
   PingTutela.aggregate([
+    {
+      $addFields: {
+        convertedDate: { $toDate: "$fecha" },
+      },
+    },
     {
       $match: {
         avg: { $ne: "unknown" },
         tipo: tipo,
-        fecha: { $gte: desde, $lte: hasta },
+        convertedDate: { $gte: desde, $lte: hasta },
         categoria: { $regex: new RegExp(categoria, "i") },
       },
     },
@@ -129,14 +144,19 @@ app.get("/tutela/grafico/:categoria/:tipo/", (req, res) => {
 // Obtener historico de latencias OPENSIGNAL por tipo
 // ====================================
 app.get("/opensignal/grafico/:categoria", (req, res) => {
-  const desde = req.query.desde;
-  const hasta = req.query.hasta;
+  const desde = new Date(req.query.desde);
+  const hasta = new Date(req.query.hasta);
   const categoria = req.params.categoria;
   PingOpenSignal.aggregate([
     {
+      $addFields: {
+        convertedDate: { $toDate: "$fecha" },
+      },
+    },
+    {
       $match: {
         avg: { $ne: "unknown" },
-        fecha: { $gte: desde, $lte: hasta },
+        convertedDate: { $gte: desde, $lte: hasta },
         categoria: { $regex: new RegExp(categoria, "i") },
       },
     },

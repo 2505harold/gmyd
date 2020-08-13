@@ -56,21 +56,21 @@ app.put("/:id", (req, res) => {
   let id = req.params.id;
 
   Nperf.findById(id, (err, metrica) => {
-    if (err) {
-      return res.status(500).json({
-        ok: false,
-        mensaje: "Error al buscar metrica",
-        error: err,
-      });
-    }
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al buscar metrica",
+          error: err,
+        });
+      }
 
-    if (!metrica) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "La metrica con ID " + id + " no existe",
-        error: err,
-      });
-    }
+      if (!metrica) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "La metrica con ID " + id + " no existe",
+          error: err,
+        });
+      }
 
     metrica.claro = body.claro;
     metrica.bitel = body.bitel;
