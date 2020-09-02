@@ -476,7 +476,7 @@ span.groupbox {
  RESPONSIVE CHART
  ========================================================*/
 .altura-card-linechart-tutela {
-  height: 430px;
+  height: 460px;
 }
 
 @media (max-width: 412px) {
