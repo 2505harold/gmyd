@@ -96,3 +96,7 @@ to{right:130%}
 .card-body-chart{height:550px}
 .chart-body{height:580px}
 }
+.altura-card-linechart-tutela{height:430px}
+@media (max-width:412px){
+.text-adjust{font-size:1.2rem}
+}

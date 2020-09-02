@@ -9,8 +9,8 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./opensignal.component.css"],
 })
 export class OpensignalComponent implements OnInit {
-  datosPingServer: any[];
-  showLoadServer: boolean = true;
+  datosPing: any[];
+  showLoadPing: boolean = true;
   colors: any[] = ["#dc3545", "#28a745"];
   view: string;
   src: string;
@@ -24,21 +24,19 @@ export class OpensignalComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       this.view = params["id"];
-      this.cagarGraficosPingServer(
-        this._fechaLocalService.corta(-6),
-        this._fechaLocalService.cortaSig(),
-        this.view
+      this.cargarGraficoAgrupadoPing(
+        this._fechaLocalService.corta(-15),
+        this._fechaLocalService.cortaSig()
       );
     });
   }
 
-  cagarGraficosPingServer(desde: string, hasta: string, tipo: string) {
+  cargarGraficoAgrupadoPing(desde: string, hasta: string) {
     this._opensignalService
-      .obtenerGraficoPing(desde, hasta, tipo)
+      .obtenerGraficoAgrupadoPing(desde, hasta)
       .subscribe((resp) => {
-        console.log(resp.datos)
-        this.datosPingServer = resp.datos;
-        this.showLoadServer = false;
+        this.datosPing = resp.datos;
+        this.showLoadPing = false;
       });
   }
 }

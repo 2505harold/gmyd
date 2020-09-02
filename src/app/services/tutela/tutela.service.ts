@@ -60,18 +60,35 @@ export class TutelaService {
     );
   }
 
-  obtenerGraficoPing(
-    categoria: string,
-    tipo: string,
-    desde: string,
-    hasta: string
-  ) {
-    const url = `${URL_SERVICIOS}/ping/tutela/grafico/${categoria}/${tipo}?desde=${desde}&hasta=${hasta}`;
+  obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
+    console.log(desde);
+    const url = `${URL_SERVICIOS}/ping/tutela/historico?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.datos.forEach((element) => {
-          element.metricas.map((item) => {
-            item.series.map((el) => (el.name = new Date(el.name)));
+          element.latencias.map((item) => {
+            item.series.map((e) => (e.name = new Date(e.name)));
+          }),
+            element.hosts.map((item) => {
+              item.metricas.map((els) => {
+                els.series.map((e) => (e.name = new Date(e.name)));
+              });
+            });
+        });
+        console.log(resp);
+        return resp;
+      })
+    );
+  }
+
+  obtenerGraficosPing(desde: string, hasta: string) {
+    console.log(desde);
+    const url = `${URL_SERVICIOS}/ping/tutela/grafico?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        resp.datos.forEach((element) => {
+          element.metricas.map((el) => {
+            el.series.map((e) => (e.name = new Date(e.name)));
           });
         });
         return resp;

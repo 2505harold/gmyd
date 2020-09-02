@@ -14,15 +14,22 @@ export class OpensignalService {
     private _fechaService: FechaLocalService
   ) {}
 
-  obtenerGraficoPing(desde: string, hasta: string, categoria: string) {
-    const url = `${URL_SERVICIOS}/ping/opensignal/grafico/${categoria}?desde=${desde}&hasta=${hasta}`;
+  obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
+    console.log(desde);
+    const url = `${URL_SERVICIOS}/ping/opensignal/historico?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.datos.forEach((element) => {
-          element.metricas.map((item) => {
-            item.series.map((el) => (el.name = new Date(el.name)));
-          });
+          element.latencias.map((item) => {
+            item.series.map((e) => (e.name = new Date(e.name)));
+          }),
+            element.hosts.map((item) => {
+              item.metricas.map((els) => {
+                els.series.map((e) => (e.name = new Date(e.name)));
+              });
+            });
         });
+        console.log(resp);
         return resp;
       })
     );

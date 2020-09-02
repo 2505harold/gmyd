@@ -6,15 +6,15 @@ const pingOpenSignalSchema = new Schema(
     min: { type: String },
     max: { type: String },
     avg: { type: String },
-    stdev: { type: String },
-    packetloss: { type: String },
     host: { type: String },
-    alive: { type: Boolean },
     fecha: { type: String },
+    namehost: { type: String },
     categoria: { type: String },
     operador: { type: String },
+    latitud: { type: String },
+    longitud: { type: String },
   },
-  { collection: "ping_opensignal" }
+  { collection: "nping_opensignal" }
 );
 
 module.exports = mongoose.model("PingOpenSignal", pingOpenSignalSchema);

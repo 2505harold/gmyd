@@ -3,7 +3,7 @@ const app = express();
 const PingAmazon = require("../models/ping/ping-amazon");
 const PingTutela = require("../models/ping/ping-tutela");
 const PingOpenSignal = require("../models/ping/ping-opensignal");
-const { orderBy, sortBy } = require("lodash");
+const { orderBy, sortBy, groupBy, forEach } = require("lodash");
 
 // ====================================
 // obtener latencia Amazon
@@ -53,137 +53,157 @@ app.get("/amazon/:categoria/:region", (req, res) => {
 });
 
 // ====================================
-// Obetener promedio latencia al dia - Tutela
+// Obtener historico agrupado de latencias TUTELA
 // ====================================
-app.get("/tutela/:categoria/:tipo", (req, res) => {
-  const tipo = req.params.tipo;
-  const desde = new Date(req.query.desde);
-  const hasta = new Date(req.query.hasta);
-  const categoria = req.params.categoria;
+app.get("/tutela/historico", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
   PingTutela.aggregate([
-    {
-      $addFields: {
-        convertedDate: { $toDate: "$fecha" },
-      },
-    },
     {
       $match: {
         avg: { $ne: "unknown" },
-        convertedDate: { $gte: desde, $lte: hasta },
-        categoria: { $regex: new RegExp(categoria, "i") },
+        fecha: { $gte: desde, $lte: hasta },
       },
     },
-    { $sort: { operador: 1 } },
     {
-      $group: {
-        _id: {
-          operador: "$operador",
-          ip: "$host",
-          tipo: "$tipo",
-        },
-        avg: { $avg: { $toDecimal: "$avg" } },
-      },
+      $sort: { fecha: 1 },
     },
-  ]).exec((err, datos) => {
-    if (tipo != "todo")
-      datos = datos.filter((item) => item._id.tipo === tipo.toLowerCase());
-    datos = orderBy(datos, ["_id.ip", "_id.operador"], ["asc", "asc"]);
+  ]).exec((err, resp) => {
+    const operadoresRep = resp.map((item) => item.operador);
+    const operadores = sortBy([...new Set(operadoresRep)]);
+    const groupByNameHost = groupBy(resp, "namehost");
+    let datos = [];
+    forEach(groupByNameHost, (arrayObjs) => {
+      const groupByHost = groupBy(arrayObjs, "host");
+      const hosts = [];
+      const latencias = [];
+
+      operadores.forEach((operador) => {
+        let series = arrayObjs.reduce((acumulador, objeto) => {
+          if (objeto.operador === operador) {
+            acumulador.push({ name: objeto.fecha, value: objeto.avg });
+          }
+          return acumulador;
+        }, []);
+        latencias.push({ name: operador, series: series });
+      });
+
+      forEach(groupByHost, (arrayObjHost) => {
+        let delayHost = [];
+        operadores.forEach((operador) => {
+          let series = arrayObjHost.reduce((acumulador, metrica) => {
+            if (metrica.operador === operador) {
+              acumulador.push({ name: metrica.fecha, value: metrica.avg });
+            }
+            return acumulador;
+          }, []);
+          delayHost.push({ name: operador, series });
+        });
+        hosts.push({ ip: arrayObjHost[0].host, metricas: delayHost });
+      });
+      datos.push({ nameHost: arrayObjs[0].namehost, latencias, hosts });
+    });
+
     res.json({ datos });
   });
 });
 
 // ====================================
-// Obtener historico de latencias TUTELA por tipo
+// Obtener historico agrupado de latencias OPENSIGNAL
 // ====================================
-app.get("/tutela/grafico/:categoria/:tipo/", (req, res) => {
-  const tipo = req.params.tipo;
-  const desde = new Date(req.query.desde);
-  const hasta = new Date(req.query.hasta);
-  const categoria = req.params.categoria;
-  PingTutela.aggregate([
-    {
-      $addFields: {
-        convertedDate: { $toDate: "$fecha" },
-      },
-    },
-    {
-      $match: {
-        avg: { $ne: "unknown" },
-        tipo: tipo,
-        convertedDate: { $gte: desde, $lte: hasta },
-        categoria: { $regex: new RegExp(categoria, "i") },
-      },
-    },
-    { $sort: { fecha: 1, operador: 1 } },
-  ]).exec((err, resp) => {
-    const hostsRep = resp.map((item) => item.host);
-    const hosts = [...new Set(hostsRep)];
-    const operadoresRep = resp.map((item) => item.operador);
-    const operadores = sortBy([...new Set(operadoresRep)]);
-    let ipsMetricas = [];
-    hosts.forEach((host) => {
-      let metricas = resp.filter((item) => item.host === host);
-      let datos = [];
-      operadores.forEach((operador) => {
-        let series = metricas.reduce((acumulador, metrica) => {
-          if (metrica.operador === operador) {
-            acumulador.push({ name: metrica.fecha, value: metrica.avg });
-          }
-          return acumulador;
-        }, []);
-        datos.push({ name: operador, series: series });
-      });
-      ipsMetricas.push({ host, metricas: datos });
-    });
-
-    res.json({ datos: ipsMetricas });
-  });
-});
-
-// ====================================
-// Obtener historico de latencias OPENSIGNAL por tipo
-// ====================================
-app.get("/opensignal/grafico/:categoria", (req, res) => {
-  const desde = new Date(req.query.desde);
-  const hasta = new Date(req.query.hasta);
-  const categoria = req.params.categoria;
+app.get("/opensignal/historico", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
   PingOpenSignal.aggregate([
     {
-      $addFields: {
-        convertedDate: { $toDate: "$fecha" },
+      $match: {
+        avg: { $ne: "unknown" },
+        fecha: { $gte: desde, $lte: hasta },
       },
     },
     {
-      $match: {
-        avg: { $ne: "unknown" },
-        convertedDate: { $gte: desde, $lte: hasta },
-        categoria: { $regex: new RegExp(categoria, "i") },
-      },
+      $sort: { fecha: 1 },
     },
-    { $sort: { fecha: 1, operador: -1 } },
   ]).exec((err, resp) => {
-    const hostsRep = resp.map((item) => item.host);
-    const hosts = [...new Set(hostsRep)];
     const operadoresRep = resp.map((item) => item.operador);
     const operadores = sortBy([...new Set(operadoresRep)]);
-    let ipsMetricas = [];
-    hosts.forEach((host) => {
-      let metricas = resp.filter((item) => item.host === host);
-      let datos = [];
+    const groupByNameHost = groupBy(resp, "namehost");
+    let datos = [];
+    forEach(groupByNameHost, (arrayObjs) => {
+      const groupByHost = groupBy(arrayObjs, "host");
+      const hosts = [];
+      const latencias = [];
+
       operadores.forEach((operador) => {
-        let series = metricas.reduce((acumulador, metrica) => {
-          if (metrica.operador === operador) {
-            acumulador.push({ name: metrica.fecha, value: metrica.avg });
+        let series = arrayObjs.reduce((acumulador, objeto) => {
+          if (objeto.operador === operador) {
+            acumulador.push({ name: objeto.fecha, value: objeto.avg });
           }
           return acumulador;
         }, []);
-        datos.push({ name: operador, series: series });
+        latencias.push({ name: operador, series: series });
       });
 
-      ipsMetricas.push({ host, metricas: datos });
+      forEach(groupByHost, (arrayObjHost) => {
+        let delayHost = [];
+        operadores.forEach((operador) => {
+          let series = arrayObjHost.reduce((acumulador, metrica) => {
+            if (metrica.operador === operador) {
+              acumulador.push({ name: metrica.fecha, value: metrica.avg });
+            }
+            return acumulador;
+          }, []);
+          delayHost.push({ name: operador, series });
+        });
+        hosts.push({ ip: arrayObjHost[0].host, metricas: delayHost });
+      });
+      datos.push({ nameHost: arrayObjs[0].namehost, latencias, hosts });
     });
-    res.json({ datos: ipsMetricas });
+
+    res.json({ datos });
   });
 });
+// app.get("/opensignal/grafico/:categoria", (req, res) => {
+//   const desde = new Date(req.query.desde);
+//   const hasta = new Date(req.query.hasta);
+//   const categoria = req.params.categoria;
+//   PingOpenSignal.aggregate([
+//     {
+//       $addFields: {
+//         convertedDate: { $toDate: "$fecha" },
+//       },
+//     },
+//     {
+//       $match: {
+//         avg: { $ne: "unknown" },
+//         convertedDate: { $gte: desde, $lte: hasta },
+//         categoria: { $regex: new RegExp(categoria, "i") },
+//       },
+//     },
+//     { $sort: { fecha: 1, operador: -1 } },
+//   ]).exec((err, resp) => {
+//     const hostsRep = resp.map((item) => item.host);
+//     const hosts = [...new Set(hostsRep)];
+//     const operadoresRep = resp.map((item) => item.operador);
+//     const operadores = sortBy([...new Set(operadoresRep)]);
+//     let ipsMetricas = [];
+//     hosts.forEach((host) => {
+//       let metricas = resp.filter((item) => item.host === host);
+//       let datos = [];
+//       operadores.forEach((operador) => {
+//         let series = metricas.reduce((acumulador, metrica) => {
+//           if (metrica.operador === operador) {
+//             acumulador.push({ name: metrica.fecha, value: metrica.avg });
+//           }
+//           return acumulador;
+//         }, []);
+//         datos.push({ name: operador, series: series });
+//       });
+
+//       ipsMetricas.push({ host, metricas: datos });
+//     });
+//     res.json({ datos: ipsMetricas });
+//   });
+// });
 
 module.exports = app;

@@ -5,25 +5,34 @@
   </h4>
 </div>
 <br />
-<h5>Servidor</h5>
+<app-boxload [show]="showLoadPing"></app-boxload>
 
-<div class="row">
-  <div class="col-12" *ngIf="showLoadServer">
-    <div class="alert alert-primary" role="alert">
-      Cargando datos espere un momento porfavor ...
+<div *ngFor="let nameHost of datosPing; let i = index">
+  <h4 class="text-adjust">{{ nameHost.nameHost }}</h4>
+  <div class="card">
+    <div class="card-body altura-card-linechart-tutela">
+      <app-grafico-lineas-ngxcharts
+        [results]="nameHost.latencias"
+        [showYAxisLabel]="true"
+        [yAxisLabel]="'ms'"
+        [height]="300"
+      >
+      </app-grafico-lineas-ngxcharts>
     </div>
   </div>
-
-  <div class="col-sm-12" *ngFor="let host of datosPingServer">
-    <div class="card shadow-sm my-2">
-      <div class="card-body" style="height: 530px;">
-        <h5 class="font-weight-light">{{ host.host }}</h5>
-        <app-grafico-lineas-ngxcharts
-          [results]="host.metricas"
-          [showYAxisLabel]="true"
-          [yAxisLabel]="'ms'"
-        >
-        </app-grafico-lineas-ngxcharts>
+  <div class="row">
+    <div class="col-sm-6 col-12" *ngFor="let host of nameHost.hosts">
+      <div class="card my-3">
+        <div class="card-body altura-card-linechart-tutela">
+          <h5>{{ host.ip }}</h5>
+          <app-grafico-lineas-ngxcharts
+            [results]="host.metricas"
+            [showYAxisLabel]="true"
+            [yAxisLabel]="'ms'"
+            [height]="300"
+          >
+          </app-grafico-lineas-ngxcharts>
+        </div>
       </div>
     </div>
   </div>

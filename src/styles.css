@@ -475,12 +475,12 @@ span.groupbox {
 /*-- =====================================================
  RESPONSIVE CHART
  ========================================================*/
-/* @media (max-width: 412px) {
-  body .ngx-charts {
-    width: 100%;
-  }
+.altura-card-linechart-tutela {
+  height: 430px;
+}
 
-  body .tooltip-area {
-    width: 100%;
+@media (max-width: 412px) {
+  .text-adjust {
+    font-size: 1.2rem;
   }
-} */
+}
