@@ -62,6 +62,18 @@ export class FechaLocalService {
     }
   }
 
+  cortaSig_full(fecha?: any) {
+    if (fecha) {
+      const _fecha = new Date(fecha);
+      const _next = _fecha.setDate(_fecha.getDate() + 1);
+      return this.datePipe.transform(_next, "yyyy-M-d");
+    } else {
+      const _fecha = new Date();
+      const _next = _fecha.setDate(_fecha.getDate() + 1);
+      return this.datePipe.transform(_next, "yyyy-M-d");
+    }
+  }
+
   cortaAnt(fecha?: any) {
     if (fecha) {
       let _fecha = new Date(fecha);
@@ -83,6 +95,18 @@ export class FechaLocalService {
       const _fecha = new Date();
       const _next = _fecha.setDate(_fecha.getDate() + numero);
       return this.datePipe.transform(_next, "yyyy-MM-dd");
+    }
+  }
+
+  corta_full(numero: number, fecha?: any) {
+    if (fecha) {
+      let _fecha = new Date(fecha);
+      let _next = _fecha.setDate(_fecha.getDate() + numero);
+      return this.datePipe.transform(_next, "yyyy-M-d");
+    } else {
+      const _fecha = new Date();
+      const _next = _fecha.setDate(_fecha.getDate() + numero);
+      return this.datePipe.transform(_next, "yyyy-M-d");
     }
   }
 

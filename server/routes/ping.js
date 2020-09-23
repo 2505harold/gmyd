@@ -114,6 +114,7 @@ app.get("/tutela/historico", (req, res) => {
 app.get("/opensignal/historico", (req, res) => {
   const desde = req.query.desde;
   const hasta = req.query.hasta;
+  console.log(hasta);
   PingOpenSignal.aggregate([
     {
       $match: {

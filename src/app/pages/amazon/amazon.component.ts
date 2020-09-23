@@ -72,8 +72,8 @@ export class AmazonComponent implements OnDestroy {
       );
       this.loadDatosChart(
         this.view,
-        this._fechaService.corta(-6),
-        this._fechaService.cortaSig()
+        this._fechaService.corta_full(-6),
+        this._fechaService.cortaSig_full()
       );
       this.cargarPrefijosAmazon();
       this.form = new FormGroup({
@@ -109,6 +109,8 @@ export class AmazonComponent implements OnDestroy {
   }
 
   loadDatosChart(categoria: string, desde: string, hasta: string) {
+    console.log(desde);
+    console.log(hasta);
     this.loadGraficoDelay = true;
     this._amazonService
       .obtenerPingGrafico(categoria, desde, hasta)
