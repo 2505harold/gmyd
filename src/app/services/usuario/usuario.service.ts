@@ -12,6 +12,7 @@ export class UsuarioService {
   usuario: any = [];
   token: string;
   constructor(public http: HttpClient, private router: Router) {
+    //si en caso el usuario esta logeado se carga sus datos
     this.leerStorage();
   }
 

@@ -22,7 +22,7 @@ export class TutelaComponent implements OnInit {
     this.activeRouter.params.subscribe((param) => {
       this.view = param["tipo"];
       this.cargarGraficoAgrupadoPing(
-        this._fechaService.corta(-15),
+        this._fechaService.corta(-360),
         this._fechaService.cortaSig()
       );
     });
