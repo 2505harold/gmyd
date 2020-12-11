@@ -351,11 +351,16 @@ app.post("/metricas/delay", (req, res) => {
 // Obtener promedio de latencias por fecha captura
 // ====================================
 app.get("/ping/:tipo/promedio", (req, res) => {
-  const desde = req.query.desde;
-  const hasta = req.query.hasta;
+  const desde = new Date(req.query.desde);
+  const hasta = new Date(req.query.hasta);
   const categoria = req.params.tipo;
 
   PingAmazon.aggregate([
+    {
+      $addFields: {
+        convertedDate: { $toDate: "$fecha" },
+      },
+    },
     {
       $lookup: {
         from: "ipsamazon",
@@ -367,7 +372,7 @@ app.get("/ping/:tipo/promedio", (req, res) => {
     {
       $match: {
         avg: { $ne: "unknown" },
-        fecha: { $gte: desde, $lte: hasta },
+        convertedDate: { $gte: desde, $lte: hasta },
         categoria: { $regex: new RegExp(categoria, "i") },
       },
     },

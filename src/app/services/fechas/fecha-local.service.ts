@@ -50,15 +50,15 @@ export class FechaLocalService {
   //====================================================
   // Formato corto de Fecha
   //====================================================
-  cortaSig(fecha?: any) {
+  cortaSig(format: string, fecha?: any) {
     if (fecha) {
       const _fecha = new Date(fecha);
       const _next = _fecha.setDate(_fecha.getDate() + 1);
-      return this.datePipe.transform(_next, "yyyy-MM-dd");
+      return this.datePipe.transform(_next, format);
     } else {
       const _fecha = new Date();
       const _next = _fecha.setDate(_fecha.getDate() + 1);
-      return this.datePipe.transform(_next, "yyyy-MM-dd");
+      return this.datePipe.transform(_next, format);
     }
   }
 
@@ -86,15 +86,15 @@ export class FechaLocalService {
     }
   }
 
-  corta(numero: number, fecha?: any) {
+  corta(numero: number, format: string, fecha?: any) {
     if (fecha) {
       let _fecha = new Date(fecha);
       let _next = _fecha.setDate(_fecha.getDate() + numero);
-      return this.datePipe.transform(_next, "yyyy-MM-dd");
+      return this.datePipe.transform(_next, format);
     } else {
       const _fecha = new Date();
       const _next = _fecha.setDate(_fecha.getDate() + numero);
-      return this.datePipe.transform(_next, "yyyy-MM-dd");
+      return this.datePipe.transform(_next, format);
     }
   }
 
@@ -116,11 +116,11 @@ export class FechaLocalService {
     });
   }
 
-  localCorta(fecha?: string) {
+  localCorta(format: string, fecha?: string) {
     if (fecha) {
-      return this.datePipe.transform(new Date(fecha), "yyyy-MM-dd");
+      return this.datePipe.transform(new Date(fecha), format);
     } else {
-      return this.datePipe.transform(new Date(), "yyyy-MM-dd");
+      return this.datePipe.transform(new Date(), format);
     }
   }
 }

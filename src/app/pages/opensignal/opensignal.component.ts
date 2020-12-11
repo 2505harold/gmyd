@@ -25,8 +25,8 @@ export class OpensignalComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.view = params["id"];
       this.cargarGraficoAgrupadoPing(
-        this._fechaLocalService.corta(-360),
-        this._fechaLocalService.cortaSig()
+        this._fechaLocalService.corta(-360, "yyyy-MM-dd"),
+        this._fechaLocalService.cortaSig("yyyy-MM-dd")
       );
     });
   }

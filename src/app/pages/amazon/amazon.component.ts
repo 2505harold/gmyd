@@ -52,27 +52,27 @@ export class AmazonComponent implements OnDestroy {
 
       this.obtenerPruebasPingAmazonBrasil(
         "sa-east-1",
-        this._fechaService.localCorta(),
-        this._fechaService.cortaSig()
+        this._fechaService.localCorta("dd-MM-yyyy"),
+        this._fechaService.cortaSig("dd-MM-yyyy")
       );
       this.obtenerPruebasPingAmazonNorthCalifornia(
         "us-west-1",
-        this._fechaService.localCorta(),
-        this._fechaService.cortaSig()
+        this._fechaService.localCorta("dd-MM-yyyy"),
+        this._fechaService.cortaSig("dd-MM-yyyy")
       );
       this.obtenerPruebasPingAmazonOhio(
         "us-east-2",
-        this._fechaService.localCorta(),
-        this._fechaService.cortaSig()
+        this._fechaService.localCorta("dd-MM-yyyy"),
+        this._fechaService.cortaSig("dd-MM-yyyy")
       );
       this.obtenerPruebasPingAmazonNorthVirginia(
         "us-east-1",
-        this._fechaService.localCorta(),
-        this._fechaService.cortaSig()
+        this._fechaService.localCorta("dd-MM-yyyy"),
+        this._fechaService.cortaSig("dd-MM-yyyy")
       );
       this.loadDatosChart(
         this.view,
-        this._fechaService.corta_full(-6),
+        this._fechaService.corta_full(-30),
         this._fechaService.cortaSig_full()
       );
       this.cargarPrefijosAmazon();
@@ -109,8 +109,6 @@ export class AmazonComponent implements OnDestroy {
   }
 
   loadDatosChart(categoria: string, desde: string, hasta: string) {
-    console.log(desde);
-    console.log(hasta);
     this.loadGraficoDelay = true;
     this._amazonService
       .obtenerPingGrafico(categoria, desde, hasta)
@@ -160,6 +158,7 @@ export class AmazonComponent implements OnDestroy {
         this.showloadCharBrasil = false;
       });
   }
+
   obtenerPruebasPingAmazonNorthCalifornia(
     region: string,
     desde: string,

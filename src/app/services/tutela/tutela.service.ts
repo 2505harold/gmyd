@@ -33,7 +33,6 @@ export class TutelaService {
   }
 
   obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
-    console.log(desde);
     const url = `${URL_SERVICIOS}/ping/tutela/historico?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
@@ -54,7 +53,6 @@ export class TutelaService {
   }
 
   obtenerGraficosPing(desde: string, hasta: string) {
-    console.log(desde);
     const url = `${URL_SERVICIOS}/ping/tutela/grafico?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {

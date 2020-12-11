@@ -175,7 +175,7 @@ export class AmazonService {
     categoria: string,
     region: string,
     desde: string,
-    hasta
+    hasta: string
   ) {
     const url = `${URL_SERVICIOS}/ping/amazon/${categoria}/${region}?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(

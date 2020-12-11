@@ -10,6 +10,7 @@ const { orderBy, sortBy, groupBy, forEach } = require("lodash");
 // ====================================
 app.get("/amazon/:categoria/:region", (req, res) => {
   const region = req.params.region;
+
   const desde = new Date(req.query.desde);
   const hasta = new Date(req.query.hasta);
   const categoria = req.params.categoria;
@@ -114,7 +115,6 @@ app.get("/tutela/historico", (req, res) => {
 app.get("/opensignal/historico", (req, res) => {
   const desde = req.query.desde;
   const hasta = req.query.hasta;
-  console.log(hasta);
   PingOpenSignal.aggregate([
     {
       $match: {
