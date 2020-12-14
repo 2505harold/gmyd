@@ -40,6 +40,7 @@ export class AmazonComponent implements OnDestroy {
 
   datos: any[];
 
+  //Contructores
   constructor(
     public _amazonService: AmazonService,
     public datePipe: DatePipe,
