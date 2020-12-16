@@ -13,6 +13,7 @@ const usuarioRoutes = require("./routes/usuario");
 const loginRoutes = require("./routes/login");
 const internacionalRoutes = require("./routes/internacional");
 const pingRoutes = require("./routes/ping");
+const pingApp = require("./routes/pingapp");
 
 //CORS
 app.use(function (req, res, next) {
@@ -39,6 +40,7 @@ app.use("/usuario", usuarioRoutes);
 app.use("/login", loginRoutes);
 app.use("/internacional", internacionalRoutes);
 app.use("/ping", pingRoutes);
+app.use("/apping", pingApp);
 
 //conexion a la base de datos
 mongoose.connect(

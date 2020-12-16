@@ -32,33 +32,40 @@ export class TutelaService {
     );
   }
 
-  obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/ping/tutela/historico?desde=${desde}&hasta=${hasta}`;
+  obtenerTipoZonaTestPing(zona: string) {
+    const url = URL_SERVICIOS + `/apping/${zona}/tutela`;
     return this.http.get(url).pipe(
       map((resp: any) => {
-        resp.datos.forEach((element) => {
-          element.latencias.map((item) => {
-            item.series.map((e) => (e.name = new Date(e.name)));
-          }),
-            element.hosts.map((item) => {
-              item.metricas.map((els) => {
-                els.series.map((e) => (e.name = new Date(e.name)));
-              });
-            });
-        });
-        console.log(resp);
-        return resp;
+        return resp.data;
       })
     );
   }
 
-  obtenerGraficosPing(desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/ping/tutela/grafico?desde=${desde}&hasta=${hasta}`;
+  obtenerTipoRedMovilPing() {
+    const url = URL_SERVICIOS + `/apping/redmovil/tutela`;
     return this.http.get(url).pipe(
       map((resp: any) => {
-        resp.datos.forEach((element) => {
-          element.metricas.map((el) => {
-            el.series.map((e) => (e.name = new Date(e.name)));
+        return resp.data;
+      })
+    );
+  }
+
+  obtenerCellIdPing() {
+    const url = URL_SERVICIOS + `/apping/cellid/tutela`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
+  obtenerGraficoDiarioPing(desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/apping/tutela?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        resp.data.forEach((datoOperador) => {
+          datoOperador.series.map((el) => {
+            el.name = new Date(el.name);
           });
         });
         return resp;
@@ -66,11 +73,16 @@ export class TutelaService {
     );
   }
 
-  obtenerCantidadPruebasPingPorDias() {
-    const url = URL_SERVICIOS + "/tutela/numeros/ping/guardados";
-    return this.http.get(url).pipe(
-      map((resp) => {
-        return resp;
+  obtenerGraficosFiltrosPing(desde: string, hasta: string, body: any) {
+    const url = `${URL_SERVICIOS}/apping/tutela/filtro?desde=${desde}&hasta=${hasta}`;
+    return this.http.post(url, body).pipe(
+      map((resp: any) => {
+        resp.data.forEach((datoOperador) => {
+          datoOperador.series.map((el) => {
+            el.name = new Date(el.name);
+          });
+        });
+        return resp.data;
       })
     );
   }
@@ -94,6 +106,35 @@ export class TutelaService {
             timer: 2000,
           });
         }
+      })
+    );
+  }
+
+  // obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
+  //   const url = `${URL_SERVICIOS}/ping/tutela/historico?desde=${desde}&hasta=${hasta}`;
+  //   return this.http.get(url).pipe(
+  //     map((resp: any) => {
+  //       resp.datos.forEach((element) => {
+  //         element.latencias.map((item) => {
+  //           item.series.map((e) => (e.name = new Date(e.name)));
+  //         }),
+  //           element.hosts.map((item) => {
+  //             item.metricas.map((els) => {
+  //               els.series.map((e) => (e.name = new Date(e.name)));
+  //             });
+  //           });
+  //       });
+  //       console.log(resp);
+  //       return resp;
+  //     })
+  //   );
+  // }
+
+  obtenerCantidadPruebasPingPorDias() {
+    const url = URL_SERVICIOS + "/tutela/numeros/ping/guardados";
+    return this.http.get(url).pipe(
+      map((resp) => {
+        return resp;
       })
     );
   }

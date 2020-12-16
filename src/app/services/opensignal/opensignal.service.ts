@@ -14,26 +14,26 @@ export class OpensignalService {
     private _fechaService: FechaLocalService
   ) {}
 
-  obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
-    console.log(desde);
-    const url = `${URL_SERVICIOS}/ping/opensignal/historico?desde=${desde}&hasta=${hasta}`;
-    return this.http.get(url).pipe(
-      map((resp: any) => {
-        resp.datos.forEach((element) => {
-          element.latencias.map((item) => {
-            item.series.map((e) => (e.name = new Date(e.name)));
-          }),
-            element.hosts.map((item) => {
-              item.metricas.map((els) => {
-                els.series.map((e) => (e.name = new Date(e.name)));
-              });
-            });
-        });
-        console.log(resp);
-        return resp;
-      })
-    );
-  }
+  // obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
+  //   console.log(desde);
+  //   const url = `${URL_SERVICIOS}/ping/opensignal/historico?desde=${desde}&hasta=${hasta}`;
+  //   return this.http.get(url).pipe(
+  //     map((resp: any) => {
+  //       resp.datos.forEach((element) => {
+  //         element.latencias.map((item) => {
+  //           item.series.map((e) => (e.name = new Date(e.name)));
+  //         }),
+  //           element.hosts.map((item) => {
+  //             item.metricas.map((els) => {
+  //               els.series.map((e) => (e.name = new Date(e.name)));
+  //             });
+  //           });
+  //       });
+  //       console.log(resp);
+  //       return resp;
+  //     })
+  //   );
+  // }
 
   guardarIp(ipOpensignal: IpsOpenSignal) {
     const url = `${URL_SERVICIOS}/opensignal`;
@@ -86,6 +86,61 @@ export class OpensignalService {
             timer: 2000,
           });
         }
+      })
+    );
+  }
+
+  obtenerTipoZonaTestPing(zona: string) {
+    const url = URL_SERVICIOS + `/apping/${zona}/opensignal`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
+  obtenerTipoRedMovilPing() {
+    const url = URL_SERVICIOS + `/apping/redmovil/opensignal`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
+  obtenerCellIdPing() {
+    const url = URL_SERVICIOS + `/apping/cellid/opensignal`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
+  obtenerGraficoDiarioPing(desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/apping/opensignal?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        resp.data.forEach((datoOperador) => {
+          datoOperador.series.map((el) => {
+            el.name = new Date(el.name);
+          });
+        });
+        return resp;
+      })
+    );
+  }
+
+  obtenerGraficosFiltrosPing(desde: string, hasta: string, body: any) {
+    const url = `${URL_SERVICIOS}/apping/opensignal/filtro?desde=${desde}&hasta=${hasta}`;
+    return this.http.post(url, body).pipe(
+      map((resp: any) => {
+        resp.data.forEach((datoOperador) => {
+          datoOperador.series.map((el) => {
+            el.name = new Date(el.name);
+          });
+        });
+        return resp.data;
       })
     );
   }
