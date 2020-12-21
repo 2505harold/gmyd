@@ -28,14 +28,6 @@
   <div class="card-header">
     <div class="d-flex justify-content-between mt-3">
       <h5>Reporte de latencias</h5>
-      <div class="justify-content-center align-items-center">
-        <mat-checkbox class="mx-1" [(ngModel)]="checkedClaro"
-          >Claro</mat-checkbox
-        >
-        <mat-checkbox class="mx-1" [(ngModel)]="checkedTdp"
-          >Movistar</mat-checkbox
-        >
-      </div>
     </div>
   </div>
   <div class="card-body">
@@ -92,6 +84,17 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Operador</mat-label>
+              <mat-select multiple (selectionChange)="operadorChange($event)">
+                <mat-option
+                  *ngFor="let nombre of operadores"
+                  [value]="nombre._id.operador"
+                >
+                  {{ nombre._id.operador }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
               <input
                 type="text"
                 placeholder="Cell ID"
@@ -120,8 +123,8 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-8">
-        <div class="card shadow-sm border-0" style="height: 470px">
+      <div class="col-sm-8 d-flex align-items-center">
+        <div class="card shadow-sm border-0 w-100" style="height: 470px">
           <div class="card-body">
             <app-boxload [show]="showLoadGraficaPingFiltro"></app-boxload>
             <h4 class="text-adjust">Grafico de latencias</h4>

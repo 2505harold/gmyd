@@ -37,6 +37,7 @@ export class OpensignalComponent implements OnInit {
   provincias: any[];
   localidades: any[];
   tecnologias: any[];
+  operadores: any[];
   filteredOptions: Observable<string[]>;
 
   servidor: string[];
@@ -59,6 +60,7 @@ export class OpensignalComponent implements OnInit {
       this.cargarLocalidades();
       this.cargarTecnologias();
       this.cargarCellIds();
+      this.cargarOperadores();
     });
   }
 
@@ -116,6 +118,12 @@ export class OpensignalComponent implements OnInit {
     });
   }
 
+  cargarOperadores() {
+    this._opensignalService.obtenerOperadoresMovilPing().subscribe((resp) => {
+      this.operadores = resp;
+    });
+  }
+
   servidorChange(event) {
     this.checkServidor = [];
     event.value.forEach((element) => {
@@ -144,6 +152,13 @@ export class OpensignalComponent implements OnInit {
     });
   }
 
+  operadorChange(event) {
+    this.checkOperador = [];
+    event.value.forEach((element) => {
+      this.checkOperador.push({ operador: element });
+    });
+  }
+
   graficar() {
     this.datosPingFiltro = [];
     this.showLoadGraficaPingFiltro = true;
@@ -158,8 +173,8 @@ export class OpensignalComponent implements OnInit {
       this.checkLocalidad.forEach((item) => this.datosPingFiltro.push(item));
     if (this.checkTecnologia.length > 0)
       this.checkTecnologia.forEach((item) => this.datosPingFiltro.push(item));
-    if (this.checkedClaro) this.datosPingFiltro.push({ operador: "Claro" });
-    if (this.checkedTdp) this.datosPingFiltro.push({ operador: "movistar" });
+    if (this.checkOperador.length > 0)
+      this.checkOperador.forEach((item) => this.datosPingFiltro.push(item));
 
     if (cellid != null && cellid != "") this.datosPingFiltro.push({ cellid });
 

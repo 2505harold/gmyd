@@ -108,6 +108,15 @@ export class OpensignalService {
     );
   }
 
+  obtenerOperadoresMovilPing() {
+    const url = URL_SERVICIOS + `/apping/operadores/opensignal`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
   obtenerCellIdPing() {
     const url = URL_SERVICIOS + `/apping/cellid/opensignal`;
     return this.http.get(url).pipe(

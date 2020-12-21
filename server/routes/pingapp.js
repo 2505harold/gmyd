@@ -13,6 +13,7 @@ app.get("/tutela", (req, res) => {
     {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
       },
     },
     {
@@ -87,6 +88,7 @@ app.post("/tutela/filtro", (req, res) => {
     {
       $match: {
         $and: [
+          { categoria: "MOBILE" },
           { fecha: { $gte: desde, $lte: hasta } },
           { $or: namehosts },
           { $or: localities },
@@ -147,6 +149,19 @@ app.get("/localidad/tutela", (req, res) => {
 });
 
 // ====================================
+// Get test operadores
+// ====================================
+app.get("/operadores/tutela", (req, res) => {
+  AppPingTutela.aggregate([
+    { $sort: { operador: -1 } },
+    { $group: { _id: { operador: "$operador" }, count: { $sum: 1 } } },
+  ]).exec((err, resp) => {
+    const _datosOrdenados = orderBy(resp, "_id.operador", "asc");
+    res.status(200).json({ ok: true, data: _datosOrdenados });
+  });
+});
+
+// ====================================
 // Get test netwrok type
 // ====================================
 app.get("/redmovil/tutela", (req, res) => {
@@ -184,6 +199,7 @@ app.get("/opensignal", (req, res) => {
     {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
       },
     },
     {
@@ -258,6 +274,7 @@ app.post("/opensignal/filtro", (req, res) => {
     {
       $match: {
         $and: [
+          { categoria: "MOBILE" },
           { fecha: { $gte: desde, $lte: hasta } },
           { $or: namehosts },
           { $or: localities },
@@ -286,6 +303,19 @@ app.post("/opensignal/filtro", (req, res) => {
 
     const sortName = sortBy(data, "name");
     res.status(200).json({ ok: true, data: sortName });
+  });
+});
+
+// ====================================
+// Get test operadores
+// ====================================
+app.get("/operadores/opensignal", (req, res) => {
+  AppPingOpensignal.aggregate([
+    { $sort: { operador: -1 } },
+    { $group: { _id: { operador: "$operador" }, count: { $sum: 1 } } },
+  ]).exec((err, resp) => {
+    const _datosOrdenados = orderBy(resp, "_id.operador", "asc");
+    res.status(200).json({ ok: true, data: _datosOrdenados });
   });
 });
 

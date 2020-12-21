@@ -50,6 +50,15 @@ export class TutelaService {
     );
   }
 
+  obtenerOperadoresMovilPing() {
+    const url = URL_SERVICIOS + `/apping/operadores/tutela`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.data;
+      })
+    );
+  }
+
   obtenerCellIdPing() {
     const url = URL_SERVICIOS + `/apping/cellid/tutela`;
     return this.http.get(url).pipe(
