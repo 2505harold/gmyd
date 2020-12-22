@@ -21,7 +21,7 @@ export class NperfComponent implements OnInit {
   loadTablaVelocidades: boolean = true;
   totalRegistro2: number = 0;
   desde2: number = 0;
-  operadores = ["claro", "entel", "movistar", "bitel"];
+  operadores = ["bitel", "claro", "entel", "movistar"];
 
   //valriables de angular material tables
   columnsTblPuntajeNacional: string[] = [

@@ -140,7 +140,7 @@ export class NperfService {
     const url = URL_SERVICIOS + "/nperf/velocidades/movil";
     return this.http.get(url).pipe(
       map((resp: any) => {
-        const operadores = ["claro", "entel", "movistar", "bitel"];
+        const operadores = ["bitel", "claro", "entel", "movistar"];
         const metricas = resp.metricas;
         var datos = [];
         operadores.forEach((operador) => {

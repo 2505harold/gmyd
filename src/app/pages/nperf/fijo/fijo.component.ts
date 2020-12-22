@@ -21,8 +21,8 @@ export class FijoComponent implements OnInit {
   departamentos: any = [];
   distUser: string;
   idUser: string;
-  campos_nacionales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
-  campos_locales = ["claro", "americatel_peru", "movistar", "winet_telecom"];
+  campos_nacionales = ["americatel_peru", "claro", "movistar", "winet_telecom"];
+  campos_locales = ["americatel_peru", "claro", "movistar", "winet_telecom"];
   loadTablaFijoNacional: boolean;
   loadTablaFijoLocal: boolean;
 

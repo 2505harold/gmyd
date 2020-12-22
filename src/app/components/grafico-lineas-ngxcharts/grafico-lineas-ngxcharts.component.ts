@@ -11,6 +11,7 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   @Input() showYAxisLabel: boolean;
   @Input() yAxisLabel: boolean;
   @Input() height: number;
+  @Input() colorScheme: Object;
 
   datos = [];
   view: any[];
@@ -26,34 +27,52 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   xAxisLabel: string = "Fecha";
   //yAxisLabel: string = "Puntos";
   timeline: boolean = false;
-  colorScheme: object;
+  //colorScheme: Object;
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    switch (this.router.url) {
-      case "/tutela":
-        this.colorScheme = {
-          domain: ["#FF4560", "#00E396"],
-        };
-        break;
-      case "/opensignal":
-        this.colorScheme = {
-          domain: ["#FF4560", "#00E396"],
-        };
-        break;
-      default:
-        this.colorScheme = {
-          domain: [
-            "#dc3545",
-            "#007bff",
-            "#28a745",
-            "#ffc107",
-            "#a8385d",
-            "#aae3f5",
-          ],
-        };
-    }
+    if (this.colorScheme)
+      this.colorScheme = {
+        domain: this.colorScheme.toString().split(","),
+      };
+    else
+      this.colorScheme = {
+        domain: [
+          "#ffc107",
+          "#dc3545",
+          "#007bff",
+          "#28a745",
+          "#a8385d",
+          "#aae3f5",
+        ],
+      };
+
+    //this.colorScheme = { domain: colorSchema.split(",") };
+    // console.log(this.router.url);
+    // switch (this.router.url) {
+    //   case "/tutela":
+    //     this.colorScheme = {
+    //       domain: ["#FF4560", "#00E396"],
+    //     };
+    //     break;
+    //   case "/opensignal":
+    //     this.colorScheme = {
+    //       domain: ["#FF4560", "#00E396"],
+    //     };
+    //     break;
+    //   default:
+    //     this.colorScheme = {
+    //       domain: [
+    //         "#ffc107",
+    //         "#dc3545",
+    //         "#007bff",
+    //         "#28a745",
+    //         "#a8385d",
+    //         "#aae3f5",
+    //       ],
+    //     };
+    // }
   }
 
   onSelect(data): void {
