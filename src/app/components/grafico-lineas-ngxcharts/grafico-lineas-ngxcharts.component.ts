@@ -32,9 +32,16 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    if (this.colorScheme)
+    if (this.colorScheme === "theme-armchart")
       this.colorScheme = {
-        domain: this.colorScheme.toString().split(","),
+        domain: [
+          "#875692",
+          "#F38400",
+          "#A1CAF1",
+          "#C2B280",
+          "#848482",
+          "#008856",
+        ],
       };
     else
       this.colorScheme = {
