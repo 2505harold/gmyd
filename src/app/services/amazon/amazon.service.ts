@@ -134,14 +134,17 @@ export class AmazonService {
     );
   }
 
-  obtenerPingGrafico(categoria: string, desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/amazon/ping/${categoria}/promedio?desde=${desde}&hasta=${hasta}`;
+  obtenerPingGrafico(
+    categoria: string,
+    operador: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url = `${URL_SERVICIOS}/apping/amazon/${categoria}/${operador}/?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.datos.forEach((element) => {
-          element.metricas.map((item) => {
-            item.series.map((el) => (el.name = new Date(el.name)));
-          });
+          element.series.map((item) => (item.name = new Date(item.name)));
         });
         return resp.datos;
       })
@@ -171,13 +174,8 @@ export class AmazonService {
     );
   }
 
-  obtenerPruebasPingAmazon(
-    categoria: string,
-    region: string,
-    desde: string,
-    hasta: string
-  ) {
-    const url = `${URL_SERVICIOS}/ping/amazon/${categoria}/${region}?desde=${desde}&hasta=${hasta}`;
+  obtenerPruebasPingPorIp(region: string, desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/apping/amazon/porip/${region}/mobile?desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         const ips = resp.datos.map((el) => el._id.ip);
@@ -187,7 +185,7 @@ export class AmazonService {
             if (item._id.ip === ip) {
               series.push({
                 name: item._id.operador,
-                value: parseFloat(item.avg.$numberDecimal).toFixed(1),
+                value: item.avg.toFixed(1),
               });
             }
             return series;

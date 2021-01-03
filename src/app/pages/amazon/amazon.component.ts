@@ -35,10 +35,19 @@ export class AmazonComponent implements OnDestroy {
   showloadCharBrasil: boolean = true;
   timeStart: number;
   intervalo;
-  loadGraficoDelay: boolean = true;
   view: string;
 
-  datos: any[];
+  datosClaro: any[];
+  datosEntel: any[];
+  datosBitel: any[];
+  datosMovistar: any[];
+  loadGraficoClaro: boolean = true;
+  loadGraficoEntel: boolean = true;
+  loadGraficoMovistar: boolean = true;
+  loadGraficoBitel: boolean = true;
+
+  from: string;
+  to: string;
 
   //Contructores
   constructor(
@@ -51,31 +60,25 @@ export class AmazonComponent implements OnDestroy {
     this.activatedRoute.params.subscribe((params) => {
       this.view = params["tipo"];
 
-      this.obtenerPruebasPingAmazonBrasil(
-        "sa-east-1",
-        this._fechaService.localCorta("dd-MM-yyyy"),
-        this._fechaService.cortaSig("dd-MM-yyyy")
-      );
+      (this.from = this._fechaService.corta(-30, "yyyy-MM-dd")),
+        (this.to = this._fechaService.cortaSig("yyyy-MM-dd"));
+
+      this.obtenerPruebasPingAmazonBrasil("sa-east-1", this.from, this.to);
       this.obtenerPruebasPingAmazonNorthCalifornia(
         "us-west-1",
-        this._fechaService.localCorta("dd-MM-yyyy"),
-        this._fechaService.cortaSig("dd-MM-yyyy")
+        this.from,
+        this.to
       );
-      this.obtenerPruebasPingAmazonOhio(
-        "us-east-2",
-        this._fechaService.localCorta("dd-MM-yyyy"),
-        this._fechaService.cortaSig("dd-MM-yyyy")
-      );
+      this.obtenerPruebasPingAmazonOhio("us-east-2", this.from, this.to);
       this.obtenerPruebasPingAmazonNorthVirginia(
         "us-east-1",
-        this._fechaService.localCorta("dd-MM-yyyy"),
-        this._fechaService.cortaSig("dd-MM-yyyy")
+        this.from,
+        this.to
       );
-      this.loadDatosChart(
-        this.view,
-        this._fechaService.corta_full(-30),
-        this._fechaService.cortaSig_full()
-      );
+      this.loadDatosChartClaro("mobile", this.from, this.to);
+      this.loadDatosChartMovistar("mobile", this.from, this.to);
+      this.loadDatosChartEntel("mobile", this.from, this.to);
+      this.loadDatosChartBitel("mobile", this.from, this.to);
       this.cargarPrefijosAmazon();
       this.form = new FormGroup({
         ip: new FormControl(null, [
@@ -106,16 +109,43 @@ export class AmazonComponent implements OnDestroy {
   }
 
   actualizarGrafico() {
-    this.loadDatosChart(this.view, this.inicio, this.fin);
+    this.loadDatosChartClaro(this.view, this.inicio, this.fin);
   }
 
-  loadDatosChart(categoria: string, desde: string, hasta: string) {
-    this.loadGraficoDelay = true;
+  loadDatosChartClaro(categoria: string, desde: string, hasta: string) {
+    this.loadGraficoClaro = true;
     this._amazonService
-      .obtenerPingGrafico(categoria, desde, hasta)
+      .obtenerPingGrafico(categoria, "claro", desde, hasta)
       .subscribe((resp) => {
-        this.datos = resp;
-        this.loadGraficoDelay = false;
+        this.datosClaro = resp;
+        this.loadGraficoClaro = false;
+      });
+  }
+  loadDatosChartEntel(categoria: string, desde: string, hasta: string) {
+    this.loadGraficoEntel = true;
+    this._amazonService
+      .obtenerPingGrafico(categoria, "entel", desde, hasta)
+      .subscribe((resp) => {
+        this.datosEntel = resp;
+        this.loadGraficoEntel = false;
+      });
+  }
+  loadDatosChartMovistar(categoria: string, desde: string, hasta: string) {
+    this.loadGraficoMovistar = true;
+    this._amazonService
+      .obtenerPingGrafico(categoria, "movistar", desde, hasta)
+      .subscribe((resp) => {
+        this.datosMovistar = resp;
+        this.loadGraficoMovistar = false;
+      });
+  }
+  loadDatosChartBitel(categoria: string, desde: string, hasta: string) {
+    this.loadGraficoBitel = true;
+    this._amazonService
+      .obtenerPingGrafico(categoria, "bitel", desde, hasta)
+      .subscribe((resp) => {
+        this.datosBitel = resp;
+        this.loadGraficoBitel = false;
       });
   }
 
@@ -153,13 +183,13 @@ export class AmazonComponent implements OnDestroy {
   obtenerPruebasPingAmazonBrasil(region: string, desde: string, hasta: string) {
     this.showloadCharBrasil = true;
     this._amazonService
-      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
+      .obtenerPruebasPingPorIp(region, desde, hasta)
       .subscribe((resp) => {
+        console.log(resp);
         this.dataPing = resp;
         this.showloadCharBrasil = false;
       });
   }
-
   obtenerPruebasPingAmazonNorthCalifornia(
     region: string,
     desde: string,
@@ -167,7 +197,7 @@ export class AmazonComponent implements OnDestroy {
   ) {
     this.showloadCharNorthCalifornia = true;
     this._amazonService
-      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
+      .obtenerPruebasPingPorIp(region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing2 = resp;
         this.showloadCharNorthCalifornia = false;
@@ -176,7 +206,7 @@ export class AmazonComponent implements OnDestroy {
   obtenerPruebasPingAmazonOhio(region: string, desde: string, hasta: string) {
     this.showloadCharOhio = true;
     this._amazonService
-      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
+      .obtenerPruebasPingPorIp(region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing3 = resp;
         this.showloadCharOhio = false;
@@ -189,7 +219,7 @@ export class AmazonComponent implements OnDestroy {
   ) {
     this.showloadCharNorthVirginia = true;
     this._amazonService
-      .obtenerPruebasPingAmazon(this.view, region, desde, hasta)
+      .obtenerPruebasPingPorIp(region, desde, hasta)
       .subscribe((resp) => {
         this.dataPing4 = resp;
         this.showloadCharNorthVirginia = false;

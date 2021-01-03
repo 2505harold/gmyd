@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const AppPingTutela = require("../models/pingApp/ping-tutela");
+const AppPingAmazon = require("../models/pingApp/ping-amazon");
 const AppPingOpensignal = require("../models/pingApp/ping-opensignal");
-const { groupBy, map, forEach, orderBy, sortBy } = require("lodash");
+const { groupBy, map, forEach, orderBy, sortBy, find } = require("lodash");
+
 // ====================================
 // Get latencia general por Servidor
 // ====================================
@@ -372,6 +374,89 @@ app.get("/cellid/opensignal", (req, res) => {
     });
     const _datosOrdenados = orderBy(cellids, "cellid", "asc");
     res.status(200).json({ ok: true, data: _datosOrdenados });
+  });
+});
+
+// ====================================
+// Obtener latencias de AMAZON
+// los agrupa por IP, Region y Operador
+// ====================================
+app.get("/amazon/porip/:region/:categoria", (req, res) => {
+  const region = req.params.region;
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  const categoria = req.params.categoria;
+  AppPingAmazon.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        region: region,
+        categoria: { $regex: new RegExp(categoria, "i") },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          operador: "$operador",
+          ip: "$host",
+          region: "$region",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    datos = orderBy(datos, ["_id.ip", "_id.operador"], ["asc", "asc"]);
+    res.json({ datos });
+  });
+});
+
+// ====================================
+// Obtener historico de latencias de AMAZON
+// los agrupa por Region y Operador
+// ====================================
+app.get("/amazon/:categoria/:operador", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  const operador = req.params.operador;
+  const categoria = req.params.categoria;
+  AppPingAmazon.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        operador: { $regex: new RegExp(operador, "i") },
+        categoria: { $regex: new RegExp(categoria, "i") },
+      },
+    },
+    {
+      $lookup: {
+        from: "regionesamazon",
+        localField: "region",
+        foreignField: "code",
+        as: "region",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          fecha: {
+            $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+          },
+          region: "$region.full_name",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    const orderByFecha = orderBy(datos, ["_id.fecha"], ["asc"]);
+    const groupByRegion = groupBy(orderByFecha, "_id.region[0]");
+    var datos = map(groupByRegion, (dataRegion) => {
+      var series = map(dataRegion, (obj) => {
+        return { value: obj.avg, name: obj._id.fecha };
+      });
+      return { name: dataRegion[0]._id.region[0], series };
+    });
+
+    res.json({ datos: orderBy(datos, ["name"], ["asc"]) });
   });
 });
 

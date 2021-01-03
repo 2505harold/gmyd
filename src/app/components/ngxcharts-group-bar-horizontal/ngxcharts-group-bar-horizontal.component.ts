@@ -13,6 +13,7 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
   @Input() xAxisLabel: string;
   @Input() showDataLabel: boolean;
   @Input() height: number;
+  @Input() colorScheme: Object;
 
   multi: any[];
   view: any[];
@@ -24,32 +25,34 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
   showLegend: boolean = true;
   legendPosition: string = "below";
 
-  colorScheme = {
-    domain: [
-      "#FF4560",
-      "#00E396",
-      "#008FFB",
-      "#775DD0",
-      "#FEB019",
-      "#00695C",
-      "#3F729B",
-      "#007E33",
-      "#3E4551",
-      "#17A2B8",
-      "#FF80AB",
-      "#90CAF9",
-      "#CC0000",
-      "#00FFFF",
-      "#FF1493",
-      "#00FF00",
-      "#808000",
-    ],
-  };
   //schemeType: string = "linear";
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.colorScheme === "theme-armchart")
+      this.colorScheme = {
+        domain: [
+          "#875692",
+          "#F38400",
+          "#A1CAF1",
+          "#C2B280",
+          "#848482",
+          "#008856",
+        ],
+      };
+    else
+      this.colorScheme = {
+        domain: [
+          "#ffc107",
+          "#dc3545",
+          "#007bff",
+          "#28a745",
+          "#a8385d",
+          "#aae3f5",
+        ],
+      };
+  }
 
   onSelect(data): void {
     console.log("Item clicked", JSON.parse(JSON.stringify(data)));

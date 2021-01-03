@@ -6,12 +6,13 @@
 </div>
 
 <br />
+<!-- GRAFICOS BAR CHART AGRUPADO HORIZONTAL -->
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-6 my-1">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 700px;">
+      <div class="card-body" style="height: 700px">
         <app-boxload [show]="showloadCharBrasil"></app-boxload>
-        <h5 class="font-weight-light">Promedio del dia</h5>
+        <h5 class="font-weight-light">Comparativo de latencias</h5>
         <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing"
@@ -25,11 +26,11 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-6 my-1">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 700px;">
+      <div class="card-body" style="height: 700px">
         <app-boxload [show]="showloadCharNorthCalifornia"></app-boxload>
-        <h5 class="font-weight-light">Promedio del dia</h5>
+        <h5 class="font-weight-light">Comparativo de latencias</h5>
         <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing2"
@@ -43,15 +44,11 @@
       </div>
     </div>
   </div>
-</div>
-
-<br />
-<div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-6 my-1">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 900px;">
+      <div class="card-body" style="height: 700px">
         <app-boxload [show]="showloadCharOhio"></app-boxload>
-        <h5 class="font-weight-light">Promedio del dia</h5>
+        <h5 class="font-weight-light">Comparativo de latencias</h5>
         <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing3"
@@ -60,16 +57,16 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon Ohio'"
-          [height]="780"
+          [height]="580"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-6 my-1">
     <div class="card shadow-sm">
-      <div class="card-body" style="height: 900px;">
+      <div class="card-body" style="height: 700px">
         <app-boxload [show]="showloadCharNorthVirginia"></app-boxload>
-        <h5 class="font-weight-light">Promedio del dia</h5>
+        <h5 class="font-weight-light">Comparativo de latencias</h5>
         <mat-divider></mat-divider>
         <app-ngxcharts-group-bar-horizontal
           [results]="dataPing4"
@@ -78,68 +75,90 @@
           [xAxisLabel]="'ms'"
           [showDataLabel]="true"
           [yAxisLabel]="'IPs Amazon North Virginia'"
-          [height]="780"
+          [height]="580"
         ></app-ngxcharts-group-bar-horizontal>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row my-1">
-  <div
-    class="my-3"
-    [ngClass]="{
-      'col-sm-12': datos.length === 1,
-      'col-sm-6': datos.length > 1
-    }"
-    *ngFor="let item of datos"
-  >
+<!-- GRAFICOS LINE CHART -->
+<br />
+<div class="row">
+  <div class="col-sm-6 my-1">
     <div class="card">
       <div class="card-header">
-        <h5>{{ item.operador }}</h5>
-        <p>
-          Los datos representan el promedio por fecha de captura en los ultimos
-          7 dias
-        </p>
+        <h5>Claro</h5>
       </div>
-      <div class="card-body" [style.height.px]="500">
-        <app-boxload [show]="loadGraficoDelay"></app-boxload>
+      <div class="card-body" [style.height.px]="400">
+        <app-boxload [show]="loadGraficoClaro"></app-boxload>
         <app-grafico-lineas-ngxcharts
-          *ngIf="!loadGraficoDelay"
-          [results]="item.metricas"
+          *ngIf="!loadGraficoClaro"
+          [colorScheme]="'theme-armchart'"
+          [results]="datosClaro"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
-          [height]="340"
+          [height]="280"
         ></app-grafico-lineas-ngxcharts>
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <!-- <ul class="list-group">
-      <li
-        *ngFor="let item of pcs"
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
-        <img src="{{ item.img }}" alt="" style="width: 25px;" />
-        {{ item.region }}
-        <span
-          *ngIf="!item.delay"
-          class="badge badge-primary badge-pill"
-          style="width: 70px;"
-          ><div class="spinner-border spinner-border-sm" role="status"></div>
-          ms</span
-        >
-        <span
-          *ngIf="item.delay"
-          class="badge badge-primary badge-pill"
-          style="width: 70px;"
-          >{{ item.delay | number: "1.0-0" }} ms</span
-        >
-      </li>
-    </ul> -->
+  <div class="col-sm-6 my-1">
+    <div class="card">
+      <div class="card-header">
+        <h5>Movistar</h5>
+      </div>
+      <div class="card-body" [style.height.px]="400">
+        <app-boxload [show]="loadGraficoMovistar"></app-boxload>
+        <app-grafico-lineas-ngxcharts
+          *ngIf="!loadGraficoMovistar"
+          [colorScheme]="'theme-armchart'"
+          [results]="datosMovistar"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+          [height]="280"
+        ></app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 my-1">
+    <div class="card">
+      <div class="card-header">
+        <h5>Entel</h5>
+      </div>
+      <div class="card-body" [style.height.px]="400">
+        <app-boxload [show]="loadGraficoEntel"></app-boxload>
+        <app-grafico-lineas-ngxcharts
+          *ngIf="!loadGraficoEntel"
+          [colorScheme]="'theme-armchart'"
+          [results]="datosEntel"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+          [height]="280"
+        ></app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 my-1">
+    <div class="card">
+      <div class="card-header">
+        <h5>Bitel</h5>
+      </div>
+      <div class="card-body" [style.height.px]="400">
+        <app-boxload [show]="loadGraficoBitel"></app-boxload>
+        <app-grafico-lineas-ngxcharts
+          *ngIf="!loadGraficoBitel"
+          [colorScheme]="'theme-armchart'"
+          [results]="datosBitel"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+          [height]="280"
+        ></app-grafico-lineas-ngxcharts>
+      </div>
+    </div>
   </div>
 </div>
-
+<br />
 <div class="card my-1">
   <div class="card-body">
     <form [formGroup]="form" (ngSubmit)="buscar()">
