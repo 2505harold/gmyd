@@ -29,7 +29,6 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   //colorScheme: Object;
 
   customColors = (value) => {
-    console.log(value);
     switch (value.toLowerCase()) {
       case "claro":
         return "#dc3545";
@@ -53,31 +52,6 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    //this.colorScheme = { domain: colorSchema.split(",") };
-    // console.log(this.router.url);
-    // switch (this.router.url) {
-    //   case "/tutela":
-    //     this.colorScheme = {
-    //       domain: ["#FF4560", "#00E396"],
-    //     };
-    //     break;
-    //   case "/opensignal":
-    //     this.colorScheme = {
-    //       domain: ["#FF4560", "#00E396"],
-    //     };
-    //     break;
-    //   default:
-    //     this.colorScheme = {
-    //       domain: [
-    //         "#ffc107",
-    //         "#dc3545",
-    //         "#007bff",
-    //         "#28a745",
-    //         "#a8385d",
-    //         "#aae3f5",
-    //       ],
-    //     };
-    // }
   }
 
   onSelect(data): void {

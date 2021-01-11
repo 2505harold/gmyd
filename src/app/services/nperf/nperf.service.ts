@@ -99,14 +99,7 @@ export class NperfService {
     this.puntajes = puntajes;
   }
 
-  obtenerMetricas() {
-    const url = URL_SERVICIOS + "/nperf";
-    return this.http.get(url).pipe(
-      map((resp) => {
-        return resp;
-      })
-    );
-  }
+
 
   obtenerMetricasFijoNacional() {
     const url = URL_SERVICIOS + "/nperf/velocidades/fijo/nacional";
@@ -131,6 +124,15 @@ export class NperfService {
     return this.http.get(url).pipe(
       map((resp) => {
         console.log(resp);
+        return resp;
+      })
+    );
+  }
+
+  obtenerMetricas() {
+    const url = URL_SERVICIOS + "/nperf";
+    return this.http.get(url).pipe(
+      map((resp) => {
         return resp;
       })
     );

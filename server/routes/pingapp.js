@@ -407,20 +407,31 @@ app.post("/opensignal/filtro", (req, res) => {
         ],
       },
     },
+    {
+      $group: {
+        _id: {
+          operador: "$operador",
+          fecha: {
+            $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+          },
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
   ]).exec((err, datos) => {
     if (err) {
       return res.status(400).json({ ok: false, err });
     }
 
-    const sortFecha = orderBy(datos, "fecha", "asc");
-    const groupByOperador = groupBy(sortFecha, "operador");
+    const sortFecha = orderBy(datos, "_id.fecha", "asc");
+    const groupByOperador = groupBy(sortFecha, "_id.operador");
     var data = [];
     forEach(groupByOperador, (item) => {
       var series = [];
       forEach(item, (el) => {
-        series.push({ value: el.avg, name: el.fecha });
+        series.push({ value: el.avg, name: el._id.fecha });
       });
-      data.push({ name: item[0].operador, series });
+      data.push({ name: item[0]._id.operador, series });
     });
 
     const sortName = sortBy(data, "name");

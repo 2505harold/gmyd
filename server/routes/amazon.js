@@ -457,37 +457,6 @@ app.get("/ping/:tipo/promedio", (req, res) => {
     });
 });
 
-// function obtenerDelayAmazon(inicio, fin) {
-//   return new Promise((resolve, reject) => {
-//     MetricasDelay.find({
-//       fecha: {
-//         $gte: new Date(inicio),
-//         $lte: new Date(fin),
-//       },
-//     })
-//       .sort({ fecha: "asc" })
-//       .exec((err, delays) => {
-//         if (err) {
-//           reject("error al cargar las metricas");
-//         } else {
-//           resolve(delays);
-//         }
-//       });
-//   });
-// }
-
-// function obtenerPcsAmazon() {
-//   return new Promise((resolve, reject) => {
-//     PcsAmazon.find({}).exec((err, pcs) => {
-//       if (err) {
-//         reject("error al cargar las pcs");
-//       } else {
-//         resolve(pcs);
-//       }
-//     });
-//   });
-// }
-
 // ====================================
 // Actualizar IPs prefix amazon con link internacional
 // ====================================
