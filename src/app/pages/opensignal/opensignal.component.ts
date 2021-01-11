@@ -29,16 +29,23 @@ export class OpensignalComponent implements OnInit {
   showLoadPing: boolean = true;
   datosGraficaPingFiltro: any[];
   showLoadGraficaPingFiltro: boolean = true;
+  datosDistrito: any[];
+  showLoadDistritosPing: boolean = true;
   view: string;
 
   urlsTutela: any[];
 
   cellids: any[];
   provincias: any[];
+  provincias2: any[];
+  departamentos: any[];
   localidades: any[];
   tecnologias: any[];
   operadores: any[];
   filteredOptions: Observable<string[]>;
+
+  selectDep: string;
+  selectProv: string;
 
   servidor: string[];
 
@@ -49,6 +56,8 @@ export class OpensignalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.selectDep = "Municipalidad Metropolitana de Lima";
+    this.selectProv = "Provincia de Lima";
     this.activeRouter.params.subscribe((param) => {
       this.view = param["id"];
       this.cargarGraficoGeneral(
@@ -57,10 +66,18 @@ export class OpensignalComponent implements OnInit {
       );
       this.cargarUrlIpsTutela();
       this.cargarProvincias();
+      this.cargarProvincias2(this.selectDep);
+      this.cargarDepartamentos();
       this.cargarLocalidades();
       this.cargarTecnologias();
       this.cargarCellIds();
       this.cargarOperadores();
+      this.graficarDistritos(
+        this.selectDep,
+        this.selectProv,
+        this._fechaService.corta(-7, "yyyy-MM-dd"),
+        this._fechaService.cortaSig("yyyy-MM-dd")
+      );
     });
   }
 
@@ -123,6 +140,21 @@ export class OpensignalComponent implements OnInit {
       this.operadores = resp;
     });
   }
+  cargarProvincias2(dep: string) {
+    this._opensignalService
+      .obtenerTipoZonaTestPing("provincia", dep)
+      .subscribe((resp) => {
+        this.provincias2 = resp;
+      });
+  }
+
+  cargarDepartamentos() {
+    this._opensignalService
+      .obtenerTipoZonaTestPing("departamento")
+      .subscribe((resp) => {
+        this.departamentos = resp;
+      });
+  }
 
   servidorChange(event) {
     this.checkServidor = [];
@@ -150,6 +182,18 @@ export class OpensignalComponent implements OnInit {
     event.value.forEach((element) => {
       this.checkTecnologia.push({ networkType: element });
     });
+  }
+
+  onChangeDep(event) {
+    this.cargarProvincias2(event.value);
+  }
+  onChangeProv(event) {
+    this.graficarDistritos(
+      this.selectDep,
+      event.value,
+      this._fechaService.corta(-7, "yyyy-MM-dd"),
+      this._fechaService.cortaSig("yyyy-MM-dd")
+    );
   }
 
   operadorChange(event) {
@@ -183,6 +227,16 @@ export class OpensignalComponent implements OnInit {
       .subscribe((resp) => {
         this.datosGraficaPingFiltro = resp;
         this.showLoadGraficaPingFiltro = false;
+      });
+  }
+
+  graficarDistritos(dep: string, prov: string, desde: string, hasta: string) {
+    this.showLoadDistritosPing = true;
+    this._opensignalService
+      .obtenerLatenciaxDistrito(dep, prov, desde, hasta)
+      .subscribe((resp) => {
+        this.datosDistrito = resp;
+        this.showLoadDistritosPing = false;
       });
   }
 }

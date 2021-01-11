@@ -5,8 +5,8 @@
   </h4>
 </div>
 <br />
-<div class="card">
-  <div class="card-body altura-card-linechart-tutela">
+<div class="card shadow">
+  <div class="card-body altura-card-linechart">
     <app-boxload [show]="showLoadPing"></app-boxload>
     <h4 class="text-adjust">Reporte General por dia de latencias</h4>
     <p>
@@ -23,7 +23,62 @@
   </div>
 </div>
 <br />
-<div class="card">
+<!--GRAFICA STACKED BAR VERTICAL DE DISTRITOS-->
+<div class="card shadow">
+  <div class="card-body height-card-grouped-distritos">
+    <h4 class="text-adjust">
+      Comparativo de latencias entre operadores por distrito
+    </h4>
+    <p>Promedio corresponde a los ultimos 7 dias</p>
+    <div class="form-inline">
+      <mat-form-field appearance="fill">
+        <mat-label>Departamento</mat-label>
+        <mat-select
+          [(ngModel)]="selectDep"
+          (selectionChange)="onChangeDep($event)"
+        >
+          <mat-option *ngFor="let dep of departamentos" [value]="dep.nombre"
+            >{{ dep.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Provincia</mat-label>
+        <mat-select
+          [(ngModel)]="selectProv"
+          (selectionChange)="onChangeProv($event)"
+        >
+          <mat-option
+            *ngFor="let prov of provincias2"
+            [value]="prov._id.provincia"
+            >{{ prov._id.provincia }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <app-boxload [show]="showLoadDistritosPing"></app-boxload>
+    <app-ngxcharts-group-bar-horizontal
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="false"
+      [xAxisLabel]="'ms'"
+      [yAxisLabel]="'Distritos'"
+      [results]="datosDistrito"
+      [height]="560"
+    >
+    </app-ngxcharts-group-bar-horizontal>
+    <!-- <app-ngxcharts-stacked-bar-vertical
+      [showXAxisLabel]="false"
+      [showYAxisLabel]="true"
+      [xAxisLabel]="'Localidades'"
+      [yAxisLabel]="'ms'"
+      [results]="datosDistrito"
+      [height]="320"
+    >
+    </app-ngxcharts-stacked-bar-vertical> -->
+  </div>
+</div>
+<br />
+<div class="card shadow">
   <div class="card-header">
     <div class="d-flex justify-content-between mt-3">
       <h5>Reporte de latencias</h5>
@@ -129,7 +184,6 @@
             <h4 class="text-adjust">Grafico de latencias</h4>
             <p>Resultado de su seleccion</p>
             <app-grafico-lineas-ngxcharts
-              [colorScheme]="'theme-armchart'"
               [results]="datosGraficaPingFiltro"
               [showYAxisLabel]="true"
               [yAxisLabel]="'ms'"

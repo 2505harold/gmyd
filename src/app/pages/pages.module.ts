@@ -17,6 +17,7 @@ import { NperfComponent } from "./nperf/movil/nperf.component";
 import { NperfEditarComponent } from "./nperf/editar-puntuacion/nperf-editar.component";
 import { GraficoLineasNgxchartsComponent } from "../components/grafico-lineas-ngxcharts/grafico-lineas-ngxcharts.component";
 import { NgxchartsGroupBarHorizontalComponent } from "../components/ngxcharts-group-bar-horizontal/ngxcharts-group-bar-horizontal.component";
+import { NgxchartsStackedBarVerticalComponent } from "../components/ngxcharts-stacked-bar-vertical/ngxcharts-stacked-bar-vertical.component";
 import { BoxloadComponent } from "../components/boxload/boxload.component";
 import { FijoComponent } from "./nperf/fijo/fijo.component";
 import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
@@ -40,6 +41,7 @@ import { TableloadComponent } from "../components/tableload/tableload.component"
     MantenimientoComponent,
     GraficoLineasNgxchartsComponent,
     NgxchartsGroupBarHorizontalComponent,
+    NgxchartsStackedBarVerticalComponent,
     BoxloadComponent,
     TableloadComponent,
     ModalComponent,

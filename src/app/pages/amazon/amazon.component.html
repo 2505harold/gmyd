@@ -94,7 +94,6 @@
         <app-boxload [show]="loadGraficoClaro"></app-boxload>
         <app-grafico-lineas-ngxcharts
           *ngIf="!loadGraficoClaro"
-          [colorScheme]="'theme-armchart'"
           [results]="datosClaro"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
@@ -112,7 +111,6 @@
         <app-boxload [show]="loadGraficoMovistar"></app-boxload>
         <app-grafico-lineas-ngxcharts
           *ngIf="!loadGraficoMovistar"
-          [colorScheme]="'theme-armchart'"
           [results]="datosMovistar"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
@@ -130,7 +128,6 @@
         <app-boxload [show]="loadGraficoEntel"></app-boxload>
         <app-grafico-lineas-ngxcharts
           *ngIf="!loadGraficoEntel"
-          [colorScheme]="'theme-armchart'"
           [results]="datosEntel"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"
@@ -148,7 +145,6 @@
         <app-boxload [show]="loadGraficoBitel"></app-boxload>
         <app-grafico-lineas-ngxcharts
           *ngIf="!loadGraficoBitel"
-          [colorScheme]="'theme-armchart'"
           [results]="datosBitel"
           [showYAxisLabel]="true"
           [yAxisLabel]="'ms'"

@@ -24,6 +24,7 @@ export class TutelaComponent implements OnInit {
 
   checkServidor: any[] = [];
   checkAdminArea: any[] = [];
+  checkSubAdminArea: any[] = [];
   checkLocalidad: any[] = [];
   checkTecnologia: any[] = [];
   checkOperador: any[] = [];
@@ -32,16 +33,23 @@ export class TutelaComponent implements OnInit {
   showLoadPing: boolean = true;
   datosGraficaPingFiltro: any[];
   showLoadGraficaPingFiltro: boolean = true;
+  datosDistrito: any[];
+  showLoadDistritosPing: boolean = true;
   view: string;
 
   urlsTutela: any[];
 
   cellids: any[];
   provincias: any[];
+  provincias2: any[];
+  departamentos: any[];
   localidades: any[];
   tecnologias: any[];
   operadores: any[];
   filteredOptions: Observable<string[]>;
+
+  selectDep: string;
+  selectProv: string;
 
   servidor: string[];
 
@@ -52,14 +60,23 @@ export class TutelaComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.selectDep = "Municipalidad Metropolitana de Lima";
+    this.selectProv = "Provincia de Lima";
     this.activeRouter.params.subscribe((param) => {
       this.view = param["tipo"];
       this.cargarGraficoGeneral(
         this._fechaService.corta(-30, "yyyy-MM-dd"),
         this._fechaService.cortaSig("yyyy-MM-dd")
       );
+      this.graficarDistritos(
+        this.selectDep,
+        this.selectProv,
+        this._fechaService.corta(-7, "yyyy-MM-dd"),
+        this._fechaService.cortaSig("yyyy-MM-dd")
+      );
       this.cargarUrlIpsTutela();
-      this.cargarProvincias();
+      this.cargarProvincias2(this.selectDep);
+      this.cargarDepartamentos();
       this.cargarLocalidades();
       this.cargarTecnologias();
       this.cargarCellIds();
@@ -89,11 +106,27 @@ export class TutelaComponent implements OnInit {
     });
   }
 
-  cargarProvincias() {
+  cargarProvincias(dep: string) {
     this._tutelaService
-      .obtenerTipoZonaTestPing("provincia")
+      .obtenerTipoZonaTestPing("provincia", dep)
       .subscribe((resp) => {
         this.provincias = resp;
+      });
+  }
+
+  cargarProvincias2(dep: string) {
+    this._tutelaService
+      .obtenerTipoZonaTestPing("provincia", dep)
+      .subscribe((resp) => {
+        this.provincias2 = resp;
+      });
+  }
+
+  cargarDepartamentos() {
+    this._tutelaService
+      .obtenerTipoZonaTestPing("departamento")
+      .subscribe((resp) => {
+        this.departamentos = resp;
       });
   }
 
@@ -135,10 +168,22 @@ export class TutelaComponent implements OnInit {
   }
 
   provinciaChange(event) {
-    this.checkAdminArea = [];
+    this.checkSubAdminArea = [];
     event.value.forEach((element) => {
-      this.checkAdminArea.push({ adminArea: element });
+      this.checkSubAdminArea.push({ subAdminArea: element });
     });
+  }
+
+  onChangeDep(event) {
+    this.cargarProvincias2(event.value);
+  }
+  onChangeProv(event) {
+    this.graficarDistritos(
+      this.selectDep,
+      event.value,
+      this._fechaService.corta(-7, "yyyy-MM-dd"),
+      this._fechaService.cortaSig("yyyy-MM-dd")
+    );
   }
 
   localidadChange(event) {
@@ -170,8 +215,8 @@ export class TutelaComponent implements OnInit {
     const cellid = this.myControl.value;
     if (this.checkServidor.length > 0)
       this.checkServidor.forEach((item) => this.datosPingFiltro.push(item));
-    if (this.checkAdminArea.length > 0)
-      this.checkAdminArea.forEach((item) => this.datosPingFiltro.push(item));
+    if (this.checkSubAdminArea.length > 0)
+      this.checkSubAdminArea.forEach((item) => this.datosPingFiltro.push(item));
     if (this.checkLocalidad.length > 0)
       this.checkLocalidad.forEach((item) => this.datosPingFiltro.push(item));
     if (this.checkTecnologia.length > 0)
@@ -186,6 +231,16 @@ export class TutelaComponent implements OnInit {
       .subscribe((resp) => {
         this.datosGraficaPingFiltro = resp;
         this.showLoadGraficaPingFiltro = false;
+      });
+  }
+
+  graficarDistritos(dep: string, prov: string, desde: string, hasta: string) {
+    this.showLoadDistritosPing = true;
+    this._tutelaService
+      .obtenerLatenciaxDistrito(dep, prov, desde, hasta)
+      .subscribe((resp) => {
+        this.datosDistrito = resp;
+        this.showLoadDistritosPing = false;
       });
   }
 }

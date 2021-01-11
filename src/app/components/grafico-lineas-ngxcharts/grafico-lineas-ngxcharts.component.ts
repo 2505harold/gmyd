@@ -11,7 +11,6 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   @Input() showYAxisLabel: boolean;
   @Input() yAxisLabel: boolean;
   @Input() height: number;
-  @Input() colorScheme: Object;
 
   datos = [];
   view: any[];
@@ -29,32 +28,31 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   timeline: boolean = false;
   //colorScheme: Object;
 
+  customColors = (value) => {
+    console.log(value);
+    switch (value.toLowerCase()) {
+      case "claro":
+        return "#dc3545";
+      case "entel":
+        return "#007bff";
+      case "movistar":
+        return "#28a745";
+      case "bitel":
+        return "#ffc107";
+      case "south america (são paulo)":
+        return "#AA00FF";
+      case "us east (n. virginia)":
+        return "#C6FF00";
+      case "us west (n. california)":
+        return "#0097A7";
+      case "us east (ohio)":
+        return "#FF4081";
+    }
+  };
+
   constructor(private router: Router) {}
 
   ngOnInit() {
-    if (this.colorScheme === "theme-armchart")
-      this.colorScheme = {
-        domain: [
-          "#875692",
-          "#F38400",
-          "#A1CAF1",
-          "#C2B280",
-          "#848482",
-          "#008856",
-        ],
-      };
-    else
-      this.colorScheme = {
-        domain: [
-          "#ffc107",
-          "#dc3545",
-          "#007bff",
-          "#28a745",
-          "#a8385d",
-          "#aae3f5",
-        ],
-      };
-
     //this.colorScheme = { domain: colorSchema.split(",") };
     // console.log(this.router.url);
     // switch (this.router.url) {

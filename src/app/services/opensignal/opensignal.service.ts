@@ -90,11 +90,26 @@ export class OpensignalService {
     );
   }
 
-  obtenerTipoZonaTestPing(zona: string) {
-    const url = URL_SERVICIOS + `/apping/${zona}/opensignal`;
+  obtenerTipoZonaTestPing(zona: string, dep: string = "") {
+    const url = URL_SERVICIOS + `/apping/${zona}/opensignal?dep=${dep}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         return resp.data;
+      })
+    );
+  }
+  obtenerLatenciaxDistrito(
+    adminArea: string,
+    subAdminArea: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url =
+      URL_SERVICIOS +
+      `/apping/opensignal/${adminArea}/${subAdminArea}/distritos/stacked?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.datos;
       })
     );
   }

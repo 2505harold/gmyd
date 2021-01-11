@@ -1,21 +1,17 @@
 <div class="chart-container" [style.height.px]="height">
-  <ngx-charts-bar-horizontal-2d
-    [view]="view"
-    [customColors]="customColors"
+  <ngx-charts-bar-vertical-stacked
     [results]="results"
     [gradient]="gradient"
     [xAxis]="showXAxis"
     [yAxis]="showYAxis"
     [legend]="showLegend"
-    [legendPosition]="legendPosition"
+    [legendPosition]="'below'"
     [showXAxisLabel]="showXAxisLabel"
     [showYAxisLabel]="showYAxisLabel"
-    [showDataLabel]="showDataLabel"
     [xAxisLabel]="xAxisLabel"
     [yAxisLabel]="yAxisLabel"
-    (select)="onSelect($event)"
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)"
+    [animations]="animations"
+    [customColors]="customColors"
   >
-  </ngx-charts-bar-horizontal-2d>
+  </ngx-charts-bar-vertical-stacked>
 </div>

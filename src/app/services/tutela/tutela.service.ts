@@ -32,8 +32,8 @@ export class TutelaService {
     );
   }
 
-  obtenerTipoZonaTestPing(zona: string) {
-    const url = URL_SERVICIOS + `/apping/${zona}/tutela`;
+  obtenerTipoZonaTestPing(zona: string, dep: string = "") {
+    const url = URL_SERVICIOS + `/apping/${zona}/tutela?dep=${dep}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         return resp.data;
@@ -55,6 +55,22 @@ export class TutelaService {
     return this.http.get(url).pipe(
       map((resp: any) => {
         return resp.data;
+      })
+    );
+  }
+
+  obtenerLatenciaxDistrito(
+    adminArea: string,
+    subAdminArea: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url =
+      URL_SERVICIOS +
+      `/apping/tutela/${adminArea}/${subAdminArea}/distritos/stacked?desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.datos;
       })
     );
   }
@@ -118,26 +134,6 @@ export class TutelaService {
       })
     );
   }
-
-  // obtenerGraficoAgrupadoPing(desde: string, hasta: string) {
-  //   const url = `${URL_SERVICIOS}/ping/tutela/historico?desde=${desde}&hasta=${hasta}`;
-  //   return this.http.get(url).pipe(
-  //     map((resp: any) => {
-  //       resp.datos.forEach((element) => {
-  //         element.latencias.map((item) => {
-  //           item.series.map((e) => (e.name = new Date(e.name)));
-  //         }),
-  //           element.hosts.map((item) => {
-  //             item.metricas.map((els) => {
-  //               els.series.map((e) => (e.name = new Date(e.name)));
-  //             });
-  //           });
-  //       });
-  //       console.log(resp);
-  //       return resp;
-  //     })
-  //   );
-  // }
 
   obtenerCantidadPruebasPingPorDias() {
     const url = URL_SERVICIOS + "/tutela/numeros/ping/guardados";

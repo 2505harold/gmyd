@@ -3,7 +3,97 @@ const app = express();
 const AppPingTutela = require("../models/pingApp/ping-tutela");
 const AppPingAmazon = require("../models/pingApp/ping-amazon");
 const AppPingOpensignal = require("../models/pingApp/ping-opensignal");
-const { groupBy, map, forEach, orderBy, sortBy, find } = require("lodash");
+const { groupBy, map, forEach, orderBy, sortBy } = require("lodash");
+
+// ====================================
+// Obtener promedio de latencias
+// por distrito TUTELA
+// ====================================
+app.get("/tutela/:dep/:prov/distritos/stacked", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingTutela.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        adminArea: req.params.dep,
+        subAdminArea: req.params.prov,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          distrito: "$locality",
+          operador: "$operador",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    const datosOrdenados = sortBy(datos, (item) => {
+      if (item._id.operador == "Claro") return item.avg;
+    });
+    const groupByDistrit = groupBy(datosOrdenados, "_id.distrito");
+    var data = [];
+    forEach(groupByDistrit, (item) => {
+      var series = [];
+      forEach(item, (el) => {
+        series.push({ value: el.avg, name: el._id.operador });
+      });
+      data.push({ name: item[0]._id.distrito, series });
+    });
+    return res.status(200).json({ ok: true, datos: data });
+  });
+});
+
+// ====================================
+// Obtener promedio de latencias
+// por distrito OPENSIGNAL
+// ====================================
+app.get("/opensignal/:dep/:prov/distritos/stacked", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingOpensignal.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        adminArea: req.params.dep,
+        subAdminArea: req.params.prov,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          distrito: "$locality",
+          operador: "$operador",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    const datosOrdenados = sortBy(datos, (item) => {
+      if (item._id.operador == "Claro") return item.avg;
+    });
+    const groupByDistrit = groupBy(datosOrdenados, "_id.distrito");
+    var data = [];
+    forEach(groupByDistrit, (item) => {
+      var series = [];
+      forEach(item, (el) => {
+        series.push({ value: el.avg, name: el._id.operador });
+      });
+      data.push({ name: item[0]._id.distrito, series });
+    });
+    return res.status(200).json({ ok: true, datos: data });
+  });
+});
 
 // ====================================
 // Get latencia general por Servidor
@@ -61,7 +151,7 @@ app.post("/tutela/filtro", (req, res) => {
   var namehosts = [];
   var localities = [];
   var networkTypes = [];
-  var adminAreas = [];
+  var subAdminAreas = [];
   var operadores = [];
   var cellids = [];
 
@@ -69,15 +159,16 @@ app.post("/tutela/filtro", (req, res) => {
     if (item.networkType) networkTypes.push({ networkType: item.networkType });
     else if (item.namehost) namehosts.push({ namehost: item.namehost });
     else if (item.locality) localities.push({ locality: item.locality });
-    else if (item.adminArea) adminAreas.push({ adminArea: item.adminArea });
+    else if (item.subAdminArea)
+      subAdminAreas.push({ subAdminArea: item.subAdminArea });
     else if (item.operador) operadores.push({ operador: item.operador });
     else if (item.cellid) cellids.push({ Ci: item.cellid });
   });
 
   if (networkTypes.length == 0)
     networkTypes.push({ networkType: { $regex: new RegExp("", "i") } });
-  if (adminAreas.length == 0)
-    adminAreas.push({ adminArea: { $regex: new RegExp("", "i") } });
+  if (subAdminAreas.length == 0)
+    subAdminAreas.push({ subAdminArea: { $regex: new RegExp("", "i") } });
   if (localities.length == 0)
     localities.push({ locality: { $regex: new RegExp("", "i") } });
   if (namehosts.length == 0)
@@ -94,11 +185,22 @@ app.post("/tutela/filtro", (req, res) => {
           { fecha: { $gte: desde, $lte: hasta } },
           { $or: namehosts },
           { $or: localities },
-          { $or: adminAreas },
+          { $or: subAdminAreas },
           { $or: networkTypes },
           { $or: operadores },
           { $or: cellids },
         ],
+      },
+    },
+    {
+      $group: {
+        _id: {
+          operador: "$operador",
+          fecha: {
+            $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+          },
+        },
+        avg: { $avg: "$avg" },
       },
     },
   ]).exec((err, datos) => {
@@ -106,15 +208,15 @@ app.post("/tutela/filtro", (req, res) => {
       return res.status(400).json({ ok: false, err });
     }
 
-    const sortFecha = orderBy(datos, "fecha", "asc");
-    const groupByOperador = groupBy(sortFecha, "operador");
+    const sortFecha = orderBy(datos, "_id.fecha", "asc");
+    const groupByOperador = groupBy(sortFecha, "_id.operador");
     var data = [];
     forEach(groupByOperador, (item) => {
       var series = [];
       forEach(item, (el) => {
-        series.push({ value: el.avg, name: el.fecha });
+        series.push({ value: el.avg, name: el._id.fecha });
       });
-      data.push({ name: item[0].operador, series });
+      data.push({ name: item[0]._id.operador, series });
     });
 
     const sortName = sortBy(data, "name");
@@ -123,15 +225,33 @@ app.post("/tutela/filtro", (req, res) => {
 });
 
 // ====================================
-// Get test province
+// Get test province TUTELA
 // ====================================
 app.get("/provincia/tutela", (req, res) => {
+  const dep = req.query.dep;
+  AppPingTutela.aggregate([
+    { $match: { adminArea: { $regex: new RegExp(dep, "i") } } },
+    { $sort: { subAdminArea: -1 } },
+    { $group: { _id: { provincia: "$subAdminArea" }, count: { $sum: 1 } } },
+  ]).exec((err, resp) => {
+    const _datosOrdenados = orderBy(resp, "_id.subAdminArea", "asc");
+    res.status(200).json({ ok: true, data: _datosOrdenados });
+  });
+});
+
+// ====================================
+// Get test departament TUTELA
+// ====================================
+app.get("/departamento/tutela", (req, res) => {
   AppPingTutela.aggregate([
     { $sort: { adminArea: -1 } },
-    { $group: { _id: { provincia: "$adminArea" }, count: { $sum: 1 } } },
+    { $group: { _id: { departamento: "$adminArea" }, count: { $sum: 1 } } },
   ]).exec((err, resp) => {
     const _datosOrdenados = orderBy(resp, "_id.adminArea", "asc");
-    res.status(200).json({ ok: true, data: _datosOrdenados });
+    const datos = map(_datosOrdenados, (item) => {
+      return { nombre: item._id.departamento };
+    });
+    res.status(200).json({ ok: true, data: datos });
   });
 });
 
@@ -309,6 +429,22 @@ app.post("/opensignal/filtro", (req, res) => {
 });
 
 // ====================================
+// Get test departament OPENSIGNAL
+// ====================================
+app.get("/departamento/opensignal", (req, res) => {
+  AppPingOpensignal.aggregate([
+    { $sort: { adminArea: -1 } },
+    { $group: { _id: { departamento: "$adminArea" }, count: { $sum: 1 } } },
+  ]).exec((err, resp) => {
+    const _datosOrdenados = orderBy(resp, "_id.adminArea", "asc");
+    const datos = map(_datosOrdenados, (item) => {
+      return { nombre: item._id.departamento };
+    });
+    res.status(200).json({ ok: true, data: datos });
+  });
+});
+
+// ====================================
 // Get test operadores
 // ====================================
 app.get("/operadores/opensignal", (req, res) => {
@@ -322,14 +458,16 @@ app.get("/operadores/opensignal", (req, res) => {
 });
 
 // ====================================
-// Get test province
+// Get test province OPENSIGNAL
 // ====================================
 app.get("/provincia/opensignal", (req, res) => {
+  const dep = req.query.dep;
   AppPingOpensignal.aggregate([
-    { $sort: { adminArea: -1 } },
-    { $group: { _id: { provincia: "$adminArea" }, count: { $sum: 1 } } },
+    { $match: { adminArea: { $regex: new RegExp(dep, "i") } } },
+    { $sort: { subAdminArea: -1 } },
+    { $group: { _id: { provincia: "$subAdminArea" }, count: { $sum: 1 } } },
   ]).exec((err, resp) => {
-    const _datosOrdenados = orderBy(resp, "_id.adminArea", "asc");
+    const _datosOrdenados = orderBy(resp, "_id.subAdminArea", "asc");
     res.status(200).json({ ok: true, data: _datosOrdenados });
   });
 });
