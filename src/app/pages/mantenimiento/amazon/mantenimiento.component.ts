@@ -29,7 +29,7 @@ export class MantenimientoComponent implements OnInit {
   desde: number = 0;
   totalRegistro: number;
   actualizandoPrefijos: boolean = false;
-  @ViewChild("input", { static: false }) input: ElementRef;
+  @ViewChild("input") input: ElementRef;
   displayedColumns: string[] = ["index", "_id", "cantidad", "accion"];
   diasPing: number;
 
