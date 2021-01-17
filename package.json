@@ -16,7 +16,7 @@
     "@angular-devkit/build-angular": "~0.803.29",
     "@angular/animations": "~8.2.14",
     "@angular/cdk": "^8.2.3",
-    "@angular/cli": "~8.3.29",
+    "@angular/cli": "^8.3.29",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",
@@ -64,7 +64,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": "11.9.0",
