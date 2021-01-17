@@ -11,6 +11,18 @@ body {
   font-weight: 300;
 }
 
+button:focus {
+  outline: none;
+}
+
+/*-- =====================================================
+ MAPA
+ ========================================================*/
+
+agm-map {
+  height: 300px;
+}
+
 /*-- =====================================================
  AALTURAS DE CARD CONTIENEN CHARTs
  ========================================================*/
@@ -34,6 +46,10 @@ body {
 }
 .altura-card-linechart {
   height: 460px;
+}
+
+.height-card-bar-vertcal-top-sites {
+  height: 600px;
 }
 
 /*-- =====================================================
@@ -413,6 +429,13 @@ CONTENEDOR DE CHART NGX
   }
   .altura-card-linechart {
     height: 550px;
+  }
+  .height-card-bar-vertcal-top-sites {
+    height: 690px;
+  }
+
+  mat-form-field {
+    width: 100%;
   }
 }
 

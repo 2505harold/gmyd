@@ -168,4 +168,9 @@ export class OpensignalService {
       })
     );
   }
+
+  actualizarReporteSemanal(desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/apping/opensignal/cellid/reporte?desde=${desde}&hasta=${hasta}`;
+    return this.http.post(url, {});
+  }
 }

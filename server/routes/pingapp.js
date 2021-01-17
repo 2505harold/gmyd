@@ -3,7 +3,270 @@ const app = express();
 const AppPingTutela = require("../models/pingApp/ping-tutela");
 const AppPingAmazon = require("../models/pingApp/ping-amazon");
 const AppPingOpensignal = require("../models/pingApp/ping-opensignal");
-const { groupBy, map, forEach, orderBy, sortBy } = require("lodash");
+const helpers = require("../helpers/methods");
+const AppFotoSiteTutela = require("../models/tutela/reporte.sites.photo");
+const AppFotoSiteOpensignal = require("../models/opensignal/reporte.sites.photo");
+const AppSiteTutela = require("../models/tutela/reporte.sites");
+const AppSiteOpensignal = require("../models/opensignal/reporte.sites");
+const { groupBy, map, forEach, orderBy, sortBy, filter } = require("lodash");
+
+// ====================================
+// Obtener IPs publicas por operador
+// ====================================
+app.get("/opensignal/ipspublicas", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingOpensignal.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          operador: "$operador",
+          ippublic: "$ipPublic",
+        },
+        count: { $sum: 1 },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    const datosOrdenados = sortBy(datos, "_id.operador");
+    const filterHasIpPublic = filter(datosOrdenados, "_id.ippublic");
+    return res.json(filterHasIpPublic);
+  });
+});
+
+// ====================================
+// Obtener foto de reporte semanal
+// del top de latencias por sitios TUTELA
+// ====================================
+app.get("/tutela/foto/reporte/sem/delay", (req, res) => {
+  const subregion = req.query.subregion
+    ? { subregion: req.query.subregion }
+    : { subregion: { $regex: new RegExp("", "i") } };
+  const top = req.query.top ? parseInt(req.query.top) : 9999999999;
+  AppFotoSiteTutela.aggregate([
+    {
+      $match: subregion,
+    },
+    {
+      $sort: { delayAvg: -1 },
+    },
+    {
+      $limit: top,
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    return res.status(200).json({ ok: true, datos });
+  });
+});
+
+// ====================================
+// Obtener historico de reporte semanal
+// del top de latencias por sitios TUTELA
+// ====================================
+app.get("/tutela/historico/reporte/sem/delay", (req, res) => {
+  const from = req.query.desde;
+  const to = req.query.hasta;
+  const subregion = req.query.subregion
+    ? req.query.subregion
+    : { $regex: new RegExp("", "i") };
+  AppSiteTutela.aggregate([
+    {
+      $match: {
+        hasta: { $gte: from, $lte: to },
+        subregion,
+      },
+    },
+    {
+      $sort: { hasta: 1 },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    return res.status(200).json({ ok: true, datos });
+  });
+});
+
+// ====================================
+// Obtener foto de reporte semanal
+// del top de latencias por sitios OPEN SIGNAL
+// ====================================
+app.get("/opensignal/foto/reporte/sem/delay", (req, res) => {
+  const subregion = req.query.subregion
+    ? { subregion: req.query.subregion }
+    : { subregion: { $regex: new RegExp("", "i") } };
+  const top = req.query.top ? parseInt(req.query.top) : 9999999999;
+  AppFotoSiteOpensignal.aggregate([
+    {
+      $match: subregion,
+    },
+    {
+      $sort: { delayAvg: -1 },
+    },
+    {
+      $limit: top,
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    return res.status(200).json({ ok: true, datos });
+  });
+});
+
+// ====================================
+// Actualizar estadisticas
+// de sites TUTELA
+// ====================================
+app.post("/tutela/cellid/reporte", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingTutela.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        operador: "Claro",
+        networkType: "LTE",
+      },
+    },
+    {
+      $lookup: {
+        from: "cellid_4G",
+        localField: "Ci",
+        foreignField: "CELL_ID",
+        as: "cellid4G",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          nodeName: "$cellid4G.MBTS_NAME",
+          departamento: "$cellid4G.DEPARTAMENTO",
+          provincia: "$cellid4G.PROVINCIA",
+          distrito: "$cellid4G.DISTRITO",
+          region: "$cellid4G.REGION",
+          subRegion: "$cellid4G.SUB_REGION",
+        },
+        avg: { $avg: "$avg" },
+        max: { $max: "$max" },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, message: err });
+    }
+
+    const newData = map(datos, (item) => {
+      return {
+        nodeName: item._id.nodeName[0],
+        departamento: item._id.departamento[0],
+        provincia: item._id.provincia[0],
+        distrito: item._id.distrito[0],
+        region: item._id.region[0],
+        subregion: item._id.subRegion[0],
+        desde: desde,
+        hasta: hasta,
+        delayAvg: item.avg,
+        delayMax: item.max,
+      };
+    });
+
+    Promise.all([
+      helpers.saveFotoReportWeekDelaySiteTutela(newData),
+      helpers.saveReportWeekDelaySiteTutela(newData),
+    ])
+      .then((resp) => {
+        return res
+          .status(200)
+          .json({ ok: true, message: "Datos guardados satisfactoriamente" });
+      })
+      .catch((err) => {
+        return res.status(400).json({ ok: false, err });
+      });
+  });
+});
+
+// ====================================
+// Actualizar estadisticas
+// de sites OPENSIGNAL
+// ====================================
+app.post("/opensignal/cellid/reporte", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingOpensignal.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        operador: "Claro",
+        networkType: "LTE",
+      },
+    },
+    {
+      $lookup: {
+        from: "cellid_4G",
+        localField: "Ci",
+        foreignField: "CELL_ID",
+        as: "cellid4G",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          nodeName: "$cellid4G.MBTS_NAME",
+          departamento: "$cellid4G.DEPARTAMENTO",
+          provincia: "$cellid4G.PROVINCIA",
+          distrito: "$cellid4G.DISTRITO",
+          region: "$cellid4G.REGION",
+          subRegion: "$cellid4G.SUB_REGION",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, message: err });
+    }
+
+    const newData = map(datos, (item) => {
+      return {
+        nodeName: item._id.nodeName[0],
+        departamento: item._id.departamento[0],
+        provincia: item._id.provincia[0],
+        distrito: item._id.distrito[0],
+        region: item._id.region[0],
+        subregion: item._id.subRegion[0],
+        desde: desde,
+        hasta: hasta,
+        delayAvg: item.avg,
+        delayMax: item.max,
+      };
+    });
+
+    Promise.all([
+      helpers.saveFotoReportWeekDelaySiteOpensignal(newData),
+      helpers.saveReportWeekDelaySitesOpensignal(newData),
+    ])
+      .then((resp) => {
+        return res
+          .status(200)
+          .json({ ok: true, message: "Datos guardados satisfactoriamente" });
+      })
+      .catch((err) => {
+        return res.status(400).json({ ok: false, err });
+      });
+  });
+});
 
 // ====================================
 // Obtener promedio de latencias
@@ -17,6 +280,7 @@ app.get("/tutela/:dep/:prov/distritos/stacked", (req, res) => {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
         categoria: "MOBILE",
+        networkType: "LTE",
         adminArea: req.params.dep,
         subAdminArea: req.params.prov,
       },
@@ -62,6 +326,7 @@ app.get("/opensignal/:dep/:prov/distritos/stacked", (req, res) => {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
         categoria: "MOBILE",
+        networkType: "LTE",
         adminArea: req.params.dep,
         subAdminArea: req.params.prov,
       },
@@ -106,6 +371,7 @@ app.get("/tutela", (req, res) => {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
         categoria: "MOBILE",
+        networkType: "LTE",
       },
     },
     {
@@ -322,6 +588,7 @@ app.get("/opensignal", (req, res) => {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
         categoria: "MOBILE",
+        networkType: "LTE",
       },
     },
     {

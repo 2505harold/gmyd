@@ -27,7 +27,6 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
   //schemeType: string = "linear";
 
   customColors = (value) => {
-    console.log(value);
     switch (value) {
       case "Claro":
         return "#dc3545";
@@ -42,30 +41,7 @@ export class NgxchartsGroupBarHorizontalComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    // if (this.colorScheme === "theme-armchart")
-    //   this.colorScheme = {
-    //     domain: [
-    //       "#875692",
-    //       "#F38400",
-    //       "#A1CAF1",
-    //       "#C2B280",
-    //       "#848482",
-    //       "#008856",
-    //     ],
-    //   };
-    // else
-    //   this.colorScheme = {
-    //     domain: [
-    //       "#ffc107",
-    //       "#dc3545",
-    //       "#007bff",
-    //       "#28a745",
-    //       "#a8385d",
-    //       "#aae3f5",
-    //     ],
-    //   };
-  }
+  ngOnInit() {}
 
   onSelect(data): void {
     console.log("Item clicked", JSON.parse(JSON.stringify(data)));

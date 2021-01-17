@@ -9,12 +9,17 @@ import { ActivatedRoute } from "@angular/router";
 import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import { stringify } from "@angular/compiler/src/util";
 
 @Component({
   selector: "app-tutela",
   templateUrl: "./tutela.component.html",
 })
 export class TutelaComponent implements OnInit {
+  title = "My first AGM project";
+  lat = 51.678418;
+  lng = 7.809007;
+
   myControl = new FormControl();
 
   checkedClaro: boolean = true;
@@ -35,6 +40,10 @@ export class TutelaComponent implements OnInit {
   showLoadGraficaPingFiltro: boolean = true;
   datosDistrito: any[];
   showLoadDistritosPing: boolean = true;
+  datosTopSites: any[];
+  showLoadTopSites: boolean = true;
+  datosHistoricoReporteSem: any[];
+  showLoadHistoricoSem: boolean = true;
   view: string;
 
   urlsTutela: any[];
@@ -50,8 +59,19 @@ export class TutelaComponent implements OnInit {
 
   selectDep: string;
   selectProv: string;
+  selectSubRegionTopSites: string;
 
   servidor: string[];
+  regiones: string[] = ["NORTE", "CENTRO", "SUR", "LIMA"];
+  subregiones: string[] = [
+    "NORTE",
+    "CENTRO",
+    "SUR",
+    "LIMA NORTE",
+    "LIMA SUR",
+    "LIMA ESTE",
+    "LIMA OESTE",
+  ];
 
   constructor(
     private _tutelaService: TutelaService,
@@ -62,6 +82,8 @@ export class TutelaComponent implements OnInit {
   ngOnInit() {
     this.selectDep = "Municipalidad Metropolitana de Lima";
     this.selectProv = "Provincia de Lima";
+    this.selectSubRegionTopSites = "LIMA NORTE";
+
     this.activeRouter.params.subscribe((param) => {
       this.view = param["tipo"];
       this.cargarGraficoGeneral(
@@ -74,6 +96,12 @@ export class TutelaComponent implements OnInit {
         this._fechaService.corta(-7, "yyyy-MM-dd"),
         this._fechaService.cortaSig("yyyy-MM-dd")
       );
+      this.graficarLatenciaSites(
+        this.selectSubRegionTopSites,
+        this._fechaService.corta(-30, "yyyy-MM-dd"),
+        this._fechaService.cortaSig("yyyy-MM-dd")
+      );
+      this.graficarTopSites("grafico", this.selectSubRegionTopSites, 5);
       this.cargarUrlIpsTutela();
       this.cargarProvincias2(this.selectDep);
       this.cargarDepartamentos();
@@ -82,16 +110,6 @@ export class TutelaComponent implements OnInit {
       this.cargarCellIds();
       this.cargarOperadores();
     });
-  }
-
-  cargarGraficoGeneral(desde: string, hasta: string) {
-    this.showLoadPing = true;
-    this._tutelaService
-      .obtenerGraficoDiarioPing(desde, hasta)
-      .subscribe((resp) => {
-        this.datosPing = resp.data;
-        this.showLoadPing = false;
-      });
   }
 
   filter(value: string): string[] {
@@ -111,14 +129,6 @@ export class TutelaComponent implements OnInit {
       .obtenerTipoZonaTestPing("provincia", dep)
       .subscribe((resp) => {
         this.provincias = resp;
-      });
-  }
-
-  cargarProvincias2(dep: string) {
-    this._tutelaService
-      .obtenerTipoZonaTestPing("provincia", dep)
-      .subscribe((resp) => {
-        this.provincias2 = resp;
       });
   }
 
@@ -174,18 +184,6 @@ export class TutelaComponent implements OnInit {
     });
   }
 
-  onChangeDep(event) {
-    this.cargarProvincias2(event.value);
-  }
-  onChangeProv(event) {
-    this.graficarDistritos(
-      this.selectDep,
-      event.value,
-      this._fechaService.corta(-7, "yyyy-MM-dd"),
-      this._fechaService.cortaSig("yyyy-MM-dd")
-    );
-  }
-
   localidadChange(event) {
     this.checkLocalidad = [];
     event.value.forEach((element) => {
@@ -207,6 +205,52 @@ export class TutelaComponent implements OnInit {
     });
   }
 
+  /***************************
+   * METODOS CAMBIO Y CARGA DATOS SELECT
+   ****************************/
+  // Select de grafico de distritos
+  onChangeDep(event) {
+    this.cargarProvincias2(event.value);
+  }
+  onChangeProv(event) {
+    this.graficarDistritos(
+      this.selectDep,
+      event.value,
+      this._fechaService.corta(-7, "yyyy-MM-dd"),
+      this._fechaService.cortaSig("yyyy-MM-dd")
+    );
+  }
+
+  cargarProvincias2(dep: string) {
+    this._tutelaService
+      .obtenerTipoZonaTestPing("provincia", dep)
+      .subscribe((resp) => {
+        this.provincias2 = resp;
+      });
+  }
+
+  // Select de grafico TOP Sites
+  subregionesChange() {
+    this.graficarTopSites("grafico", this.selectSubRegionTopSites, 5);
+    this.graficarLatenciaSites(
+      this.selectSubRegionTopSites,
+      this._fechaService.corta(-30, "yyyy-MM-dd"),
+      this._fechaService.cortaSig("yyyy-MM-dd")
+    );
+  }
+
+  /***************************
+   * METODOS DE GRAFICOS
+   ****************************/
+  cargarGraficoGeneral(desde: string, hasta: string) {
+    this.showLoadPing = true;
+    this._tutelaService
+      .obtenerGraficoDiarioPing(desde, hasta)
+      .subscribe((resp) => {
+        this.datosPing = resp.data;
+        this.showLoadPing = false;
+      });
+  }
   graficar() {
     this.datosPingFiltro = [];
     this.showLoadGraficaPingFiltro = true;
@@ -233,7 +277,6 @@ export class TutelaComponent implements OnInit {
         this.showLoadGraficaPingFiltro = false;
       });
   }
-
   graficarDistritos(dep: string, prov: string, desde: string, hasta: string) {
     this.showLoadDistritosPing = true;
     this._tutelaService
@@ -241,6 +284,24 @@ export class TutelaComponent implements OnInit {
       .subscribe((resp) => {
         this.datosDistrito = resp;
         this.showLoadDistritosPing = false;
+      });
+  }
+  graficarTopSites(tipo: string, subregion?: string, top?: number) {
+    this.showLoadTopSites = true;
+    this._tutelaService
+      .obtenerFotoLatenciaSite(tipo, subregion, top)
+      .subscribe((resp) => {
+        this.datosTopSites = resp;
+        this.showLoadTopSites = false;
+      });
+  }
+  graficarLatenciaSites(subregion: string, desde: string, hasta: string) {
+    this.showLoadHistoricoSem = true;
+    this._tutelaService
+      .obtenerHistoricoLatenciaSite("grafico", desde, hasta, subregion)
+      .subscribe((resp) => {
+        this.datosHistoricoReporteSem = resp;
+        this.showLoadHistoricoSem = false;
       });
   }
 }

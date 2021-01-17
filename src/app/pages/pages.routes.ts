@@ -13,6 +13,7 @@ import { MantTutelaComponent } from "./mantenimiento/tutela/mant-tutela.componen
 import { OpensignalComponent } from "./opensignal/opensignal.component";
 import { MantOpensignalComponent } from "./mantenimiento/opensignal/mant-opensignal.component";
 import { TestvelocidadComponent } from "./nperf/editar-test-velocidad/testvelocidad.component";
+import { MantAppComponent } from "./mantenimiento/app/mant-app.component";
 
 const pagesRoute: Routes = [
   {
@@ -27,6 +28,7 @@ const pagesRoute: Routes = [
       { path: "mantenimiento/usuarios", component: MantUsuariosComponent },
       { path: "mantenimiento/tutela", component: MantTutelaComponent },
       { path: "mantenimiento/opensignal", component: MantOpensignalComponent },
+      { path: "mantenimiento/app", component: MantAppComponent },
       { path: "nperf/movil", component: NperfComponent },
       { path: "nperf/fijo", component: FijoComponent },
       { path: "nperf/fijo/:id/:area", component: EditarFijoComponent },

@@ -16,9 +16,12 @@ import { PagesComponent } from "./pages.component";
 import { NperfComponent } from "./nperf/movil/nperf.component";
 import { NperfEditarComponent } from "./nperf/editar-puntuacion/nperf-editar.component";
 import { GraficoLineasNgxchartsComponent } from "../components/grafico-lineas-ngxcharts/grafico-lineas-ngxcharts.component";
+import { GraficoLineasNgxchartsDefaultComponent } from "../components/grafico-lineas-ngxcharts-default/grafico-lineas-ngxcharts-default.component";
 import { NgxchartsGroupBarHorizontalComponent } from "../components/ngxcharts-group-bar-horizontal/ngxcharts-group-bar-horizontal.component";
 import { NgxchartsStackedBarVerticalComponent } from "../components/ngxcharts-stacked-bar-vertical/ngxcharts-stacked-bar-vertical.component";
+import { NgxchartsVerticalBarComponent } from "../components/ngxcharts-vertical-bar/ngxcharts-vertical-bar.component";
 import { BoxloadComponent } from "../components/boxload/boxload.component";
+import { AlertComponent } from "../components/alert/alert.component";
 import { FijoComponent } from "./nperf/fijo/fijo.component";
 import { EditarFijoComponent } from "./nperf/editar-fijo/editar-fijo.component";
 import { DropdownButtonComponent } from "../components/dropdown-button/dropdown-button.component";
@@ -31,6 +34,8 @@ import { OpensignalComponent } from "./opensignal/opensignal.component";
 import { MantOpensignalComponent } from "./mantenimiento/opensignal/mant-opensignal.component";
 import { TestvelocidadComponent } from "./nperf/editar-test-velocidad/testvelocidad.component";
 import { TableloadComponent } from "../components/tableload/tableload.component";
+import { MantAppComponent } from "./mantenimiento/app/mant-app.component";
+import { AgmCoreModule } from "@agm/core";
 
 @NgModule({
   declarations: [
@@ -40,8 +45,11 @@ import { TableloadComponent } from "../components/tableload/tableload.component"
     NperfEditarComponent,
     MantenimientoComponent,
     GraficoLineasNgxchartsComponent,
+    GraficoLineasNgxchartsDefaultComponent,
     NgxchartsGroupBarHorizontalComponent,
     NgxchartsStackedBarVerticalComponent,
+    NgxchartsVerticalBarComponent,
+    AlertComponent,
     BoxloadComponent,
     TableloadComponent,
     ModalComponent,
@@ -54,6 +62,7 @@ import { TableloadComponent } from "../components/tableload/tableload.component"
     MantTutelaComponent,
     OpensignalComponent,
     MantOpensignalComponent,
+    MantAppComponent,
   ],
   providers: [DatePipe],
   imports: [
@@ -65,6 +74,9 @@ import { TableloadComponent } from "../components/tableload/tableload.component"
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MaterialModule,
+    AgmCoreModule.forRoot({
+      apiKey: "AIzaSyD6Bm6Kofd5eOiVD29CvmrdyvklsZIBUeI",
+    }),
   ],
 })
 export class PagesModule {}

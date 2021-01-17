@@ -15,8 +15,6 @@ export class NgxchartsStackedBarVerticalComponent implements OnInit {
   @Input() height: number;
 
   // options
-  showXAxis: boolean = true;
-  showYAxis: boolean = true;
   gradient: boolean = false;
   showLegend: boolean = true;
   animations: boolean = true;
@@ -31,6 +29,8 @@ export class NgxchartsStackedBarVerticalComponent implements OnInit {
         return "#28a745";
       case "Bitel":
         return "#ffc107";
+      default:
+        return "#dc3545";
     }
   };
 

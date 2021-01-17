@@ -13,6 +13,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule, MAT_DATE_LOCALE } from "@angular/material/core";
 
 //libreria de NPM
 import { SelectAutocompleteModule } from "mat-select-autocomplete";
@@ -32,6 +34,9 @@ import { SelectAutocompleteModule } from "mat-select-autocomplete";
     MatInputModule,
     SelectAutocompleteModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: "es-PE" }],
 })
 export class MaterialModule {}

@@ -4,6 +4,7 @@ import { URL_SERVICIOS } from "../../config/global";
 import { map } from "rxjs/operators";
 import { IpsTutela } from "src/app/models/ips.tutela.model";
 import Swal from "sweetalert2";
+import * as _ from "lodash";
 
 @Injectable()
 export class TutelaService {
@@ -34,11 +35,7 @@ export class TutelaService {
 
   obtenerTipoZonaTestPing(zona: string, dep: string = "") {
     const url = URL_SERVICIOS + `/apping/${zona}/tutela?dep=${dep}`;
-    return this.http.get(url).pipe(
-      map((resp: any) => {
-        return resp.data;
-      })
-    );
+    return this.http.get(url).pipe(map((resp: any) => resp.data));
   }
 
   obtenerTipoRedMovilPing() {
@@ -71,6 +68,56 @@ export class TutelaService {
     return this.http.get(url).pipe(
       map((resp: any) => {
         return resp.datos;
+      })
+    );
+  }
+
+  obtenerFotoLatenciaSite(tipo: string, subregion?: string, top?: number) {
+    const query = subregion ? `?subregion=${subregion}&top=${top}` : "";
+    const url = URL_SERVICIOS + `/apping/tutela/foto/reporte/sem/delay${query}`;
+    return this.http.get(url, {}).pipe(
+      map((resp: any) => {
+        if (tipo == "grafico") {
+          let data = [];
+          resp.datos.forEach((el) => {
+            data.push({ name: el.nodeName, value: el.delayAvg });
+          });
+
+          return data;
+        } else {
+          return resp.datos;
+        }
+      })
+    );
+  }
+
+  obtenerHistoricoLatenciaSite(
+    tipo: string,
+    desde: string,
+    hasta: string,
+    subregion?: string
+  ) {
+    const query = subregion
+      ? `?subregion=${subregion}&desde=${desde}&hasta=${hasta}`
+      : "";
+    const url =
+      URL_SERVICIOS + `/apping/tutela/historico/reporte/sem/delay${query}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        if (tipo == "grafico") {
+          const groupBySite = _.groupBy(resp.datos, "nodeName");
+          var data = [];
+          _.forEach(groupBySite, (item) => {
+            var series = [];
+            _.forEach(item, (el) => {
+              series.push({ value: el.delayAvg, name: new Date(el.hasta) });
+            });
+            data.push({ name: item[0].nodeName, series });
+          });
+          return data;
+        } else {
+          return resp.datos;
+        }
       })
     );
   }
@@ -142,5 +189,10 @@ export class TutelaService {
         return resp;
       })
     );
+  }
+
+  actualizarReporteSemanal(desde: string, hasta: string) {
+    const url = `${URL_SERVICIOS}/apping/tutela/cellid/reporte?desde=${desde}&hasta=${hasta}`;
+    return this.http.post(url, {});
   }
 }

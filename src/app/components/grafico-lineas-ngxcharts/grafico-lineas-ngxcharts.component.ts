@@ -11,6 +11,7 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   @Input() showYAxisLabel: boolean;
   @Input() yAxisLabel: boolean;
   @Input() height: number;
+  @Input() customColor: string;
 
   datos = [];
   view: any[];
@@ -21,12 +22,17 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
+
   //showYAxisLabel: boolean = false;
   showXAxisLabel: boolean = false;
   xAxisLabel: string = "Fecha";
   //yAxisLabel: string = "Puntos";
   timeline: boolean = false;
   //colorScheme: Object;
+
+  colorScheme = {
+    domain: ["#5AA454", "#A10A28", "#C7B42C", "#AAAAAA"],
+  };
 
   customColors = (value) => {
     switch (value.toLowerCase()) {
@@ -51,8 +57,7 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSelect(data): void {
     console.log("Item clicked", JSON.parse(JSON.stringify(data)));

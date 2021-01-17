@@ -1,0 +1,80 @@
+<br />
+<div class="card">
+  <div class="card-body">
+    <h4>JOB App Tutela y Opensignal</h4>
+    <p>
+      ¿Desea altualizar reporte semanal del promedio de latencias por cell id?
+    </p>
+    <small class="form-text text-muted"
+      >Esto lo que hara es enlazar el nombre de las radiobases con los Cell ID
+      obtenidos en las pruebas de ping y los agrupara en base al promedio de su
+      latencia
+    </small>
+    <hr />
+    <div class="form-inline">
+      <mat-form-field appearance="fill" class="mb-0">
+        <mat-label>Fecha inicio</mat-label>
+        <input
+          matInput
+          [matDatepicker]="desdePicker"
+          placeholder="Placeholder"
+          [(ngModel)]="desde"
+          disabled
+        />
+        <mat-datepicker-toggle matSuffix [for]="desdePicker" disabled="false"
+          ><i class="icon-calendar"></i
+        ></mat-datepicker-toggle>
+        <mat-datepicker #desdePicker disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="mb-0">
+        <mat-label>Fecha Fin</mat-label>
+        <input
+          matInput
+          [matDatepicker]="hastaPicker"
+          placeholder="Placeholder"
+          [(ngModel)]="hasta"
+          disabled
+        />
+        <mat-datepicker-toggle matSuffix [for]="hastaPicker" disabled="false"
+          ><i class="icon-calendar"></i
+        ></mat-datepicker-toggle>
+        <mat-datepicker #hastaPicker disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <button
+      [disabled]="blockBtnTutela"
+      class="m-1"
+      mat-raised-button
+      color="accent"
+      (click)="actualizarReporteTutela()"
+    >
+      Actualizar Tutela
+    </button>
+    <button
+      [disabled]="blockBtnOpensignal"
+      class="m-1"
+      mat-raised-button
+      color="accent"
+      (click)="actualizarReporteOpensignal()"
+    >
+      Actualizar Opensignal
+    </button>
+    <br />
+    <app-alert
+      [type]="typeAlertOpensignal"
+      [message]="msgAlertOpensignal"
+      [show]="showAlertOpensignal"
+      [strong]="titleAlertOpensignal"
+    >
+    </app-alert>
+    <br />
+    <app-alert
+      [type]="typeAlertTutela"
+      [message]="msgAlertTutela"
+      [show]="showAlertTutela"
+      [strong]="titleAlertTutela"
+    >
+    </app-alert>
+  </div>
+</div>

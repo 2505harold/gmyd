@@ -67,18 +67,74 @@
       [height]="560"
     >
     </app-ngxcharts-group-bar-horizontal>
-    <!-- <app-ngxcharts-stacked-bar-vertical
-      [showXAxisLabel]="false"
-      [showYAxisLabel]="true"
-      [xAxisLabel]="'Localidades'"
-      [yAxisLabel]="'ms'"
-      [results]="datosDistrito"
-      [height]="320"
-    >
-    </app-ngxcharts-stacked-bar-vertical> -->
   </div>
 </div>
 <br />
+
+<!--GRAFICA TOP SITES CON MAS LATENCIA-->
+<div class="row">
+  <div class="col-sm-6 my-1">
+    <div class="card shadow">
+      <div class="card-body height-card-bar-vertcal-top-sites">
+        <h4 class="text-adjust">Top sites CLARO con mas latencia</h4>
+        <p>Periodo</p>
+        <div class="form-inline">
+          <mat-form-field appearance="fill">
+            <mat-label>Sub Regiones</mat-label>
+            <mat-select
+              [(ngModel)]="selectSubRegionTopSites"
+              (selectionChange)="subregionesChange($event)"
+            >
+              <mat-option
+                *ngFor="let subregion of subregiones"
+                [value]="subregion"
+              >
+                {{ subregion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <app-boxload [show]="showLoadTopSites"></app-boxload>
+        <app-ngxcharts-vertical-bar
+          [results]="datosTopSites"
+          [showYAxisLabel]="true"
+          [yAxisLabel]="'ms'"
+          [showXAxisLabel]="false"
+          [height]="280"
+        >
+        </app-ngxcharts-vertical-bar>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 my-1">
+    <div class="card shadow">
+      <div class="card-body height-card-bar-vertcal-top-sites">
+        <h4 class="text-adjust">
+          Historico semanal de latencia por radiobase de CLARO
+        </h4>
+        <app-boxload [show]="showLoadHistoricoSem"></app-boxload>
+        <app-grafico-lineas-ngxcharts-default
+          [results]="datosHistoricoReporteSem"
+          [showYAxisLabel]="true"
+          [legend]="false"
+          [yAxisLabel]="'ms'"
+          [height]="280"
+        >
+        </app-grafico-lineas-ngxcharts-default>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<!-- MAPA DE SITES -->
+<div class="card">
+  <agm-map [latitude]="lat" [longitude]="lng">
+    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+  </agm-map>
+</div>
+
+<br />
+
 <!--GRAFICA LINE CHART DE LATENCIAS PROMEDIO DIARIO POR FILTROs-->
 <div class="card shadow">
   <div class="card-header">
