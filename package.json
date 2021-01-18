@@ -28,7 +28,7 @@
     "@angular/router": "~10.2.4",
     "@swimlane/ngx-charts": "^13.0.4",
     "aws-regions": "^2.1.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
