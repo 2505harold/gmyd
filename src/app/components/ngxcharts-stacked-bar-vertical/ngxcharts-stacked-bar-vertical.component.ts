@@ -18,6 +18,8 @@ export class NgxchartsStackedBarVerticalComponent implements OnInit {
   gradient: boolean = false;
   showLegend: boolean = true;
   animations: boolean = true;
+  showXAxis: boolean = true;
+  showYAxis: boolean = true;
 
   customColors = (value) => {
     switch (value) {

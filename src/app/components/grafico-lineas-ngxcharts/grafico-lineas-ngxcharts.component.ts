@@ -22,12 +22,14 @@ export class GraficoLineasNgxchartsComponent implements OnInit {
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
-
-  //showYAxisLabel: boolean = false;
+  timeline: boolean = false;
   showXAxisLabel: boolean = false;
   xAxisLabel: string = "Fecha";
+
+  //showYAxisLabel: boolean = false;
+
   //yAxisLabel: string = "Puntos";
-  timeline: boolean = false;
+
   //colorScheme: Object;
 
   colorScheme = {

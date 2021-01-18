@@ -16,9 +16,10 @@ import { stringify } from "@angular/compiler/src/util";
   templateUrl: "./tutela.component.html",
 })
 export class TutelaComponent implements OnInit {
-  title = "My first AGM project";
-  lat = 51.678418;
-  lng = 7.809007;
+  lat: number;
+  lng: number;
+  mapTypeId = "hybrid";
+  zoom: number;
 
   myControl = new FormControl();
 
@@ -44,6 +45,8 @@ export class TutelaComponent implements OnInit {
   showLoadTopSites: boolean = true;
   datosHistoricoReporteSem: any[];
   showLoadHistoricoSem: boolean = true;
+  datosMedicionxDist: any[];
+  sitesMedicionxDist: any[];
   view: string;
 
   urlsTutela: any[];
@@ -53,12 +56,14 @@ export class TutelaComponent implements OnInit {
   provincias2: any[];
   departamentos: any[];
   localidades: any[];
+  distritos: any[];
   tecnologias: any[];
   operadores: any[];
   filteredOptions: Observable<string[]>;
 
   selectDep: string;
   selectProv: string;
+  selectDist: string;
   selectSubRegionTopSites: string;
 
   servidor: string[];
@@ -77,11 +82,16 @@ export class TutelaComponent implements OnInit {
     private _tutelaService: TutelaService,
     private _fechaService: FechaLocalService,
     private activeRouter: ActivatedRoute
-  ) {}
+  ) {
+    this.lat = -12.08634;
+    this.lng = -77.014662;
+    this.zoom = 15;
+  }
 
   ngOnInit() {
     this.selectDep = "Municipalidad Metropolitana de Lima";
     this.selectProv = "Provincia de Lima";
+    this.selectDist = "La Victoria";
     this.selectSubRegionTopSites = "LIMA NORTE";
 
     this.activeRouter.params.subscribe((param) => {
@@ -109,6 +119,14 @@ export class TutelaComponent implements OnInit {
       this.cargarTecnologias();
       this.cargarCellIds();
       this.cargarOperadores();
+      this.cargarDistEnMapa();
+      this.obtenerMedicionxDist(
+        this.selectDep,
+        this.selectProv,
+        this.selectDist,
+        this._fechaService.corta(-7, "yyyy-MM-dd"),
+        this._fechaService.cortaSig("yyyy-MM-dd")
+      );
     });
   }
 
@@ -205,6 +223,28 @@ export class TutelaComponent implements OnInit {
     });
   }
 
+  obtenerMedicionxDist(
+    dep: string,
+    prov: string,
+    dist: string,
+    desde: string,
+    hasta: string
+  ) {
+    this._tutelaService
+      .obtenerMedDistTestPing(dep, prov, dist, desde, hasta)
+      .subscribe((resp) => {
+        this.datosMedicionxDist = resp.test;
+        this.sitesMedicionxDist = resp.sites;
+        this.setZoomMap(resp.test[0].lat, resp.test[0].lng, 15);
+      });
+  }
+
+  setZoomMap(lat: number, lng: number, zoom: number) {
+    this.lat = lat;
+    this.lng = lng;
+    this.zoom = zoom;
+  }
+
   /***************************
    * METODOS CAMBIO Y CARGA DATOS SELECT
    ****************************/
@@ -219,6 +259,7 @@ export class TutelaComponent implements OnInit {
       this._fechaService.corta(-7, "yyyy-MM-dd"),
       this._fechaService.cortaSig("yyyy-MM-dd")
     );
+    this.cargarDistEnMapa();
   }
 
   cargarProvincias2(dep: string) {
@@ -230,11 +271,28 @@ export class TutelaComponent implements OnInit {
   }
 
   // Select de grafico TOP Sites
-  subregionesChange() {
+  subregionesChange(event) {
     this.graficarTopSites("grafico", this.selectSubRegionTopSites, 5);
     this.graficarLatenciaSites(
       this.selectSubRegionTopSites,
       this._fechaService.corta(-30, "yyyy-MM-dd"),
+      this._fechaService.cortaSig("yyyy-MM-dd")
+    );
+  }
+
+  //Select del mapa
+  cargarDistEnMapa() {
+    this._tutelaService
+      .obtenerDistritosTestPing(this.selectDep, this.selectProv)
+      .subscribe((resp) => (this.distritos = resp));
+  }
+
+  onChangeDistrito(event) {
+    this.obtenerMedicionxDist(
+      this.selectDep,
+      this.selectProv,
+      event.value,
+      this._fechaService.corta(-7, "yyyy-MM-dd"),
       this._fechaService.cortaSig("yyyy-MM-dd")
     );
   }

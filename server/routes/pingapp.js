@@ -537,6 +537,81 @@ app.get("/localidad/tutela", (req, res) => {
 });
 
 // ====================================
+// obtener Locality by AdminArea y SubAdminArea
+// ====================================
+app.get("/distritos/tutela", (req, res) => {
+  const adminArea = req.query.adminArea;
+  const subAdminArea = req.query.subAdminArea;
+  AppPingTutela.aggregate([
+    { $match: { adminArea, subAdminArea } },
+    { $group: { _id: { localidad: "$locality" }, count: { $sum: 1 } } },
+  ]).exec((err, resp) => {
+    var localidades = map(resp, (el) => {
+      return { nombre: el._id.localidad };
+    });
+    const _localidades = orderBy(localidades, "localidad", "asc");
+    res.status(200).json({ ok: true, data: _localidades });
+  });
+});
+
+// ====================================
+// Obtener datos de medicion por distrito
+// TUTELA
+// ====================================
+app.get("/mediciones/distrito/tutela/", (req, res) => {
+  const dep = req.query.dep;
+  const prov = req.query.prov;
+  const dist = req.query.dist;
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  AppPingTutela.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        networkType: "LTE",
+        operador: "Claro",
+        adminArea: dep,
+        subAdminArea: prov,
+        locality: dist,
+      },
+    },
+    {
+      $lookup: {
+        from: "cellid_4G",
+        localField: "Ci",
+        foreignField: "CELL_ID",
+        as: "cellid4G",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          latitud: "$latitud",
+          longitud: "$Longitud",
+          nodeName: "$cellid4G.MBTS_NAME",
+          nodeNameLat: "$cellid4G.LATITUD",
+          nodeNameLng: "$cellid4G.LONGITUD",
+        },
+        avg: { $avg: "$avg" },
+      },
+    },
+  ]).exec((err, resp) => {
+    const datos = map(resp, (item) => {
+      return {
+        lat: item._id.latitud,
+        lng: item._id.longitud,
+        nodeName: item._id.nodeName[0],
+        nodeNameLat: item._id.nodeNameLat[0],
+        nodeNameLng: item._id.nodeNameLng[0],
+        avg: item.avg,
+      };
+    });
+    res.status(200).json({ ok: true, data: datos });
+  });
+});
+
+// ====================================
 // Get test operadores
 // ====================================
 app.get("/operadores/tutela", (req, res) => {

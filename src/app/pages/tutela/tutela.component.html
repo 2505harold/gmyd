@@ -127,9 +127,42 @@
 </div>
 <br />
 <!-- MAPA DE SITES -->
-<div class="card">
-  <agm-map [latitude]="lat" [longitude]="lng">
-    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+<div class="card shadow">
+  <div class="card-header bg-white">
+    <mat-form-field appearance="fill">
+      <mat-label>Distritos</mat-label>
+      <mat-select
+        [(ngModel)]="selectDist"
+        (selectionChange)="onChangeDistrito($event)"
+      >
+        <mat-option *ngFor="let dist of distritos" [value]="dist.nombre"
+          >{{ dist.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+    <agm-marker
+      *ngFor="let test of datosMedicionxDist"
+      [latitude]="test.lat"
+      [longitude]="test.lng"
+      [iconUrl]="test.urlIcon"
+    >
+      <agm-info-window>
+        <p>Nombre site: {{ test.nodeName }}</p>
+        <p>Latencia Media: {{ test.avg }}</p>
+      </agm-info-window>
+    </agm-marker>
+    <agm-marker
+      *ngFor="let site of sitesMedicionxDist"
+      [latitude]="site.lat"
+      [longitude]="site.lng"
+      [iconUrl]="site.urlIcon"
+    >
+      <agm-info-window>
+        <p>Site: {{ site.nodeName }}</p>
+      </agm-info-window>
+    </agm-marker>
   </agm-map>
 </div>
 

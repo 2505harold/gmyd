@@ -8,6 +8,17 @@ import * as _ from "lodash";
 
 @Injectable()
 export class TutelaService {
+  colors: string[] = [
+    "red",
+    "blue",
+    "yellow",
+    "orange",
+    "pink",
+    "green",
+    "purple",
+  ];
+  iconUrlSite = `http://maps.google.com/mapfiles/ms/icons/${this.colors[0]}-dot.png`;
+  iconUrlTest = `http://maps.google.com/mapfiles/ms/icons/${this.colors[0]}.png`;
   constructor(private http: HttpClient) {}
 
   guardarIp(iptutela: IpsTutela) {
@@ -36,6 +47,52 @@ export class TutelaService {
   obtenerTipoZonaTestPing(zona: string, dep: string = "") {
     const url = URL_SERVICIOS + `/apping/${zona}/tutela?dep=${dep}`;
     return this.http.get(url).pipe(map((resp: any) => resp.data));
+  }
+
+  obtenerDistritosTestPing(dep: string, prov: string) {
+    const url =
+      URL_SERVICIOS +
+      `/apping/distritos/tutela?adminArea=${dep}&subAdminArea=${prov}`;
+    return this.http.get(url).pipe(map((resp: any) => resp.data));
+  }
+
+  obtenerMedDistTestPing(
+    dep: string,
+    prov: string,
+    dist: string,
+    desde: string,
+    hasta: string
+  ) {
+    const url =
+      URL_SERVICIOS +
+      `/apping/mediciones/distrito/tutela?dep=${dep}&prov=${prov}&dist=${dist}&desde=${desde}&hasta=${hasta}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        const groupBySite = _.groupBy(resp.data, "nodeName");
+        var count = 0;
+        var dataTest = [];
+        var dataSites = [];
+        _.forEach(groupBySite, (element) => {
+          _.forEach(element, (item) => {
+            dataTest.push({
+              lat: item.lat,
+              lng: item.lng,
+              avg: item.avg,
+              nodeName: item.nodeName,
+              urlIcon: `http://maps.google.com/mapfiles/ms/icons/${this.colors[count]}.png`,
+            });
+            dataSites.push({
+              lat: item.nodeNameLat,
+              lng: item.nodeNameLng,
+              nodeName: item.nodeName,
+              urlIcon: `http://maps.google.com/mapfiles/ms/icons/${this.colors[count]}-dot.png`,
+            });
+          });
+          count++;
+        });
+        return { test: dataTest, sites: dataSites };
+      })
+    );
   }
 
   obtenerTipoRedMovilPing() {

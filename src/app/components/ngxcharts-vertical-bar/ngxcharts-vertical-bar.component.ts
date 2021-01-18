@@ -22,6 +22,7 @@ export class NgxchartsVerticalBarComponent implements OnInit {
   gradient: boolean = false;
   showLegend: boolean = true;
   legendPosition: string = "below";
+  animations: boolean = true;
 
   //schemeType: string = "linear";
 

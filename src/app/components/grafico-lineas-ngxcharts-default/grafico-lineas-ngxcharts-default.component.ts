@@ -45,6 +45,7 @@ export class GraficoLineasNgxchartsDefaultComponent implements OnInit {
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
+  timeline: boolean = false;
 
   constructor() {}
 
