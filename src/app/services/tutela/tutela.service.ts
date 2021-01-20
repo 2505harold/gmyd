@@ -16,6 +16,23 @@ export class TutelaService {
     "pink",
     "green",
     "purple",
+    "ltblue",
+    "red",
+    "blue",
+    "yellow",
+    "orange",
+    "pink",
+    "green",
+    "purple",
+    "ltblue",
+    "red",
+    "blue",
+    "yellow",
+    "orange",
+    "pink",
+    "green",
+    "purple",
+    "ltblue",
   ];
   iconUrlSite = `http://maps.google.com/mapfiles/ms/icons/${this.colors[0]}-dot.png`;
   iconUrlTest = `http://maps.google.com/mapfiles/ms/icons/${this.colors[0]}.png`;
