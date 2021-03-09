@@ -47,6 +47,9 @@ agm-map {
 .altura-card-linechart {
   height: 460px;
 }
+.altura-card-linechart-host {
+  height: 580px;
+}
 
 .height-card-bar-vertcal-top-sites {
   height: 600px;
@@ -429,6 +432,9 @@ CONTENEDOR DE CHART NGX
   }
   .altura-card-linechart {
     height: 550px;
+  }
+  .altura-card-linechart-host {
+    height: 950px;
   }
   .height-card-bar-vertcal-top-sites {
     height: 690px;

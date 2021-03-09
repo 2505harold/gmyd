@@ -49,7 +49,7 @@ export class MantOpensignalComponent implements OnInit {
   }
 
   cargarTablaIpsOpenSignal() {
-    this._opensignalService.obtenerIpsOpenSignal().subscribe((resp) => {
+    this._opensignalService.obtenerServers().subscribe((resp) => {
       this.ipsOpensignal = resp;
     });
   }

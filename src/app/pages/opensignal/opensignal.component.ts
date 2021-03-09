@@ -13,6 +13,8 @@ import { map, startWith } from "rxjs/operators";
 })
 export class OpensignalComponent implements OnInit {
   myControl = new FormControl();
+  desde: string;
+  hasta: string;
 
   checkedClaro: boolean = true;
   checkedTdp: boolean = true;
@@ -25,6 +27,8 @@ export class OpensignalComponent implements OnInit {
   checkTecnologia: any[] = [];
   checkOperador: any[] = [];
 
+  datosHostPing: any[];
+  showLoadHostPing: boolean = true;
   datosPing: any[];
   showLoadPing: boolean = true;
   datosGraficaPingFiltro: any[];
@@ -33,7 +37,7 @@ export class OpensignalComponent implements OnInit {
   showLoadDistritosPing: boolean = true;
   view: string;
 
-  urlsTutela: any[];
+  urls: any[];
 
   cellids: any[];
   provincias: any[];
@@ -46,6 +50,10 @@ export class OpensignalComponent implements OnInit {
 
   selectDep: string;
   selectProv: string;
+  selectServer: string;
+  selectServerHost: string = "todos";
+  selectMetricaHost: string = "und";
+  selectOperadorHost: string = "Claro";
 
   servidor: string[];
 
@@ -53,18 +61,26 @@ export class OpensignalComponent implements OnInit {
     private _opensignalService: OpensignalService,
     private _fechaService: FechaLocalService,
     private activeRouter: ActivatedRoute
-  ) {}
+  ) {
+    this.desde = this._fechaService.corta(-60, "yyyy-MM-dd");
+    this.hasta = this._fechaService.cortaSig("yyyy-MM-dd");
+  }
 
   ngOnInit() {
     this.selectDep = "Municipalidad Metropolitana de Lima";
     this.selectProv = "Provincia de Lima";
+    this.selectServer = "todos";
     this.activeRouter.params.subscribe((param) => {
       this.view = param["id"];
-      this.cargarGraficoGeneral(
-        this._fechaService.corta(-30, "yyyy-MM-dd"),
-        this._fechaService.cortaSig("yyyy-MM-dd")
+      this.cargarGraficoGeneral(this.desde, this.hasta, this.selectServer);
+      this.cargarGraficoHost(
+        this.desde,
+        this.hasta,
+        "Claro",
+        this.selectServerHost,
+        this.selectMetricaHost
       );
-      this.cargarUrlIpsTutela();
+      this.cargarUrlIps();
       this.cargarProvincias();
       this.cargarProvincias2(this.selectDep);
       this.cargarDepartamentos();
@@ -81,13 +97,29 @@ export class OpensignalComponent implements OnInit {
     });
   }
 
-  cargarGraficoGeneral(desde: string, hasta: string) {
+  cargarGraficoGeneral(desde: string, hasta: string, server: string) {
     this.showLoadPing = true;
     this._opensignalService
-      .obtenerGraficoDiarioPing(desde, hasta)
+      .obtenerGraficoDiarioPing(desde, hasta, server)
       .subscribe((resp) => {
         this.datosPing = resp.data;
         this.showLoadPing = false;
+      });
+  }
+
+  cargarGraficoHost(
+    desde: string,
+    hasta: string,
+    operador: string,
+    server: string,
+    metrica: string
+  ) {
+    this.showLoadHostPing = true;
+    this._opensignalService
+      .obtenerHostPing(desde, hasta, operador, server, metrica)
+      .subscribe((resp) => {
+        this.datosHostPing = resp;
+        this.showLoadHostPing = false;
       });
   }
 
@@ -97,9 +129,9 @@ export class OpensignalComponent implements OnInit {
       .filter((option) => option.toString().indexOf(value) == 0);
   }
 
-  cargarUrlIpsTutela() {
-    this._opensignalService.obtenerIpsOpenSignal().subscribe((resp) => {
-      this.urlsTutela = resp;
+  cargarUrlIps() {
+    this._opensignalService.obtenerServers().subscribe((resp) => {
+      this.urls = resp;
     });
   }
 
@@ -193,6 +225,44 @@ export class OpensignalComponent implements OnInit {
       event.value,
       this._fechaService.corta(-7, "yyyy-MM-dd"),
       this._fechaService.cortaSig("yyyy-MM-dd")
+    );
+  }
+
+  onChangeServer(grafico: string) {
+    //this.cargarProvincias2(event.value);
+    switch (grafico) {
+      case "general":
+        this.cargarGraficoGeneral(this.desde, this.hasta, this.selectServer);
+        break;
+      case "host":
+        this.cargarGraficoHost(
+          this.desde,
+          this.hasta,
+          this.selectOperadorHost,
+          this.selectServerHost,
+          this.selectMetricaHost
+        );
+        break;
+    }
+  }
+
+  onChangeMetrica() {
+    this.cargarGraficoHost(
+      this.desde,
+      this.hasta,
+      this.selectOperadorHost,
+      this.selectServerHost,
+      this.selectMetricaHost
+    );
+  }
+
+  onChangeOperadorHost() {
+    this.cargarGraficoHost(
+      this.desde,
+      this.hasta,
+      this.selectOperadorHost,
+      this.selectServerHost,
+      this.selectMetricaHost
     );
   }
 

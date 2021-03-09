@@ -49,7 +49,7 @@ export class OpensignalService {
     );
   }
 
-  obtenerIpsOpenSignal() {
+  obtenerServers() {
     const url = URL_SERVICIOS + "/opensignal";
     return this.http.get(url).pipe(
       map((resp: any) => {
@@ -141,8 +141,8 @@ export class OpensignalService {
     );
   }
 
-  obtenerGraficoDiarioPing(desde: string, hasta: string) {
-    const url = `${URL_SERVICIOS}/apping/opensignal?desde=${desde}&hasta=${hasta}`;
+  obtenerGraficoDiarioPing(desde: string, hasta: string, server: string) {
+    const url = `${URL_SERVICIOS}/apping/opensignal?url=${server}&desde=${desde}&hasta=${hasta}`;
     return this.http.get(url).pipe(
       map((resp: any) => {
         resp.data.forEach((datoOperador) => {
@@ -172,5 +172,34 @@ export class OpensignalService {
   actualizarReporteSemanal(desde: string, hasta: string) {
     const url = `${URL_SERVICIOS}/apping/opensignal/cellid/reporte?desde=${desde}&hasta=${hasta}`;
     return this.http.post(url, {});
+  }
+
+  obtenerHostPing(
+    desde: string,
+    hasta: string,
+    operador: string,
+    server: string,
+    leyenda: string
+  ) {
+    const url = `${URL_SERVICIOS}/apping/opensignal/host?desde=${desde}&hasta=${hasta}&operador=${operador}&server=${server}`;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        const hosts = [...new Set(_.map(resp.datos, (el) => el.host))];
+        let datos = [];
+        hosts.forEach((host) => {
+          const valores = [];
+          resp.datos.forEach((el) => {
+            if (el.host == host) {
+              valores.push({
+                name: new Date(el.fecha),
+                value: leyenda == "und" ? el.count : el.maxAvg,
+              });
+            }
+          });
+          datos.push({ name: host, series: valores });
+        });
+        return datos;
+      })
+    );
   }
 }

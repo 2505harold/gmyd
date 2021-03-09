@@ -38,6 +38,10 @@ export class GraficoLineasNgxchartsDefaultComponent implements OnInit {
       "#808000",
       "#ff6090",
       "#7c4dff",
+      "#FF7F50",
+      "#9FE2BF",
+      "#CCCCFF",
+      "#DFFF00",
     ],
   };
 

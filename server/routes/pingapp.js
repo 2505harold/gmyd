@@ -658,12 +658,17 @@ app.get("/cellid/tutela", (req, res) => {
 app.get("/opensignal", (req, res) => {
   const desde = req.query.desde;
   const hasta = req.query.hasta;
+  const namehost =
+    req.query.url.toLowerCase() != "todos"
+      ? req.query.url
+      : { $regex: new RegExp("", "i") };
   AppPingOpensignal.aggregate([
     {
       $match: {
         fecha: { $gte: desde, $lte: hasta },
         categoria: "MOBILE",
         networkType: "LTE",
+        namehost,
       },
     },
     {
@@ -696,6 +701,56 @@ app.get("/opensignal", (req, res) => {
     });
     const sortName = sortBy(data, "name");
     res.status(200).json({ ok: true, data: sortName });
+  });
+});
+
+// ====================================
+// Get latencia de HOST OPENSIGNAL por operador
+// ====================================
+app.get("/opensignal/host", (req, res) => {
+  const desde = req.query.desde;
+  const hasta = req.query.hasta;
+  const operador = req.query.operador;
+  const namehost =
+    req.query.server.toLowerCase() != "todos"
+      ? req.query.server
+      : { $regex: new RegExp("", "i") };
+  AppPingOpensignal.aggregate([
+    {
+      $match: {
+        fecha: { $gte: desde, $lte: hasta },
+        categoria: "MOBILE",
+        networkType: "LTE",
+        operador: { $regex: new RegExp(operador, "i") },
+        namehost,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          fecha: {
+            $dateToString: { format: "%Y-%m-%d", date: { $toDate: "$fecha" } },
+          },
+          host: "$host",
+        },
+        count: { $sum: 1 },
+        max: { $max: "$avg" },
+      },
+    },
+  ]).exec((err, datos) => {
+    if (err) {
+      return res.status(400).json({ ok: false, err });
+    }
+    var _datos = map(datos, (el) => {
+      return {
+        fecha: el._id.fecha,
+        host: el._id.host,
+        count: el.count,
+        maxAvg: el.max,
+      };
+    });
+    const _ordenar = orderBy(_datos, "fecha", "asc");
+    return res.status(200).json({ ok: true, datos: _ordenar });
   });
 });
 
