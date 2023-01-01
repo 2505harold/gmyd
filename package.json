@@ -13,7 +13,7 @@
   "dependencies": {
     "@agm/core": "^3.0.0-beta.0",
     "@amcharts/amcharts4": "^4.10.13",
-    "@angular-devkit/build-angular": "~0.1002.1",
+    "@angular-devkit/build-angular": "~15.0.4",
     "@angular/animations": "~10.2.4",
     "@angular/cdk": "^8.2.3",
     "@angular/cli": "^10.2.1",
@@ -47,7 +47,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1002.1",
+    "@angular-devkit/build-angular": "~15.0.4",
     "@angular/cli": "^10.2.1",
     "@angular/compiler-cli": "~10.2.4",
     "@angular/language-service": "~10.2.4",
